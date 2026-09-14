@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% block titulo %}Inicio — Las Ricuras de la Abuela Lola{% endblock %}
+
+{% block contenido %}
+    <h2>Bienvenido a Ricuras de la Abuela Lola</h2>
+    <p>
+        Aquí disfrutarás de una experiencia llena de sabor, tradición y esos pequeños detalles que hacen sentir como en casa. Preparamos los mejores platos tradicionales con ingredientes cuidadosamente seleccionados, mucho amor y esa sazón casera que nos ha caracterizado durante años.
+Cada receta guarda una historia, un recuerdo y el auténtico sabor de la cocina tradicional. Queremos que cada persona que nos visite pueda disfrutar de comidas preparadas con dedicación, conservando esas recetas especiales que han pasado de generación en generación.
+    </p>
+
+    <h3>Platos destacados</h3>
+    <ul>
+        <li><strong>Bandeja paisa</strong>—el plato insignia de la casa</li>
+        <li><strong>Tamales</strong>—Los mas pedidos por nuestros clientes</li>
+        <li><strong>Sancocho de gallina</strong>—el favorito de los domingos</li>
+        <li><strong>Asado al barril</strong>—Un asado que te vas a quedar chupando los dedos</li>
+    </ul>
+
+    <h3>Horarios de atención</h3>
+    <p>
+        🕐 Lunes a viernes:6:00 a.m.—3:30 p.m.<br>
+        🕐 Sábados y domingos:8:00 a.m.—3:30 p.m.
+    </p>
+
+    <h3>¿Quieres visitarnos?</h3>
+    <p>
+       queremos compartir contigo una experiencia llena de tradición, familia y buenos recuerdos. Ven a visitarnos y déjate conquistar por el auténtico sabor de nuestra cocina. Te esperamos para que disfrutes de nuestros deliciosos platos y vivas una experiencia que te hará sentir como en casa. ¡Ven y descubre por qué nuestro sabor sigue conquistando corazones!
+    </p>
+    <a href="{% url 'reservas' %}" class="btn">Reservar mesa</a>
+    <a href="{% url 'menu' %}" class="btn">Ver menú</a>
+{% endblock %}
