@@ -33,6 +33,50 @@
             border-bottom: 4px solid #d4a24c;
         }
 
+        /* ===== BARRA SUPERIOR (Solo Sesión de usuario a la derecha) ===== */
+        .barra-superior {
+            display: flex;
+            justify-content: flex-end; /* Alinea todo a la derecha */
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(212, 162, 76, 0.4);
+        }
+
+        .sesion-usuario {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d4a24c;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sesion-usuario .separador {
+            color: rgba(212, 162, 76, 0.5);
+        }
+
+        .btn-salir-top {
+            background: transparent;
+            border: none;
+            color: #d4a24c;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .btn-salir-top:hover {
+            color: #fdf6ec;
+        }
+
+        /* ===== SECCIÓN DE MARCA Y LOGO ===== */
         .header-top {
             display: flex;
             align-items: center;
@@ -70,7 +114,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== NAVEGACIÓN (CENTRADA) ===== */
+        /* ===== NAVEGACIÓN ===== */
         nav {
             display: flex;
             flex-wrap: wrap;
@@ -83,7 +127,6 @@
             border-top: 2px solid rgba(212, 162, 76, 0.5);
         }
 
-        /* Botones del menú (a y button) */
         nav a, nav button {
             color: #fdf6ec;
             text-decoration: none;
@@ -110,37 +153,6 @@
 
         nav a i, nav button i {
             font-size: 14px;
-        }
-
-        /* ===== Saludo del usuario (destacado en dorado) ===== */
-        .saludo-usuario {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #5c2e0e;
-            font-weight: 700;
-            font-size: 15px;
-            padding: 10px 22px;
-            border-radius: 25px;
-            background: linear-gradient(135deg, #d4a24c, #b8860b);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .saludo-usuario i {
-            font-size: 16px;
-            color: #5c2e0e;
-        }
-
-        /* ===== Botón Cerrar Sesión (destacado en rojo) ===== */
-        .btn-logout {
-            background: rgba(139, 0, 0, 0.5) !important;
-            border: 1px solid rgba(212, 162, 76, 0.5) !important;
-        }
-
-        .btn-logout:hover {
-            background: #8b0000 !important;
-            color: #fdf6ec !important;
         }
 
         /* ===== CONTENIDO ===== */
@@ -230,6 +242,9 @@
             header {
                 padding: 20px 15px;
             }
+            .barra-superior {
+                justify-content: center; /* Centrado en móviles */
+            }
             main {
                 padding: 25px;
             }
@@ -238,6 +253,29 @@
 </head>
 <body>
     <header>
+        <!-- ===== BARRA SUPERIOR (Solo sesión de usuario) ===== -->
+        <div class="barra-superior">
+            <div class="sesion-usuario">
+                {% if user.is_authenticated %}
+                    <span class="usuario-info">
+                        <i class="fa-solid fa-user"></i> {{ user.username }}
+                    </span>
+                    <span class="separador">|</span>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline; margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-salir-top">
+                            <i class="fa-solid fa-right-from-bracket"></i> Salir
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-salir-top">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ===== LOGO Y MARCA ===== -->
         <div class="header-top">
             <img src="{% static 'core/img/logo.png' %}" alt="Logo Las Ricuras de la Abuela Lola" class="logo">
             <div class="marca">
@@ -246,7 +284,7 @@
             </div>
         </div>
 
-        <!-- NAVEGACIÓN: TODO CENTRADO -->
+        <!-- ===== NAVEGACIÓN ===== -->
         <nav>
             <a href="{% url 'inicio' %}">
                 <i class="fa-solid fa-house"></i>
@@ -268,30 +306,6 @@
                 <i class="fa-solid fa-envelope"></i>
                 Contacto
             </a>
-
-            {% if user.is_authenticated %}
-                <!-- Saludo + Cerrar Sesión, centrados con los demás -->
-                <span class="saludo-usuario">
-                    <i class="fa-solid fa-circle-user"></i>
-                    Hola, {{ user.username }}
-                </span>
-                <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-logout">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        Cerrar Sesión
-                    </button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    Iniciar sesión
-                </a>
-                <a href="{% url 'registro' %}">
-                    <i class="fa-solid fa-user-plus"></i>
-                    Registrarse
-                </a>
-            {% endif %}
         </nav>
     </header>
 
