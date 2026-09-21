@@ -1,0 +1,953 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Menú | Las Ricuras de la Abuela Lola
+    </title>
+
+    <style>
+
+        /* =========================
+           ESTILOS GENERALES
+        ========================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background: #f5efe6;
+
+            color: #2e241c;
+
+            line-height: 1.7;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           ENCABEZADO
+        ========================= */
+
+        header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #5c2e0e 0%,
+                    #8b4513 50%,
+                    #a0522d 100%
+                );
+
+            padding: 22px 40px;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.25);
+
+            border-bottom:
+                4px solid #d4a24c;
+        }
+
+
+        .header-top {
+            display: flex;
+
+            align-items: center;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            gap: 25px;
+        }
+
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+            width: 120px;
+
+            height: 120px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            padding: 6px;
+
+            object-fit: cover;
+
+            box-shadow:
+                0 0 0 4px #d4a24c,
+                0 6px 20px rgba(0,0,0,0.4);
+
+            flex-shrink: 0;
+        }
+
+
+        /* =========================
+           MARCA
+        ========================= */
+
+        .marca h1 {
+            font-size: 32px;
+
+            color: #fdf6ec;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                2px 2px 6px rgba(0,0,0,0.5);
+
+            line-height: 1.2;
+
+            margin-bottom: 6px;
+        }
+
+
+        .marca .lema {
+            font-size: 15px;
+
+            color: #d4a24c;
+
+            font-style: italic;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================
+           NAVEGACIÓN
+        ========================= */
+
+        nav {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+
+            padding-top: 18px;
+
+            border-top:
+                2px solid rgba(212,162,76,0.5);
+        }
+
+
+        nav a {
+            color: #fdf6ec;
+
+            text-decoration: none;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(0,0,0,0.25);
+
+            border:
+                1px solid rgba(212,162,76,0.5);
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover {
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        /* =========================
+           CONTENIDO
+        ========================= */
+
+        main {
+            flex: 1;
+
+            width: 92%;
+
+            max-width: 1200px;
+
+            margin: 40px auto;
+
+            padding: 40px;
+
+            background: #fff;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(92,46,14,0.15);
+
+            border-top:
+                5px solid #8b4513;
+        }
+
+
+        /* =========================
+           TÍTULO DEL MENÚ
+        ========================= */
+
+        .titulo-menu {
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .titulo-menu h2 {
+            color: #5c2e0e;
+
+            font-size: 38px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .titulo-menu p {
+            color: #6b5a4b;
+
+            font-size: 16px;
+
+            max-width: 650px;
+
+            margin: 0 auto;
+        }
+
+
+        .linea {
+            width: 90px;
+
+            height: 4px;
+
+            background: #d4a24c;
+
+            margin: 15px auto;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           GRID DE PLATOS
+        ========================= */
+
+        .platos-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(270px, 1fr)
+                );
+
+            gap: 25px;
+        }
+
+
+        /* =========================
+           TARJETA DEL PLATO
+        ========================= */
+
+        .plato-card {
+            background: #fffaf3;
+
+            border:
+                1px solid #ead8bd;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            display: flex;
+
+            flex-direction: column;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+            box-shadow:
+                0 4px 12px
+                rgba(92,46,14,0.08);
+        }
+
+
+        .plato-card:hover {
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(92,46,14,0.18);
+        }
+
+
+        /* =========================
+           FOTO DEL PLATO
+           MODIFICADO
+        ========================= */
+
+        .imagen-plato {
+            width: 100%;
+
+            height: 210px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5efe6,
+                    #ead8bd
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 15px;
+
+            overflow: hidden;
+        }
+
+
+        .imagen-plato img {
+            width: 100%;
+
+            height: 100%;
+
+            /*
+             * contain evita que la imagen
+             * se deforme o se corte
+             */
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            transition:
+                transform 0.3s ease;
+        }
+
+
+        .plato-card:hover
+        .imagen-plato img {
+            transform:
+                scale(1.04);
+        }
+
+
+        /* =========================
+           INFORMACIÓN
+        ========================= */
+
+        .plato-info {
+            padding: 20px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            flex: 1;
+        }
+
+
+        .plato-info h3 {
+            color: #5c2e0e;
+
+            font-size: 22px;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =========================
+           DESCRIPCIÓN
+           MODIFICADA
+        ========================= */
+
+        .descripcion {
+            color: #5f5146;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 15px;
+
+            /*
+             * Limita la descripción a
+             * 3 líneas para que todas
+             * las tarjetas mantengan
+             * una apariencia uniforme.
+             */
+            display: -webkit-box;
+
+            -webkit-line-clamp: 3;
+
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           PIE DE TARJETA
+        ========================= */
+
+        .plato-footer {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-top: auto;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid #ead8bd;
+        }
+
+
+        /* =========================
+           PRECIO
+        ========================= */
+
+        .precio {
+            color: #8b4513;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           DISPONIBILIDAD
+        ========================= */
+
+        .disponible {
+            color: #357a38;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .no-disponible {
+            color: #a33b32;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           BOTÓN VER PLATO
+        ========================= */
+
+        .btn-ver {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 10px 18px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 4px 10px
+                rgba(92,46,14,0.25);
+        }
+
+
+        .btn-ver:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d4a24c,
+                    #b8860b
+                );
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 6px 15px
+                rgba(212,162,76,0.35);
+        }
+
+
+        /* =========================
+           CUANDO NO HAY PLATOS
+        ========================= */
+
+        .sin-platos {
+            text-align: center;
+
+            padding: 50px 20px;
+
+            background: #fffaf3;
+
+            border:
+                1px dashed #d4a24c;
+
+            border-radius: 15px;
+        }
+
+
+        .sin-platos h3 {
+            color: #8b4513;
+
+            margin-bottom: 10px;
+        }
+
+
+        .sin-platos p {
+            color: #6b5a4b;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #2e241c;
+
+            color: #d4a24c;
+
+            text-align: center;
+
+            padding: 20px;
+
+            font-size: 14px;
+
+            margin-top: auto;
+
+            border-top:
+                4px solid #8b4513;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            header {
+                padding: 20px 15px;
+            }
+
+
+            .header-top {
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 15px;
+            }
+
+
+            .marca h1 {
+                font-size: 24px;
+            }
+
+
+            .logo {
+                width: 110px;
+
+                height: 110px;
+            }
+
+
+            main {
+                width: 95%;
+
+                padding: 25px 18px;
+
+                margin: 25px auto;
+            }
+
+
+            .titulo-menu h2 {
+                font-size: 30px;
+            }
+
+
+            .platos-grid {
+                grid-template-columns: 1fr;
+
+                gap: 20px;
+            }
+
+
+            /*
+             * Imagen más pequeña
+             * en teléfonos.
+             */
+            .imagen-plato {
+                height: 200px;
+
+                padding: 12px;
+            }
+
+
+            .imagen-plato img {
+                max-width: 100%;
+
+                max-height: 180px;
+            }
+
+
+            .plato-footer {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+
+            .btn-ver {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         ENCABEZADO
+    ========================= -->
+
+    <header>
+
+        <div class="header-top">
+
+            <img
+                src="{% static 'core/img/img.png' %}"
+                alt="Logo Las Ricuras de la Abuela Lola"
+                class="logo"
+            >
+
+
+            <div class="marca">
+
+                <h1>
+                    Las Ricuras de la Abuela Lola
+                </h1>
+
+                <p class="lema">
+                    Donde cada plato sabe a hogar
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             NAVEGACIÓN
+        ========================= -->
+
+        <nav>
+
+            <a href="{% url 'inicio' %}">
+                Inicio
+            </a>
+
+            <a href="{% url 'historia' %}">
+                Historia
+            </a>
+
+            <a href="{% url 'menu' %}">
+                Menú
+            </a>
+
+            <a href="{% url 'reservas' %}">
+                Reservas
+            </a>
+
+            <a href="{% url 'contacto' %}">
+                Contacto
+            </a>
+
+            <a href="{% url 'login' %}">
+                Iniciar sesión
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================= -->
+
+    <main>
+
+
+        <section class="titulo-menu">
+
+            <h2>
+                🍽️ Nuestro Menú
+            </h2>
+
+            <div class="linea"></div>
+
+            <p>
+                Descubre los sabores tradicionales de
+                nuestra cocina, preparados con cariño
+                y ese toque especial de la Abuela Lola.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             LISTA DE PLATOS
+        ========================= -->
+
+        {% if platos %}
+
+            <div class="platos-grid">
+
+
+                {% for plato in platos %}
+
+
+                    <article class="plato-card">
+
+
+                        <!-- =========================
+                             FOTO
+                        ========================= -->
+
+                        <div class="imagen-plato">
+
+                            {% if plato.imagen %}
+
+                                <img
+                                    src="{{ plato.imagen.url }}"
+                                    alt="{{ plato.nombre }}"
+                                >
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =========================
+                             INFORMACIÓN
+                        ========================= -->
+
+                        <div class="plato-info">
+
+
+                            <h3>
+                                {{ plato.nombre }}
+                            </h3>
+
+
+                            {% if plato.descripcion %}
+
+                                <p class="descripcion">
+                                    {{ plato.descripcion }}
+                                </p>
+
+                            {% else %}
+
+                                <p class="descripcion">
+                                    Delicioso plato preparado
+                                    con el sabor tradicional
+                                    de nuestra casa.
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- =========================
+                                 PRECIO Y DISPONIBILIDAD
+                            ========================= -->
+
+                            <div class="plato-footer">
+
+
+                                <span class="precio">
+
+                                    ${{ plato.precio|floatformat:0 }}
+
+                                </span>
+
+
+                                {% if plato.disponible %}
+
+                                    <span class="disponible">
+
+                                        ● Disponible
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="no-disponible">
+
+                                        ● No disponible
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <!-- =========================
+                                 VER DETALLE
+                            ========================= -->
+
+                            <a
+                                href="{% url 'plato_detalle' plato.id %}"
+                                class="btn-ver"
+                            >
+
+                                👀 Ver plato
+
+                            </a>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- =========================
+                 SIN PLATOS
+            ========================= -->
+
+            <div class="sin-platos">
+
+                <h3>
+                    🍽️ Nuestro menú está preparando
+                    nuevas delicias
+                </h3>
+
+                <p>
+                    Pronto encontrarás aquí nuestros
+                    platos especiales.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <p>
+            &copy; 2026 Las Ricuras de la Abuela Lola —
+            Todos los derechos reservados
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>
