@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión · Las Ricuras de la Abuela Lola</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            /* Color de fondo crema suave para el restaurante */
+            background-color: #fdfaf5;
+        }
+        .login-card {
+            transition: box-shadow 0.15s ease, transform 0.1s ease;
+        }
+        .login-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
+            transform: translateY(-1px);
+        }
+        input {
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        /* Color de foco adaptado al marrón del restaurante */
+        input:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
+        }
+        .btn-primary {
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-700 min-h-screen flex items-center justify-center p-4 md:p-6">
+
+    <main class="w-full max-w-md">
+        <!-- Tarjeta de login -->
+        <div class="login-card bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
+            
+            <!-- Logo y título -->
+            <div class="text-center mb-8">
+                <!-- Contenedor del logo con degradado marrón (en vez de índigo) -->
+                <div class="w-24 h-24 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4 overflow-hidden border-4 border-white">
+                    <!-- Ajusté la ruta a tu estructura real -->
+                    <img src="{% static 'core/img/logo.png' %}" alt="Logo Abuela Lola" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800">Las Ricuras de la Abuela Lola</h1>
+                <p class="text-sm text-slate-500 mt-1">Inicia sesión para continuar</p>
+            </div>
+
+            <!-- Formulario de login -->
+            <form action="{% url 'login' %}" method="post" class="space-y-5">
+                {% csrf_token %}
+                
+                <!-- Campo: Usuario -->
+                <div class="space-y-1.5">
+                    <label for="username" class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                        <i class="fa-regular fa-user text-slate-400"></i>
+                        Usuario
+                    </label>
+                    <input 
+                        type="text" 
+                        name="username" 
+                        id="username"
+                        placeholder="Nombre de usuario"
+                        required
+                        autofocus
+                        value="{{ form.username.value|default:'' }}"
+                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all"
+                    >
+                </div>
+
+                <!-- Campo: Contraseña -->
+                <div class="space-y-1.5">
+                    <label for="password" class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                        <i class="fa-regular fa-lock text-slate-400"></i>
+                        Contraseña
+                    </label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password"
+                        placeholder="********"
+                        required
+                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all"
+                    >
+                </div>
+
+                <!-- Error de autenticación (si existe) -->
+                {% if form.errors %}
+                    <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-sm text-rose-700 flex items-center gap-2">
+                        <i class="fa-regular fa-circle-exclamation"></i>
+                        Usuario o contraseña incorrectos
+                    </div>
+                {% endif %}
+
+                <!-- Botón de submit (Cambiado a color marrón/ámbar) -->
+                <button type="submit" 
+                        class="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-amber-700 text-white text-sm font-medium rounded-xl border border-amber-700 hover:bg-amber-800 hover:border-amber-800 transition-all duration-150 shadow-sm hover:shadow">
+                    <i class="fa-regular fa-arrow-right-to-bracket"></i>
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Enlace a registro -->
+            <div class="mt-6 text-center text-sm text-slate-500 border-t border-slate-200/60 pt-5">
+                ¿No tienes cuenta? 
+                <a href="{% url 'registro' %}" class="font-medium text-amber-700 hover:text-amber-800 hover:underline transition-colors">
+                    Regístrate
+                </a>
+            </div>
+        </div>
+
+        <!-- Pie de página sutil -->
+        <div class="mt-6 text-xs text-slate-400 text-center">
+            <span class="flex items-center justify-center gap-2">
+                <i class="fa-regular fa-circle-check text-emerald-400"></i>
+                Las Ricuras de la Abuela Lola · Django + Tailwind
+            </span>
+        </div>
+    </main>
+
+</body>
+</html>

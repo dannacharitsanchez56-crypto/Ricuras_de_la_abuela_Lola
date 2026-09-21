@@ -96,6 +96,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'las_ricuras' / 'static',
 ]
-
+LOGIN_REDIRECT_URL = 'inicio'      
+LOGOUT_REDIRECT_URL = 'portada'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

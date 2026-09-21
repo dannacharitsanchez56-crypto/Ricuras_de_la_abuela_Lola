@@ -1,0 +1,71 @@
+{% load static %} 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido - Las Ricuras de la Abuela Lola</title>
+    <style>
+        body {
+            background-color: #8B4513; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .contenedor-bienvenida {
+            background-color: rgba(0,0,0,0.5);
+            padding: 50px;
+            border-radius: 20px;
+            max-width: 90%; 
+        }
+        
+        .logo-portada {
+            width: 180px;         
+            height: 180px;
+            object-fit: cover;   
+            border-radius: 50%; 
+            border: 5px solid white;
+            margin-bottom: 20px;   
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.5); 
+        }
+
+        h1 {
+            font-size: 2.5em; 
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .boton-entrar {
+            background-color: #D2691E;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            font-size: 1.3em;
+            border-radius: 10px;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+        }
+        .boton-entrar:hover {
+            background-color: #A0522D;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-bienvenida">
+        
+        <img src="{% static 'core/img/logo.png' %}" alt="Logo Abuela Lola" class="logo-portada">
+        <h1>¡Bienvenidos a Las Ricuras de la Abuela Lola!</h1>
+        <p>Sabor de casa, tradición de siempre</p>
+        
+        <a href="{% url 'inicio' %}" class="boton-entrar">Entrar al Sitio</a>
+    </div>
+
+</body>
+</html>
