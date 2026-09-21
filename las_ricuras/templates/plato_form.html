@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if plato %}
+            Editar plato
+        {% else %}
+            Nuevo plato
+        {% endif %}
+    </title>
+</head>
+<body>
+
+{% if plato %}
+    <h1>Editar plato</h1>
+{% else %}
+    <h1>Agregar nuevo plato</h1>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Guardar
+    </button>
+
+</form>
+
+<a href="{% url 'Platos' %}">
+    Cancelar
+</a>
+
+</body>
+</html>

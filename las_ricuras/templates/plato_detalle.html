@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ plato.nombre }}</title>
+</head>
+<body>
+
+<h1>{{ plato.nombre }}</h1>
+
+{% if plato.imagen %}
+    <img src="{{ plato.imagen.url }}"
+         alt="{{ plato.nombre }}"
+         width="300">
+{% endif %}
+
+<h2>Descripción</h2>
+
+<p>{{ plato.descripcion }}</p>
+
+<h2>Precio</h2>
+
+<p>${{ plato.precio }}</p>
+
+<h2>Disponibilidad</h2>
+
+{% if plato.disponible %}
+    <p>✅ Disponible</p>
+{% else %}
+    <p>❌ No disponible</p>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'editar_plato' plato.id %}">
+    ✏️ Editar
+</a>
+
+<a href="{% url 'eliminar_plato' plato.id %}">
+    🗑️ Eliminar
+</a>
+
+<a href="{% url 'Platos' %}">
+    ← Volver a platos
+</a>
+
+</body>
+</html>

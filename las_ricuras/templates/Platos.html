@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Platos</title>
+</head>
+<body>
+
+<h1>Nuestros platos</h1>
+
+<a href="{% url 'crear_plato' %}">➕ Agregar plato</a>
+
+<hr>
+
+{% if platos %}
+
+    {% for plato in platos %}
+
+        <div>
+            {% if plato.imagen %}
+                <img src="{{ plato.imagen.url }}"
+                     alt="{{ plato.nombre }}"
+                     width="200">
+            {% endif %}
+
+            <h2>{{ plato.nombre }}</h2>
+
+            <p>{{ plato.descripcion }}</p>
+
+            <p>
+                Precio: ${{ plato.precio }}
+            </p>
+
+            {% if plato.disponible %}
+                <p>✅ Disponible</p>
+            {% else %}
+                <p>❌ No disponible</p>
+            {% endif %}
+
+            <a href="{% url 'plato_detalle' plato.id %}">
+                Ver detalle
+            </a>
+
+            <a href="{% url 'editar_plato' plato.id %}">
+                Editar
+            </a>
+
+            <a href="{% url 'eliminar_plato' plato.id %}">
+                Eliminar
+            </a>
+        </div>
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No hay platos registrados.</p>
+
+{% endif %}
+
+</body>
+</html>
