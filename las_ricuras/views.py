@@ -1,34 +1,101 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import Plato
+from .forms import PlatoForm
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+# ---------- PORTADA E INICIO ----------
 def portada(request):
     return render(request, 'portada.html')
+
 
 def inicio(request):
     return render(request, 'inicio.html')
 
+
+def historia(request):
+    return render(request, 'historia.html')
+
+
+# ---------- SECCIONES ----------
 def menu(request):
-    return render(request, 'menu.html')
+    platos = Plato.objects.filter(disponible=True)
+    return render(request, 'menu.html', {
+        'platos': platos
+    })
+
 
 def reservas(request):
     return render(request, 'reservas.html')
 
-def Platos(request):
-    return render(request, 'Platos.html')
 
 def contacto(request):
     return render(request, 'contacto.html')
 
+
 def perfil(request):
     return render(request, 'perfil.html')
 
-# ---------- VISTA DE LOGIN ----------
-# (Por ahora solo muestra el formulario; cuando quieras procesarlo, avísame)
+
+# ---------- PLATOS (CRUD) ----------
+@staff_member_required
+def Platos(request):
+    platos = Plato.objects.all()
+    return render(request, 'Platos.html', {'platos': platos})
+
+
+def plato_detalle(request, id):
+    plato = get_object_or_404(Plato, id=id)
+    return render(request, 'plato_detalle.html', {'plato': plato})
+
+
+@staff_member_required
+def crear_plato(request):
+    if request.method == 'POST':
+        form = PlatoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('Platos')
+    else:
+        form = PlatoForm()
+    return render(request, 'plato_form.html', {'form': form})
+
+
+@staff_member_required
+def editar_plato(request, id):
+    plato = get_object_or_404(Plato, id=id)
+    if request.method == 'POST':
+        form = PlatoForm(request.POST, request.FILES, instance=plato)
+        if form.is_valid():
+            form.save()
+            return redirect('Platos')
+    else:
+        form = PlatoForm(instance=plato)
+    return render(request, 'plato_form.html', {
+        'form': form,
+        'plato': plato
+    })
+
+
+@staff_member_required
+def eliminar_plato(request, id):
+    plato = get_object_or_404(Plato, id=id)
+    if request.method == 'POST':
+        plato.delete()
+        return redirect('Platos')
+    return render(request, 'plato_confirmar_eliminar.html', {
+        'plato': plato
+    })
+
+
+# ---------- LOGIN ----------
 def login_view(request):
     return render(request, 'login.html')
 
-# ---------- VISTA DE REGISTRO ----------
 
+# ---------- REGISTRO (con validaciones) ----------
 def registro(request):
     # Si el usuario ya está logueado, lo mandamos al inicio
     if request.user.is_authenticated:
