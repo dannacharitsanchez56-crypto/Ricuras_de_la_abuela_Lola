@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Contacto - Ricuras de la Abuela Lola{% endblock %}
+
+{% block contenido %}
+<style>
+    .contacto-intro { text-align: center; margin-bottom: 30px; }
+    .contacto-tarjetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+    }
+    .tarjeta {
+        background: #fdf6ec;
+        border: 1px solid #e8d3a8;
+        border-top: 4px solid #d4a24c;
+        border-radius: 14px;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.12);
+        transition: 0.3s;
+    }
+    .tarjeta:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(92, 46, 14, 0.25);
+    }
+    .tarjeta .icono { font-size: 52px; line-height: 1; margin-bottom: 10px; }
+    .tarjeta h3 { margin: 0 0 6px; }
+    .tarjeta .numero {
+        font-size: 24px;
+        font-weight: 700;
+        color: #5c2e0e;
+        margin-bottom: 14px;
+    }
+    .tarjeta .btn { border-bottom: none !important; margin: 0; }
+    .btn.btn-whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+    .btn.btn-whatsapp:hover {
+        background: linear-gradient(135deg, #128c7e, #075e54);
+        color: #fff !important;
+    }
+</style>
+
+<h2>Contáctanos</h2>
+<p class="contacto-intro">
+    ¿Quieres hacer una consulta o un pedido? Elige la forma que más te guste
+    para comunicarte con el restaurante.
+</p>
+
+<div class="contacto-tarjetas">
+    <div class="tarjeta">
+        <div class="icono">📞</div>
+        <h3>Llámanos</h3>
+        <p class="numero">311 829 9494</p>
+        <a class="btn" href="tel:+573118299494">Llamar ahora</a>
+    </div>
+
+    <div class="tarjeta">
+        <div class="icono">💬</div>
+        <h3>WhatsApp</h3>
+        <p class="numero">311 829 9494</p>
+        <a class="btn btn-whatsapp"
+           href="https://wa.me/573118299494?text=Hola,%20quisiera%20hacer%20una%20consulta"
+           target="_blank" rel="noopener noreferrer">
+            Escribir por WhatsApp
+        </a>
+    </div>
+</div>
+{% endblock %}
