@@ -1,38 +1,684 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>
         {% if plato %}
             Editar plato
         {% else %}
             Nuevo plato
         {% endif %}
+        | Las Ricuras de la Abuela Lola
     </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5efe6;
+            color: #2e241c;
+            line-height: 1.7;
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: linear-gradient(
+                135deg,
+                #5c2e0e 0%,
+                #8b4513 50%,
+                #a0522d 100%
+            );
+
+            padding: 22px 40px;
+
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+
+            border-bottom: 4px solid #d4a24c;
+        }
+
+
+        .header-top {
+            display: flex;
+            align-items: center;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            gap: 25px;
+        }
+
+
+        .logo {
+            width: 140px;
+            height: 140px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            padding: 6px;
+
+            object-fit: cover;
+
+            box-shadow:
+                0 0 0 4px #d4a24c,
+                0 6px 20px rgba(0,0,0,0.4);
+
+            flex-shrink: 0;
+        }
+
+
+        .marca h1 {
+            font-size: 34px;
+
+            color: #fdf6ec;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                2px 2px 6px rgba(0,0,0,0.5);
+
+            line-height: 1.2;
+
+            margin-bottom: 6px;
+        }
+
+
+        .lema {
+            font-size: 15px;
+
+            color: #d4a24c;
+
+            font-style: italic;
+
+            font-weight: 500;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* ================= NAV ================= */
+
+        nav {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+
+            padding-top: 18px;
+
+            border-top:
+                2px solid rgba(212,162,76,0.5);
+        }
+
+
+        nav a {
+            color: #fdf6ec;
+
+            text-decoration: none;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            background: rgba(0,0,0,0.25);
+
+            border:
+                1px solid rgba(212,162,76,0.5);
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover {
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        /* ================= CONTENIDO ================= */
+
+        main {
+            flex: 1;
+
+            max-width: 900px;
+
+            width: 90%;
+
+            margin: 40px auto;
+
+            padding: 40px;
+
+            background: #fff;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 8px 30px rgba(92,46,14,0.15);
+
+            border-top: 5px solid #8b4513;
+        }
+
+
+        .titulo {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .titulo h2 {
+            color: #5c2e0e;
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .titulo p {
+            color: #8b4513;
+
+            font-style: italic;
+        }
+
+
+        /* ================= FORMULARIO ================= */
+
+        .formulario {
+            background: #fffaf3;
+
+            padding: 30px;
+
+            border-radius: 14px;
+
+            border: 1px solid #ead8bd;
+
+            box-shadow:
+                0 5px 15px rgba(92,46,14,0.10);
+        }
+
+
+        .formulario p {
+            margin-bottom: 20px;
+        }
+
+
+        .formulario label {
+            display: block;
+
+            color: #5c2e0e;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+
+        .formulario input[type="text"],
+        .formulario input[type="number"],
+        .formulario input[type="file"],
+        .formulario textarea,
+        .formulario select {
+
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border: 2px solid #d8c3a5;
+
+            border-radius: 10px;
+
+            background: #fff;
+
+            color: #2e241c;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+
+        .formulario textarea {
+            min-height: 130px;
+
+            resize: vertical;
+        }
+
+
+        .formulario input:focus,
+        .formulario textarea:focus,
+        .formulario select:focus {
+
+            outline: none;
+
+            border-color: #d4a24c;
+
+            box-shadow:
+                0 0 0 3px rgba(212,162,76,0.2);
+        }
+
+
+        /* ================= CHECKBOX ================= */
+
+        .formulario input[type="checkbox"] {
+
+            width: 18px;
+            height: 18px;
+
+            accent-color: #8b4513;
+
+            margin-right: 8px;
+
+            vertical-align: middle;
+        }
+
+
+        /* ================= ERRORES ================= */
+
+        .errorlist {
+            list-style: none;
+
+            margin: 5px 0 10px;
+
+            padding: 10px;
+
+            background: #f8d7da;
+
+            color: #842029;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+        }
+
+
+        .helptext {
+            display: block;
+
+            color: #8b7a69;
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+
+        /* ================= BOTONES ================= */
+
+        .botones {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 12px 26px;
+
+            border-radius: 25px;
+
+            text-decoration: none;
+
+            border: none;
+
+            font-weight: 700;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .btn-guardar {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+
+            box-shadow:
+                0 4px 12px rgba(92,46,14,0.4);
+        }
+
+
+        .btn-guardar:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d4a24c,
+                    #b8860b
+                );
+
+            color: #5c2e0e;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 16px rgba(212,162,76,0.5);
+        }
+
+
+        .btn-cancelar {
+
+            background: #e8ddd0;
+
+            color: #5c2e0e;
+
+            border: 1px solid #d4c0a5;
+        }
+
+
+        .btn-cancelar:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            background: #2e241c;
+
+            color: #d4a24c;
+
+            text-align: center;
+
+            padding: 20px;
+
+            font-size: 14px;
+
+            margin-top: auto;
+
+            border-top: 4px solid #8b4513;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 750px) {
+
+            .header-top {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 15px;
+            }
+
+
+            .marca h1 {
+
+                font-size: 24px;
+            }
+
+
+            .logo {
+
+                width: 120px;
+
+                height: 120px;
+            }
+
+
+            header {
+
+                padding: 20px 15px;
+            }
+
+
+            main {
+
+                padding: 25px 20px;
+            }
+
+
+            .formulario {
+
+                padding: 20px;
+            }
+
+
+            .botones {
+
+                flex-direction: column;
+            }
+
+
+            .btn {
+
+                text-align: center;
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
 
-{% if plato %}
-    <h1>Editar plato</h1>
-{% else %}
-    <h1>Agregar nuevo plato</h1>
-{% endif %}
 
-<form method="POST" enctype="multipart/form-data">
+<header>
+    <div class="campo">
 
-    {% csrf_token %}
+    <label for="{{ form.descripcion.id_for_label }}">
+        Descripción e ingredientes
+    </label>
 
-    {{ form.as_p }}
+    <textarea
+        name="descripcion"
+        id="{{ form.descripcion.id_for_label }}"
+        rows="8"
+        placeholder="Describe el plato y escribe sus ingredientes..."
+    >{{ form.descripcion.value|default:'' }}</textarea>
 
-    <button type="submit">
-        Guardar
-    </button>
+</div>
 
-</form>
 
-<a href="{% url 'Platos' %}">
-    Cancelar
-</a>
+    <div class="header-top">
+
+        <img
+            src="{% static 'core/img/img.png' %}"
+            alt="Logo Las Ricuras de la Abuela Lola"
+            class="logo"
+        >
+
+        <div class="marca">
+
+            <h1>
+                Las Ricuras de la Abuela Lola
+            </h1>
+
+            <p class="lema">
+                Donde cada plato sabe a hogar
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a href="{% url 'inicio' %}">
+            Inicio
+        </a>
+
+        <a href="{% url 'historia' %}">
+            Historia
+        </a>
+
+        <a href="{% url 'menu' %}">
+            Menú
+        </a>
+
+        <a href="{% url 'reservas' %}">
+            Reservas
+        </a>
+
+        <a href="{% url 'Platos' %}">
+            Platos
+        </a>
+
+        <a href="{% url 'contacto' %}">
+            Contacto
+        </a>
+
+        <a href="{% url 'login' %}">
+            Iniciar sesión
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+
+    <div class="titulo">
+
+        {% if plato %}
+
+            <h2>
+                ✏️ Editar plato
+            </h2>
+
+            <p>
+                Modifica la información de tu plato
+            </p>
+
+        {% else %}
+
+            <h2>
+                🍽️ Agregar nuevo plato
+            </h2>
+
+            <p>
+                Añade una nueva ricura al menú
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="formulario">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+
+            {{ form.as_p }}
+
+
+            <div class="botones">
+
+                <button
+                    type="submit"
+                    class="btn btn-guardar"
+                >
+                    {% if plato %}
+                        💾 Guardar cambios
+                    {% else %}
+                        ➕ Agregar plato
+                    {% endif %}
+                </button>
+
+
+                <a
+                    href="{% url 'Platos' %}"
+                    class="btn btn-cancelar"
+                >
+                    ← Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <p>
+        &copy; 2026 Las Ricuras de la Abuela Lola —
+        Todos los derechos reservados
+    </p>
+
+</footer>
+
 
 </body>
+
 </html>

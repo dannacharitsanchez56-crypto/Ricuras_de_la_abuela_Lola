@@ -1,31 +1,776 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Eliminar plato</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Eliminar plato | Las Ricuras de la Abuela Lola
+    </title>
+
+    <style>
+
+        /* ================= GENERAL ================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background: #f5efe6;
+
+            color: #2e241c;
+
+            line-height: 1.7;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* ================= ENCABEZADO ================= */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5c2e0e 0%,
+                    #8b4513 50%,
+                    #a0522d 100%
+                );
+
+            padding: 22px 40px;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.25);
+
+            border-bottom:
+                4px solid #d4a24c;
+        }
+
+
+        .header-top {
+
+            display: flex;
+
+            align-items: center;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            gap: 25px;
+        }
+
+
+        .logo {
+
+            width: 140px;
+
+            height: 140px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            padding: 6px;
+
+            object-fit: cover;
+
+            box-shadow:
+                0 0 0 4px #d4a24c,
+                0 6px 20px rgba(0,0,0,0.4);
+
+            flex-shrink: 0;
+        }
+
+
+        .marca h1 {
+
+            font-size: 34px;
+
+            color: #fdf6ec;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                2px 2px 6px rgba(0,0,0,0.5);
+
+            line-height: 1.2;
+
+            margin-bottom: 6px;
+        }
+
+
+        .lema {
+
+            font-size: 15px;
+
+            color: #d4a24c;
+
+            font-style: italic;
+
+            font-weight: 500;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* ================= NAVEGACIÓN ================= */
+
+        nav {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+
+            padding-top: 18px;
+
+            border-top:
+                2px solid rgba(212,162,76,0.5);
+        }
+
+
+        nav a {
+
+            color: #fdf6ec;
+
+            text-decoration: none;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(0,0,0,0.25);
+
+            border:
+                1px solid rgba(212,162,76,0.5);
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        /* ================= CONTENIDO ================= */
+
+        main {
+
+            flex: 1;
+
+            max-width: 750px;
+
+            width: 90%;
+
+            margin: 50px auto;
+
+            padding: 45px;
+
+            background: #fff;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 30px rgba(92,46,14,0.15);
+
+            border-top:
+                5px solid #8b4513;
+
+            text-align: center;
+        }
+
+
+        /* ================= ICONO ================= */
+
+        .icono {
+
+            width: 85px;
+
+            height: 85px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            background: #f5d6d2;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 42px;
+
+            border:
+                3px solid #c85c4d;
+
+        }
+
+
+        /* ================= TITULO ================= */
+
+        h2 {
+
+            color: #5c2e0e;
+
+            font-size: 32px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .subtitulo {
+
+            color: #8b4513;
+
+            font-size: 16px;
+
+            margin-bottom: 30px;
+
+            font-style: italic;
+        }
+
+
+        /* ================= TARJETA PLATO ================= */
+
+        .plato {
+
+            background: #fffaf3;
+
+            border:
+                1px solid #ead8bd;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            margin: 25px 0 30px;
+
+            box-shadow:
+                0 5px 15px rgba(92,46,14,0.10);
+        }
+
+
+        .plato-imagen {
+
+            width: 180px;
+
+            height: 150px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            margin-bottom: 15px;
+
+            border:
+                3px solid #d4a24c;
+        }
+
+
+        .sin-imagen {
+
+            width: 180px;
+
+            height: 150px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ead8bd,
+                    #f5efe6
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 55px;
+
+            color: #8b4513;
+        }
+
+
+        .plato h3 {
+
+            color: #5c2e0e;
+
+            font-size: 25px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .descripcion {
+
+            color: #5f5146;
+
+            margin-bottom: 10px;
+        }
+
+
+        .precio {
+
+            color: #8b4513;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        /* ================= ADVERTENCIA ================= */
+
+        .advertencia {
+
+            background: #fff3cd;
+
+            border:
+                1px solid #d4a24c;
+
+            color: #6b4b16;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 25px;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= BOTONES ================= */
+
+        .botones {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 12px 25px;
+
+            border-radius: 25px;
+
+            text-decoration: none;
+
+            border: none;
+
+            font-weight: 700;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        /* ELIMINAR */
+
+        .btn-eliminar {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #c85c4d,
+                    #8b2d23
+                );
+
+            color: white;
+
+            box-shadow:
+                0 4px 12px rgba(139,45,35,0.3);
+        }
+
+
+        .btn-eliminar:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b2d23,
+                    #6b1f18
+                );
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 16px rgba(139,45,35,0.4);
+        }
+
+
+        /* CANCELAR */
+
+        .btn-cancelar {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+        }
+
+
+        .btn-cancelar:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d4a24c,
+                    #b8860b
+                );
+
+            color: #5c2e0e;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            background: #2e241c;
+
+            color: #d4a24c;
+
+            text-align: center;
+
+            padding: 20px;
+
+            font-size: 14px;
+
+            margin-top: auto;
+
+            border-top:
+                4px solid #8b4513;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 750px) {
+
+            .header-top {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 15px;
+            }
+
+
+            .marca h1 {
+
+                font-size: 24px;
+            }
+
+
+            .logo {
+
+                width: 120px;
+
+                height: 120px;
+            }
+
+
+            header {
+
+                padding: 20px 15px;
+            }
+
+
+            main {
+
+                width: 95%;
+
+                padding: 30px 20px;
+
+                margin: 30px auto;
+            }
+
+
+            h2 {
+
+                font-size: 27px;
+            }
+
+
+            .botones {
+
+                flex-direction: column;
+            }
+
+
+            .btn {
+
+                width: 100%;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
 
-<h1>Eliminar plato</h1>
 
-<p>
-    ¿Estás seguro de que quieres eliminar
-    <strong>{{ plato.nombre }}</strong>?
-</p>
+<!-- ================= ENCABEZADO ================= -->
 
-<form method="POST">
+<header>
 
-    {% csrf_token %}
+    <div class="header-top">
 
-    <button type="submit">
-        Sí, eliminar
-    </button>
+        <img
+            src="{% static 'core/img/img.png' %}"
+            alt="Logo Las Ricuras de la Abuela Lola"
+            class="logo"
+        >
 
-    <a href="{% url 'plato_detalle' plato.id %}">
-        Cancelar
-    </a>
 
-</form>
+        <div class="marca">
+
+            <h1>
+                Las Ricuras de la Abuela Lola
+            </h1>
+
+            <p class="lema">
+                Donde cada plato sabe a hogar
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= NAVEGACIÓN ================= -->
+
+    <nav>
+
+        <a href="{% url 'inicio' %}">
+            Inicio
+        </a>
+
+        <a href="{% url 'historia' %}">
+            Historia
+        </a>
+
+        <a href="{% url 'menu' %}">
+            Menú
+        </a>
+
+        <a href="{% url 'reservas' %}">
+            Reservas
+        </a>
+
+        <a href="{% url 'Platos' %}">
+            Platos
+        </a>
+
+        <a href="{% url 'contacto' %}">
+            Contacto
+        </a>
+
+        <a href="{% url 'login' %}">
+            Iniciar sesión
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= CONTENIDO ================= -->
+
+<main>
+
+
+    <div class="icono">
+        🗑️
+    </div>
+
+
+    <h2>
+        Eliminar plato
+    </h2>
+
+
+    <p class="subtitulo">
+        Esta acción eliminará el plato del menú
+    </p>
+
+
+    <!-- ================= PLATO ================= -->
+
+    <div class="plato">
+
+
+        {% if plato.imagen %}
+
+            <img
+                src="{{ plato.imagen.url }}"
+                alt="{{ plato.nombre }}"
+                class="plato-imagen"
+            >
+
+        {% else %}
+
+            <div class="sin-imagen">
+                🍽️
+            </div>
+
+        {% endif %}
+
+
+        <h3>
+            {{ plato.nombre }}
+        </h3>
+
+
+        <p class="descripcion">
+            {{ plato.descripcion }}
+        </p>
+
+
+        <p class="precio">
+            ${{ plato.precio }}
+        </p>
+
+
+    </div>
+
+
+    <!-- ================= ADVERTENCIA ================= -->
+
+    <div class="advertencia">
+
+        ⚠️ <strong>¿Estás seguro?</strong>
+
+        <br>
+
+        Una vez eliminado, este plato
+        no podrá recuperarse.
+
+    </div>
+
+
+    <!-- ================= FORMULARIO ================= -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <div class="botones">
+
+
+            <button
+                type="submit"
+                class="btn btn-eliminar"
+            >
+                🗑️ Sí, eliminar plato
+            </button>
+
+
+            <a
+                href="{% url 'plato_detalle' plato.id %}"
+                class="btn btn-cancelar"
+            >
+                ← No, volver
+            </a>
+
+
+        </div>
+
+    </form>
+
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        &copy; 2026 Las Ricuras de la Abuela Lola —
+        Todos los derechos reservados
+    </p>
+
+</footer>
+
 
 </body>
+
 </html>

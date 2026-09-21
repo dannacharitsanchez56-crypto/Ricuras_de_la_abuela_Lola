@@ -1,64 +1,1166 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Platos</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Platos | Las Ricuras de la Abuela Lola
+    </title>
+
+
+    <style>
+
+        /* =====================================================
+           GENERAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background: #f5efe6;
+
+            color: #2e241c;
+
+            line-height: 1.7;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* =====================================================
+           ENCABEZADO
+        ===================================================== */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5c2e0e 0%,
+                    #8b4513 50%,
+                    #a0522d 100%
+                );
+
+            padding: 22px 40px;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.25);
+
+            border-bottom:
+                4px solid #d4a24c;
+        }
+
+
+        .header-top {
+
+            display: flex;
+
+            align-items: center;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            gap: 25px;
+        }
+
+
+        .logo {
+
+            width: 140px;
+
+            height: 140px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            padding: 6px;
+
+            object-fit: cover;
+
+            box-shadow:
+                0 0 0 4px #d4a24c,
+                0 6px 20px rgba(0,0,0,0.4);
+
+            flex-shrink: 0;
+        }
+
+
+        .marca h1 {
+
+            font-size: 34px;
+
+            color: #fdf6ec;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                2px 2px 6px rgba(0,0,0,0.5);
+
+            line-height: 1.2;
+
+            margin-bottom: 6px;
+        }
+
+
+        .lema {
+
+            font-size: 15px;
+
+            color: #d4a24c;
+
+            font-style: italic;
+
+            font-weight: 500;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =====================================================
+           NAVEGACIÓN
+        ===================================================== */
+
+        nav {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+
+            padding-top: 18px;
+
+            border-top:
+                2px solid rgba(212,162,76,0.5);
+        }
+
+
+        nav a {
+
+            color: #fdf6ec;
+
+            text-decoration: none;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(0,0,0,0.25);
+
+            border:
+                1px solid rgba(212,162,76,0.5);
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            transition:
+                all 0.3s ease;
+        }
+
+
+        nav a:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        /* =====================================================
+           CONTENIDO PRINCIPAL
+        ===================================================== */
+
+        main {
+
+            flex: 1;
+
+            max-width: 1200px;
+
+            width: 92%;
+
+            margin: 40px auto;
+
+            padding: 40px;
+
+            background: #fff;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 8px 30px rgba(92,46,14,0.15);
+
+            border-top:
+                5px solid #8b4513;
+        }
+
+
+        /* =====================================================
+           TITULO
+        ===================================================== */
+
+        .titulo {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .titulo h2 {
+
+            color: #5c2e0e;
+
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .titulo p {
+
+            color: #8b4513;
+
+            font-size: 16px;
+
+            font-style: italic;
+        }
+
+
+        .linea {
+
+            width: 100px;
+
+            height: 4px;
+
+            background: #d4a24c;
+
+            margin: 15px auto 0;
+
+            border-radius: 10px;
+        }
+
+
+        /* =====================================================
+           BOTÓN AGREGAR
+        ===================================================== */
+
+        .acciones {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-bottom: 30px;
+        }
+
+
+        .btn-agregar {
+
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+
+            padding: 12px 24px;
+
+            border-radius: 25px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 4px 12px rgba(92,46,14,0.35);
+
+            transition: 0.3s;
+        }
+
+
+        .btn-agregar:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d4a24c,
+                    #b8860b
+                );
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 6px 16px rgba(212,162,76,0.5);
+        }
+
+
+        /* =====================================================
+           CONTENEDOR DE PLATOS
+        ===================================================== */
+
+        .platos-container {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(280px, 1fr)
+                );
+
+            gap: 30px;
+        }
+
+
+        /* =====================================================
+           TARJETA DEL PLATO
+        ===================================================== */
+
+        .plato-card {
+
+            background: #fffaf3;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            border:
+                1px solid #ead8bd;
+
+            box-shadow:
+                0 6px 18px rgba(92,46,14,0.15);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .plato-card:hover {
+
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                0 12px 25px rgba(92,46,14,0.25);
+        }
+
+
+        /* =====================================================
+           IMAGEN DEL PLATO
+        ===================================================== */
+
+        .imagen-container {
+
+            width: 100%;
+
+            height: 250px;
+
+            padding: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5efe6,
+                    #ead8bd
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            overflow: hidden;
+        }
+
+
+        .plato-imagen {
+
+            max-width: 100%;
+
+            max-height: 100%;
+
+            width: auto;
+
+            height: auto;
+
+            object-fit: contain;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(92,46,14,0.18);
+
+            transition:
+                transform 0.4s ease;
+        }
+
+
+        .plato-card:hover .plato-imagen {
+
+            transform:
+                scale(1.03);
+        }
+
+
+        /* =====================================================
+           CUANDO NO HAY IMAGEN
+        ===================================================== */
+
+        .sin-imagen {
+
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 65px;
+
+            color: #8b4513;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ead8bd,
+                    #f5efe6
+                );
+
+            border-radius: 12px;
+        }
+
+
+        /* =====================================================
+           INFORMACIÓN DEL PLATO
+        ===================================================== */
+
+        .plato-info {
+
+            padding: 24px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            flex: 1;
+        }
+
+
+        .plato-info h3 {
+
+            color: #5c2e0e;
+
+            font-size: 24px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .descripcion {
+
+            color: #5f5146;
+
+            font-size: 15px;
+
+            margin-bottom: 15px;
+
+            flex: 1;
+
+            line-height: 1.8;
+
+            white-space: normal;
+
+            text-align: left;
+        }
+
+
+        .precio {
+
+            color: #8b4513;
+
+            font-size: 23px;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* =====================================================
+           DISPONIBILIDAD
+        ===================================================== */
+
+        .disponible {
+
+            display: inline-block;
+
+            width: fit-content;
+
+            padding: 5px 12px;
+
+            border-radius: 20px;
+
+            background: #dcefd8;
+
+            color: #376b2d;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+        }
+
+
+        .no-disponible {
+
+            display: inline-block;
+
+            width: fit-content;
+
+            padding: 5px 12px;
+
+            border-radius: 20px;
+
+            background: #f5d6d2;
+
+            color: #8b2d23;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =====================================================
+           BOTONES DEL PLATO
+        ===================================================== */
+
+        .botones {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 9px 15px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+
+        /* VER */
+
+        .btn-ver {
+
+            background: #8b4513;
+
+            color: white;
+        }
+
+
+        .btn-ver:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* EDITAR */
+
+        .btn-editar {
+
+            background: #ead8bd;
+
+            color: #5c2e0e;
+        }
+
+
+        .btn-editar:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* ELIMINAR */
+
+        .btn-eliminar {
+
+            background: #f1d5d0;
+
+            color: #8b2d23;
+        }
+
+
+        .btn-eliminar:hover {
+
+            background: #c85c4d;
+
+            color: white;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           CUANDO NO HAY PLATOS
+        ===================================================== */
+
+        .sin-platos {
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #8b4513;
+        }
+
+
+        .sin-platos .icono {
+
+            font-size: 60px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .sin-platos h3 {
+
+            color: #5c2e0e;
+
+            font-size: 25px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .sin-platos p {
+
+            margin-bottom: 20px;
+        }
+
+
+        /* =====================================================
+           PIE DE PÁGINA
+        ===================================================== */
+
+        footer {
+
+            background: #2e241c;
+
+            color: #d4a24c;
+
+            text-align: center;
+
+            padding: 20px;
+
+            font-size: 14px;
+
+            margin-top: auto;
+
+            border-top:
+                4px solid #8b4513;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 750px) {
+
+            .header-top {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 15px;
+            }
+
+
+            .marca h1 {
+
+                font-size: 24px;
+            }
+
+
+            .logo {
+
+                width: 120px;
+
+                height: 120px;
+            }
+
+
+            header {
+
+                padding: 20px 15px;
+            }
+
+
+            main {
+
+                padding: 25px 15px;
+
+                width: 95%;
+            }
+
+
+            .titulo h2 {
+
+                font-size: 28px;
+            }
+
+
+            .acciones {
+
+                justify-content: center;
+            }
+
+
+            /* Imagen más pequeña en celular */
+
+            .imagen-container {
+
+                height: 220px;
+
+                padding: 12px;
+            }
+
+
+            .plato-imagen {
+
+                max-width: 100%;
+
+                max-height: 100%;
+            }
+
+
+            .botones {
+
+                flex-direction: column;
+            }
+
+
+            .btn {
+
+                text-align: center;
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
 
-<h1>Nuestros platos</h1>
 
-<a href="{% url 'crear_plato' %}">➕ Agregar plato</a>
+<!-- =====================================================
+     ENCABEZADO
+===================================================== -->
 
-<hr>
+<header>
 
-{% if platos %}
+    <div class="header-top">
 
-    {% for plato in platos %}
 
-        <div>
-            {% if plato.imagen %}
-                <img src="{{ plato.imagen.url }}"
-                     alt="{{ plato.nombre }}"
-                     width="200">
-            {% endif %}
+        <img
+            src="{% static 'core/img/img.png' %}"
+            alt="Logo Las Ricuras de la Abuela Lola"
+            class="logo"
+        >
 
-            <h2>{{ plato.nombre }}</h2>
 
-            <p>{{ plato.descripcion }}</p>
+        <div class="marca">
 
-            <p>
-                Precio: ${{ plato.precio }}
+            <h1>
+                Las Ricuras de la Abuela Lola
+            </h1>
+
+            <p class="lema">
+                Donde cada plato sabe a hogar
             </p>
 
-            {% if plato.disponible %}
-                <p>✅ Disponible</p>
-            {% else %}
-                <p>❌ No disponible</p>
-            {% endif %}
-
-            <a href="{% url 'plato_detalle' plato.id %}">
-                Ver detalle
-            </a>
-
-            <a href="{% url 'editar_plato' plato.id %}">
-                Editar
-            </a>
-
-            <a href="{% url 'eliminar_plato' plato.id %}">
-                Eliminar
-            </a>
         </div>
 
-        <hr>
 
-    {% endfor %}
+    </div>
 
-{% else %}
 
-    <p>No hay platos registrados.</p>
+    <!-- =================================================
+         NAVEGACIÓN
+    ================================================== -->
 
-{% endif %}
+    <nav>
+
+        <a href="{% url 'inicio' %}">
+            Inicio
+        </a>
+
+        <a href="{% url 'historia' %}">
+            Historia
+        </a>
+
+        <a href="{% url 'menu' %}">
+            Menú
+        </a>
+
+        <a href="{% url 'reservas' %}">
+            Reservas
+        </a>
+
+        <a href="{% url 'Platos' %}">
+            Platos
+        </a>
+
+        <a href="{% url 'contacto' %}">
+            Contacto
+        </a>
+
+        <a href="{% url 'login' %}">
+            Iniciar sesión
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<main>
+
+
+    <!-- =================================================
+         TITULO
+    ================================================== -->
+
+    <div class="titulo">
+
+        <h2>
+            🍽️ Nuestros Platos
+        </h2>
+
+        <p>
+            Descubre los sabores caseros de la Abuela Lola
+        </p>
+
+        <div class="linea"></div>
+
+    </div>
+
+
+    <!-- =================================================
+         AGREGAR PLATO
+    ================================================== -->
+
+    <div class="acciones">
+
+        <a
+            href="{% url 'crear_plato' %}"
+            class="btn-agregar"
+        >
+            ➕ Agregar plato
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         LISTADO DE PLATOS
+    ================================================== -->
+
+    {% if platos %}
+
+
+        <div class="platos-container">
+
+
+            {% for plato in platos %}
+
+
+                <div class="plato-card">
+
+
+                    <!-- ===============================
+                         IMAGEN
+                    ================================= -->
+
+                    <div class="imagen-container">
+
+
+                        {% if plato.imagen %}
+
+
+                            <img
+                                src="{{ plato.imagen.url }}"
+                                alt="{{ plato.nombre }}"
+                                class="plato-imagen"
+                            >
+
+
+                        {% else %}
+
+
+                            <div class="sin-imagen">
+                                🍽️
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- ===============================
+                         INFORMACIÓN
+                    ================================= -->
+
+                    <div class="plato-info">
+
+
+                        <h3>
+                            {{ plato.nombre }}
+                        </h3>
+
+
+                        <p class="descripcion">
+
+                            {{ plato.descripcion|linebreaksbr }}
+
+                        </p>
+
+
+                        <p class="precio">
+                            ${{ plato.precio|floatformat:0 }}
+                        </p>
+
+
+
+                        <!-- ===========================
+                             DISPONIBILIDAD
+                        ============================ -->
+
+                        {% if plato.disponible %}
+
+
+                            <span class="disponible">
+
+                                ✓ Disponible
+
+                            </span>
+
+
+                        {% else %}
+
+
+                            <span class="no-disponible">
+
+                                ✕ Agotado
+
+                            </span>
+
+
+                        {% endif %}
+
+
+                        <!-- ===========================
+                             BOTONES
+                        ============================ -->
+
+                        <div class="botones">
+
+
+                            <a
+                                href="{% url 'plato_detalle' plato.id %}"
+                                class="btn btn-ver"
+                            >
+                                👀 Ver
+                            </a>
+
+
+                            <a
+                                href="{% url 'editar_plato' plato.id %}"
+                                class="btn btn-editar"
+                            >
+                                ✏️ Editar
+                            </a>
+
+
+                            <a
+                                href="{% url 'eliminar_plato' plato.id %}"
+                                class="btn btn-eliminar"
+                            >
+                                🗑️ Eliminar
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =================================================
+             SIN PLATOS
+        ================================================== -->
+
+        <div class="sin-platos">
+
+
+            <div class="icono">
+                🍽️
+            </div>
+
+
+            <h3>
+                Todavía no hay platos registrados
+            </h3>
+
+
+            <p>
+                Agrega el primer plato de Las Ricuras
+                de la Abuela Lola.
+            </p>
+
+
+            <a
+                href="{% url 'crear_plato' %}"
+                class="btn-agregar"
+            >
+                ➕ Agregar primer plato
+            </a>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+        &copy; 2026 Las Ricuras de la Abuela Lola —
+        Todos los derechos reservados
+    </p>
+
+</footer>
+
 
 </body>
+
 </html>

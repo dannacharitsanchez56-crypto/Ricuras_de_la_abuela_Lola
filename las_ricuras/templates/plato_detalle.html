@@ -1,48 +1,1003 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>{{ plato.nombre }}</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ plato.nombre }} | Las Ricuras de la Abuela Lola
+    </title>
+
+    <style>
+
+        /* =========================
+           ESTILOS GENERALES
+        ========================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background: #f5efe6;
+
+            color: #2e241c;
+
+            line-height: 1.7;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           ENCABEZADO
+        ========================= */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5c2e0e 0%,
+                    #8b4513 50%,
+                    #a0522d 100%
+                );
+
+            padding: 22px 40px;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.25);
+
+            border-bottom:
+                4px solid #d4a24c;
+        }
+
+
+        .header-top {
+
+            display: flex;
+
+            align-items: center;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            gap: 25px;
+        }
+
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+
+            width: 120px;
+
+            height: 120px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            padding: 6px;
+
+            object-fit: cover;
+
+            box-shadow:
+                0 0 0 4px #d4a24c,
+                0 6px 20px rgba(0,0,0,0.4);
+
+            flex-shrink: 0;
+        }
+
+
+        /* =========================
+           MARCA
+        ========================= */
+
+        .marca h1 {
+
+            font-size: 32px;
+
+            color: #fdf6ec;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                2px 2px 6px rgba(0,0,0,0.5);
+
+            line-height: 1.2;
+
+            margin-bottom: 6px;
+        }
+
+
+        .marca .lema {
+
+            font-size: 15px;
+
+            color: #d4a24c;
+
+            font-style: italic;
+
+            font-weight: 500;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================
+           NAVEGACIÓN
+        ========================= */
+
+        nav {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+
+            padding-top: 18px;
+
+            border-top:
+                2px solid rgba(212,162,76,0.5);
+        }
+
+
+        nav a {
+
+            color: #fdf6ec;
+
+            text-decoration: none;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(0,0,0,0.25);
+
+            border:
+                1px solid rgba(212,162,76,0.5);
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover {
+
+            background: #d4a24c;
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        /* =========================
+           CONTENIDO PRINCIPAL
+        ========================= */
+
+        main {
+
+            flex: 1;
+
+            max-width: 1050px;
+
+            width: 92%;
+
+            margin: 40px auto;
+
+            padding: 40px;
+
+            background: #fff;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(92,46,14,0.15);
+
+            border-top:
+                5px solid #8b4513;
+        }
+
+
+        /* =========================
+           NOMBRE DEL PLATO
+        ========================= */
+
+        .plato-header {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .plato-header h2 {
+
+            color: #5c2e0e;
+
+            font-size: 38px;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+        }
+
+
+        .linea {
+
+            width: 90px;
+
+            height: 4px;
+
+            background: #d4a24c;
+
+            margin: 15px auto;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           IMAGEN DEL PLATO
+        ========================= */
+
+        .foto-container {
+
+            width: 100%;
+
+            height: 280px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5efe6,
+                    #ead8bd
+                );
+
+            border-radius: 18px;
+
+            padding: 15px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+
+            overflow: hidden;
+        }
+
+
+        .foto-container img {
+
+            max-width: 70%;
+
+            max-height: 250px;
+
+            width: auto;
+
+            height: auto;
+
+            object-fit: contain;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 6px 18px
+                rgba(92,46,14,0.20);
+        }
+
+
+        /* =========================
+           SECCIONES
+        ========================= */
+
+        .seccion {
+
+            margin-top: 30px;
+        }
+
+
+        .seccion h3 {
+
+            color: #5c2e0e;
+
+            font-size: 25px;
+
+            border-bottom:
+                3px solid #d4a24c;
+
+            padding-bottom: 8px;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           DESCRIPCIÓN
+        ========================= */
+
+        .descripcion {
+
+            background: #fffaf3;
+
+            border-left:
+                5px solid #8b4513;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            color: #4d4137;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            text-align: left;
+        }
+
+
+        /* =========================
+           COMPONENTES
+        ========================= */
+
+        .ingredientes {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(280px, 1fr)
+                );
+
+            gap: 15px;
+        }
+
+
+        .ingrediente {
+
+            background: #fffaf3;
+
+            border:
+                1px solid #ead8bd;
+
+            border-radius: 12px;
+
+            padding: 17px;
+
+            transition: 0.3s;
+        }
+
+
+        .ingrediente:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 5px 15px
+                rgba(92,46,14,0.12);
+
+            border-color:
+                #d4a24c;
+        }
+
+
+        .ingrediente strong {
+
+            display: block;
+
+            color: #8b4513;
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .ingrediente span {
+
+            color: #5f5146;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           PRECIO
+        ========================= */
+
+        .precio-box {
+
+            margin-top: 35px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 5px 15px
+                rgba(92,46,14,0.2);
+        }
+
+
+        .precio-box p {
+
+            color: #d4a24c;
+
+            font-size: 14px;
+
+            margin-bottom: 3px;
+        }
+
+
+        .precio {
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #fff;
+        }
+
+
+        /* =========================
+           BOTÓN VOLVER
+        ========================= */
+
+        .acciones {
+
+            display: flex;
+
+            justify-content: center;
+
+            margin-top: 35px;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            padding: 12px 26px;
+
+            border-radius: 25px;
+
+            font-weight: 700;
+
+            transition: 0.3s;
+        }
+
+
+        .btn-volver {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b4513,
+                    #5c2e0e
+                );
+
+            color: white;
+
+            box-shadow:
+                0 4px 12px
+                rgba(92,46,14,0.3);
+        }
+
+
+        .btn-volver:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d4a24c,
+                    #b8860b
+                );
+
+            color: #5c2e0e;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 6px 16px
+                rgba(212,162,76,0.4);
+        }
+
+
+        /* =========================
+           PIE DE PÁGINA
+        ========================= */
+
+        footer {
+
+            background: #2e241c;
+
+            color: #d4a24c;
+
+            text-align: center;
+
+            padding: 20px;
+
+            font-size: 14px;
+
+            margin-top: auto;
+
+            border-top:
+                4px solid #8b4513;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            header {
+
+                padding: 20px 15px;
+            }
+
+
+            .header-top {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                gap: 15px;
+            }
+
+
+            .marca h1 {
+
+                font-size: 24px;
+            }
+
+
+            .logo {
+
+                width: 110px;
+
+                height: 110px;
+            }
+
+
+            main {
+
+                padding: 25px 18px;
+
+                width: 95%;
+
+                margin: 25px auto;
+            }
+
+
+            .plato-header h2 {
+
+                font-size: 30px;
+            }
+
+
+            .foto-container {
+
+                height: 220px;
+
+                padding: 10px;
+            }
+
+
+            .foto-container img {
+
+                max-width: 85%;
+
+                max-height: 200px;
+            }
+
+
+            .ingredientes {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .btn {
+
+                width: 100%;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
 
-<h1>{{ plato.nombre }}</h1>
 
-{% if plato.imagen %}
-    <img src="{{ plato.imagen.url }}"
-         alt="{{ plato.nombre }}"
-         width="300">
-{% endif %}
+    <!-- =========================
+         ENCABEZADO
+    ========================= -->
 
-<h2>Descripción</h2>
+    <header>
 
-<p>{{ plato.descripcion }}</p>
+        <div class="header-top">
 
-<h2>Precio</h2>
+            <img
+                src="{% static 'core/img/img.png' %}"
+                alt="Logo Las Ricuras de la Abuela Lola"
+                class="logo"
+            >
 
-<p>${{ plato.precio }}</p>
+            <div class="marca">
 
-<h2>Disponibilidad</h2>
+                <h1>
+                    Las Ricuras de la Abuela Lola
+                </h1>
 
-{% if plato.disponible %}
-    <p>✅ Disponible</p>
-{% else %}
-    <p>❌ No disponible</p>
-{% endif %}
+                <p class="lema">
+                    Donde cada plato sabe a hogar
+                </p>
 
-<hr>
+            </div>
 
-<a href="{% url 'editar_plato' plato.id %}">
-    ✏️ Editar
-</a>
+        </div>
 
-<a href="{% url 'eliminar_plato' plato.id %}">
-    🗑️ Eliminar
-</a>
 
-<a href="{% url 'Platos' %}">
-    ← Volver a platos
-</a>
+        <!-- NAVEGACIÓN -->
+
+        <nav>
+
+            <a href="{% url 'inicio' %}">
+                Inicio
+            </a>
+
+            <a href="{% url 'historia' %}">
+                Historia
+            </a>
+
+            <a href="{% url 'menu' %}">
+                Menú
+            </a>
+
+            <a href="{% url 'reservas' %}">
+                Reservas
+            </a>
+
+            <a href="{% url 'contacto' %}">
+                Contacto
+            </a>
+
+            <a href="{% url 'login' %}">
+                Iniciar sesión
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO
+    ========================= -->
+
+    <main>
+
+
+        <!-- NOMBRE DEL PLATO -->
+
+        <div class="plato-header">
+
+            <h2>
+                {{ plato.nombre }}
+            </h2>
+
+            <div class="linea"></div>
+
+        </div>
+
+
+        <!-- =========================
+             IMAGEN
+        ========================= -->
+
+        {% if plato.imagen %}
+
+            <div class="foto-container">
+
+                <img
+                    src="{{ plato.imagen.url }}"
+                    alt="{{ plato.nombre }}"
+                >
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             DESCRIPCIÓN
+        ========================= -->
+
+        <div class="seccion">
+
+            <h3>
+                📝 Descripción
+            </h3>
+
+            <div class="descripcion">
+
+                {{ plato.descripcion|linebreaksbr }}
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             COMPONENTES
+        ========================= -->
+
+        <div class="seccion">
+
+            <h3>
+                🍽️ Componentes del plato
+            </h3>
+
+
+            <div class="ingredientes">
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🫘 Frijoles rojos
+                    </strong>
+
+                    <span>
+                        Preparados al estilo tradicional
+                        con un toque de hogao.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🍚 Arroz blanco
+                    </strong>
+
+                    <span>
+                        Suave y graneado, ideal para
+                        acompañar los granos.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🥩 Carne molida
+                    </strong>
+
+                    <span>
+                        Carne de res sofrita y
+                        desmenuzada en textura fina.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🥓 Chicharrón
+                    </strong>
+
+                    <span>
+                        Crocante por fuera y jugoso
+                        por dentro.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🌭 Chorizo
+                    </strong>
+
+                    <span>
+                        Embutido de cerdo típico
+                        con gran sabor local.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🍳 Huevo frito
+                    </strong>
+
+                    <span>
+                        Servido sobre la carne
+                        o los frijoles.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🍌 Plátano maduro
+                    </strong>
+
+                    <span>
+                        Tajadas fritas con un
+                        toque dulce.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🥑 Aguacate
+                    </strong>
+
+                    <span>
+                        Rebanadas frescas para
+                        equilibrar los sabores.
+                    </span>
+
+                </div>
+
+
+                <div class="ingrediente">
+
+                    <strong>
+                        🫓 Arepa
+                    </strong>
+
+                    <span>
+                        Pequeña y redonda,
+                        elaborada con masa de maíz.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PRECIO
+        ========================= -->
+
+        <div class="precio-box">
+
+            <p>
+                Precio
+            </p>
+
+            <div class="precio">
+
+                ${{ plato.precio|floatformat:0 }}
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             VOLVER AL MENÚ
+        ========================= -->
+
+        <div class="acciones">
+
+            <a
+                href="{% url 'menu' %}"
+                class="btn btn-volver"
+            >
+                ← Volver al menú
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <p>
+            &copy; 2026 Las Ricuras de la Abuela Lola —
+            Todos los derechos reservados
+        </p>
+
+    </footer>
+
 
 </body>
+
 </html>

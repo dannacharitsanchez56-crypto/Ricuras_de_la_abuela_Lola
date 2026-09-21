@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Plato
 from .forms import PlatoForm
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 
 def inicio(request):
@@ -10,51 +12,59 @@ def inicio(request):
 def historia(request):
     return render(request, 'historia.html')
 
-
 def menu(request):
-    return render(request, 'menu.html')
+    platos = Plato.objects.filter(disponible=True)
+
+    return render(request, 'menu.html', {
+        'platos': platos
+    })
+
 
 
 def reservas(request):
     return render(request, 'reservas.html')
 
-
-# Mostrar todos los platos
+@staff_member_required
 def Platos(request):
     platos = Plato.objects.all()
     return render(request, 'Platos.html', {'platos': platos})
 
 
-# Ver un plato en detalle
 def plato_detalle(request, id):
     plato = get_object_or_404(Plato, id=id)
     return render(request, 'plato_detalle.html', {'plato': plato})
 
-
-# Crear un plato
+@staff_member_required
 def crear_plato(request):
+
     if request.method == 'POST':
         form = PlatoForm(request.POST, request.FILES)
 
         if form.is_valid():
             form.save()
             return redirect('Platos')
+
     else:
         form = PlatoForm()
 
     return render(request, 'plato_form.html', {'form': form})
 
-
-# Editar un plato
+@staff_member_required
 def editar_plato(request, id):
+
     plato = get_object_or_404(Plato, id=id)
 
     if request.method == 'POST':
-        form = PlatoForm(request.POST, request.FILES, instance=plato)
+        form = PlatoForm(
+            request.POST,
+            request.FILES,
+            instance=plato
+        )
 
         if form.is_valid():
             form.save()
-            return redirect('plato_detalle', id=plato.id)
+            return redirect('Platos')
+
     else:
         form = PlatoForm(instance=plato)
 
@@ -63,9 +73,9 @@ def editar_plato(request, id):
         'plato': plato
     })
 
-
-# Eliminar un plato
+@staff_member_required
 def eliminar_plato(request, id):
+
     plato = get_object_or_404(Plato, id=id)
 
     if request.method == 'POST':
