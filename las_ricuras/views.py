@@ -15,9 +15,6 @@ def inicio(request):
     return render(request, 'inicio.html')
 
 
-def historia(request):
-    return render(request, 'historia.html')
-
 
 # ---------- SECCIONES ----------
 def menu(request):
@@ -27,12 +24,12 @@ def menu(request):
     })
 
 
-def reservas(request):
-    return render(request, 'reservas.html')
+
 
 
 def contacto(request):
     return render(request, 'contacto.html')
+
 
 
 def perfil(request):
