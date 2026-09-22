@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %}Las ricuras de la Abuela Lola{% endblock %}</title>
+    <title>{% block titulo %}Ricuras de la Abuela Lola{% endblock %}</title>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         * {
             box-sizing: border-box;
@@ -29,6 +32,50 @@
             border-bottom: 4px solid #d4a24c;
         }
 
+        /* ===== BARRA SUPERIOR (Solo Sesión de usuario a la derecha) ===== */
+        .barra-superior {
+            display: flex;
+            justify-content: flex-end; /* Alinea todo a la derecha */
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(212, 162, 76, 0.4);
+        }
+
+        .sesion-usuario {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d4a24c;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sesion-usuario .separador {
+            color: rgba(212, 162, 76, 0.5);
+        }
+
+        .btn-salir-top {
+            background: transparent;
+            border: none;
+            color: #d4a24c;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .btn-salir-top:hover {
+            color: #fdf6ec;
+        }
+
+        /* ===== SECCIÓN DE MARCA Y LOGO ===== */
         .header-top {
             display: flex;
             align-items: center;
@@ -71,6 +118,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
             gap: 10px;
             max-width: 1200px;
             margin: 20px auto 0;
@@ -78,7 +126,7 @@
             border-top: 2px solid rgba(212, 162, 76, 0.5);
         }
 
-        nav a {
+        nav a, nav button {
             color: #fdf6ec;
             text-decoration: none;
             padding: 10px 22px;
@@ -88,13 +136,22 @@
             font-weight: 600;
             font-size: 15px;
             transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        nav a:hover {
+        nav a:hover, nav button:hover {
             background: #d4a24c;
             color: #5c2e0e;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        nav a i, nav button i {
+            font-size: 14px;
         }
 
         /* ===== CONTENIDO ===== */
@@ -184,6 +241,9 @@
             header {
                 padding: 20px 15px;
             }
+            .barra-superior {
+                justify-content: center; /* Centrado en móviles */
+            }
             main {
                 padding: 25px;
             }
@@ -192,21 +252,59 @@
 </head>
 <body>
     <header>
+        <!-- ===== BARRA SUPERIOR (Solo sesión de usuario) ===== -->
+        <div class="barra-superior">
+            <div class="sesion-usuario">
+                {% if user.is_authenticated %}
+                    <span class="usuario-info">
+                        <i class="fa-solid fa-user"></i> {{ user.username }}
+                    </span>
+                    <span class="separador">|</span>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline; margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-salir-top">
+                            <i class="fa-solid fa-right-from-bracket"></i> Salir
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-salir-top">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ===== LOGO Y MARCA ===== -->
         <div class="header-top">
-            <img src="{% static 'core/img/img.png' %}" alt="Logo Las Ricuras de la Abuela Lola" class="logo">
+            <img src="{% static 'core/img/logo.png' %}" alt="Logo Las Ricuras de la Abuela Lola" class="logo">
             <div class="marca">
                 <h1>Las Ricuras de la Abuela Lola</h1>
                 <p class="lema">Donde cada plato sabe a hogar</p>
             </div>
         </div>
+
+        <!-- ===== NAVEGACIÓN ===== -->
         <nav>
-            <a href="{% url 'inicio' %}">Inicio</a>
-            <a href="{% url 'historia' %}">Historia</a>
-            <a href="{% url 'menu' %}">Menú</a>
-            <a href="{% url 'reservas' %}">Reservas</a>
-            <a href="{% url 'Platos' %}">Platos</a>
-            <a href="{% url 'contacto' %}">Contacto</a>
-            <a href="{% url 'login' %}">Iniciar sesión</a>
+            <a href="{% url 'inicio' %}">
+                <i class="fa-solid fa-house"></i>
+                Inicio
+            </a>
+            <a href="{% url 'menu' %}">
+                <i class="fa-solid fa-utensils"></i>
+                Menú
+            </a>
+            <a href="{% url 'reservas' %}">
+                <i class="fa-solid fa-calendar-check"></i>
+                Reservas
+            </a>
+            <a href="{% url 'Platos' %}">
+                <i class="fa-solid fa-plate-wheat"></i>
+                Platos
+            </a>
+            <a href="{% url 'contacto' %}">
+                <i class="fa-solid fa-envelope"></i>
+                Contacto
+            </a>
         </nav>
     </header>
 

@@ -13,8 +13,11 @@
         {% else %}
             Nuevo plato
         {% endif %}
-        | Las Ricuras de la Abuela Lola
+        | Ricuras de la Abuela Lola
     </title>
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
 
@@ -158,6 +161,12 @@
             font-size: 15px;
 
             transition: all 0.3s ease;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
         }
 
 
@@ -170,6 +179,11 @@
 
             box-shadow:
                 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+
+        nav a i {
+            font-size: 14px;
         }
 
 
@@ -210,6 +224,18 @@
             font-size: 32px;
 
             margin-bottom: 8px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .titulo h2 i {
+            color: #d4a24c;
+            font-size: 28px;
         }
 
 
@@ -358,7 +384,13 @@
 
         .btn {
 
-            display: inline-block;
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
 
             padding: 12px 26px;
 
@@ -373,6 +405,8 @@
             font-size: 15px;
 
             cursor: pointer;
+
+            font-family: inherit;
 
             transition: 0.3s;
         }
@@ -506,8 +540,6 @@
 
             .btn {
 
-                text-align: center;
-
                 width: 100%;
             }
 
@@ -522,21 +554,6 @@
 
 
 <header>
-    <div class="campo">
-
-    <label for="{{ form.descripcion.id_for_label }}">
-        Descripción e ingredientes
-    </label>
-
-    <textarea
-        name="descripcion"
-        id="{{ form.descripcion.id_for_label }}"
-        rows="8"
-        placeholder="Describe el plato y escribe sus ingredientes..."
-    >{{ form.descripcion.value|default:'' }}</textarea>
-
-</div>
-
 
     <div class="header-top">
 
@@ -564,30 +581,37 @@
     <nav>
 
         <a href="{% url 'inicio' %}">
+            <i class="fa-solid fa-house"></i>
             Inicio
         </a>
 
         <a href="{% url 'historia' %}">
+            <i class="fa-solid fa-book"></i>
             Historia
         </a>
 
         <a href="{% url 'menu' %}">
+            <i class="fa-solid fa-book-open-reader"></i>
             Menú
         </a>
 
         <a href="{% url 'reservas' %}">
+            <i class="fa-solid fa-calendar-check"></i>
             Reservas
         </a>
 
         <a href="{% url 'Platos' %}">
+            <i class="fa-solid fa-plate-wheat"></i>
             Platos
         </a>
 
         <a href="{% url 'contacto' %}">
+            <i class="fa-solid fa-envelope"></i>
             Contacto
         </a>
 
         <a href="{% url 'login' %}">
+            <i class="fa-solid fa-right-to-bracket"></i>
             Iniciar sesión
         </a>
 
@@ -604,7 +628,8 @@
         {% if plato %}
 
             <h2>
-                ✏️ Editar plato
+                <i class="fa-solid fa-pen-to-square"></i>
+                Editar plato
             </h2>
 
             <p>
@@ -614,7 +639,8 @@
         {% else %}
 
             <h2>
-                🍽️ Agregar nuevo plato
+                <i class="fa-solid fa-circle-plus"></i>
+                Agregar nuevo plato
             </h2>
 
             <p>
@@ -646,9 +672,11 @@
                     class="btn btn-guardar"
                 >
                     {% if plato %}
-                        💾 Guardar cambios
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
                     {% else %}
-                        ➕ Agregar plato
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar plato
                     {% endif %}
                 </button>
 
@@ -657,7 +685,8 @@
                     href="{% url 'Platos' %}"
                     class="btn btn-cancelar"
                 >
-                    ← Cancelar
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Cancelar
                 </a>
 
             </div>
