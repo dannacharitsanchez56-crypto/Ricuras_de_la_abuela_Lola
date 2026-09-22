@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta · Las Ricuras de la Abuela Lola</title>
+    <title>Crear Cuenta · Ricuras de la Abuela Lola</title>
     <!-- Tailwind CSS v3 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -42,7 +42,7 @@
 
     <main class="w-full max-w-md">
         <div class="registro-card bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
-            
+
             <!-- Logo y título -->
             <div class="text-center mb-8">
                 <div class="w-24 h-24 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4 overflow-hidden border-4 border-white">
@@ -55,31 +55,33 @@
             <!-- Formulario de registro -->
             <form method="post" class="space-y-5">
                 {% csrf_token %}
-                
+
                 <!-- Campo: Usuario -->
                 <div class="space-y-1.5">
                     <label for="username" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-regular fa-user text-slate-400"></i>
+                        <i class="fa-solid fa-user text-slate-400"></i>
                         Nombre de Usuario
                     </label>
                     <input type="text" name="username" id="username" placeholder="Elige un nombre de usuario" required
+                        value="{{ request.POST.username|default:'' }}"
                         class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
                 </div>
 
                 <!-- Campo: Email -->
                 <div class="space-y-1.5">
                     <label for="email" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-regular fa-envelope text-slate-400"></i>
+                        <i class="fa-solid fa-envelope text-slate-400"></i>
                         Correo Electrónico
                     </label>
                     <input type="email" name="email" id="email" placeholder="tu@correo.com" required
+                        value="{{ request.POST.email|default:'' }}"
                         class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
                 </div>
 
                 <!-- Campo: Contraseña -->
                 <div class="space-y-1.5">
                     <label for="password1" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-regular fa-lock text-slate-400"></i>
+                        <i class="fa-solid fa-lock text-slate-400"></i>
                         Contraseña
                     </label>
                     <input type="password" name="password1" id="password1" placeholder="Mínimo 8 caracteres" required
@@ -89,34 +91,47 @@
                 <!-- Campo: Confirmar Contraseña -->
                 <div class="space-y-1.5">
                     <label for="password2" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-regular fa-lock text-slate-400"></i>
+                        <i class="fa-solid fa-lock text-slate-400"></i>
                         Confirmar Contraseña
                     </label>
                     <input type="password" name="password2" id="password2" placeholder="Repite tu contraseña" required
                         class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
                 </div>
 
-                <!-- Mostrar errores si los hay -->
+                <!-- Mostrar mensajes (errores o éxitos) -->
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-sm text-rose-700 flex items-center gap-2">
-                            <i class="fa-regular fa-circle-exclamation"></i>
+                        <div class="rounded-xl p-3 text-sm flex items-center gap-2
+                            {% if message.tags == 'success' %}
+                                bg-emerald-50 border border-emerald-200 text-emerald-700
+                            {% elif message.tags == 'error' %}
+                                bg-rose-50 border border-rose-200 text-rose-700
+                            {% else %}
+                                bg-amber-50 border border-amber-200 text-amber-700
+                            {% endif %}">
+                            {% if message.tags == 'success' %}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            {% else %}
+                                <i class="fa-solid fa-circle-info"></i>
+                            {% endif %}
                             {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
 
                 <!-- Botón de submit -->
-                <button type="submit" 
+                <button type="submit"
                         class="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-xl border border-amber-700 hover:bg-amber-800 hover:border-amber-800 transition-all duration-150 shadow-sm mt-2">
-                    <i class="fa-regular fa-user-plus"></i>
+                    <i class="fa-solid fa-user-plus"></i>
                     Crear Cuenta
                 </button>
             </form>
 
             <!-- Enlace a login -->
             <div class="mt-6 text-center text-sm text-slate-500 border-t border-slate-200/60 pt-5">
-                ¿Ya tienes cuenta? 
+                ¿Ya tienes cuenta?
                 <a href="{% url 'login' %}" class="font-medium text-amber-700 hover:text-amber-800 hover:underline transition-colors">
                     Inicia Sesión
                 </a>
@@ -125,7 +140,7 @@
 
         <div class="mt-6 text-xs text-slate-400 text-center">
             <span class="flex items-center justify-center gap-2">
-                <i class="fa-regular fa-circle-check text-emerald-400"></i>
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
                 Las Ricuras de la Abuela Lola · Django + Tailwind
             </span>
         </div>
