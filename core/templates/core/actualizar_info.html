@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar información del restaurante</title>
+    <style>
+        /* Copia aquí el CSS de tu base (header, nav, main, etc.) */
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Tu header y nav igual que en los demás templates -->
+    </header>
+
+    <main>
+        <h2>Actualizar información del restaurante</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Guardar cambios</button>
+        </form>
+    </main>
+
+    <footer>
+        <!-- Tu footer -->
+    </footer>
+</body>
+</html>
