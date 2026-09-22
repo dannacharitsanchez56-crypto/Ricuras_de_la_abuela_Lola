@@ -27,6 +27,11 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent; /* Quita el flash azul en móviles */
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -48,6 +53,9 @@
             display: flex;
 
             flex-direction: column;
+
+            /* HU24: Evita scroll horizontal en móviles */
+            overflow-x: hidden;
         }
 
 
@@ -117,7 +125,8 @@
         ========================= */
 
         .marca h1 {
-            font-size: 32px;
+            /* HU24: Tamaño fluido entre 20px y 32px */
+            font-size: clamp(20px, 3vw, 32px);
 
             color: #fdf6ec;
 
@@ -135,7 +144,7 @@
 
 
         .marca .lema {
-            font-size: 15px;
+            font-size: clamp(12px, 1.5vw, 15px);
 
             color: #d4a24c;
 
@@ -174,7 +183,7 @@
 
             text-decoration: none;
 
-            padding: 10px 22px;
+            padding: 12px 22px;
 
             border-radius: 25px;
 
@@ -195,10 +204,14 @@
             align-items: center;
 
             gap: 8px;
+
+            /* HU24: Tamaño táctil mínimo */
+            min-height: 44px;
         }
 
 
-        nav a:hover {
+        nav a:hover,
+        nav a:active {
             background: #d4a24c;
 
             color: #5c2e0e;
@@ -258,7 +271,8 @@
         .titulo-menu h2 {
             color: #5c2e0e;
 
-            font-size: 38px;
+            /* HU24: Tamaño fluido */
+            font-size: clamp(24px, 4vw, 38px);
 
             margin-bottom: 8px;
 
@@ -267,19 +281,23 @@
             align-items: center;
 
             gap: 14px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
         }
 
 
         .titulo-menu h2 i {
             color: #d4a24c;
-            font-size: 34px;
+            font-size: 0.9em;
         }
 
 
         .titulo-menu p {
             color: #6b5a4b;
 
-            font-size: 16px;
+            font-size: clamp(14px, 1.8vw, 16px);
 
             max-width: 650px;
 
@@ -301,16 +319,17 @@
 
 
         /* =========================
-           GRID DE PLATOS
+           GRID DE PLATOS (HU24: Auto-adaptable)
         ========================= */
 
         .platos-grid {
             display: grid;
 
+            /* Se ajusta automáticamente al tamaño de pantalla */
             grid-template-columns:
                 repeat(
                     auto-fit,
-                    minmax(270px, 1fr)
+                    minmax(min(100%, 270px), 1fr)
                 );
 
             gap: 25px;
@@ -356,13 +375,14 @@
 
 
         /* =========================
-           FOTO DEL PLATO
+           FOTO DEL PLATO (HU24: Imagen adaptable)
         ========================= */
 
         .imagen-plato {
             width: 100%;
 
-            height: 210px;
+            /* HU24: Altura fluida */
+            height: clamp(180px, 25vw, 210px);
 
             background:
                 linear-gradient(
@@ -380,13 +400,20 @@
             padding: 15px;
 
             overflow: hidden;
+
+            position: relative;
         }
 
 
         .imagen-plato img {
-            width: 100%;
+            /* HU24: Imagen se adapta sin deformarse */
+            max-width: 100%;
 
-            height: 100%;
+            max-height: 100%;
+
+            width: auto;
+
+            height: auto;
 
             object-fit: contain;
 
@@ -422,7 +449,7 @@
         .plato-info h3 {
             color: #5c2e0e;
 
-            font-size: 22px;
+            font-size: clamp(18px, 2.5vw, 22px);
 
             margin-bottom: 8px;
         }
@@ -470,6 +497,8 @@
 
             border-top:
                 1px solid #ead8bd;
+
+            flex-wrap: wrap;
         }
 
 
@@ -480,14 +509,14 @@
         .precio {
             color: #8b4513;
 
-            font-size: 21px;
+            font-size: clamp(18px, 2.5vw, 21px);
 
             font-weight: 700;
         }
 
 
         /* =========================
-           DISPONIBILIDAD
+           DISPONIBILIDAD (HU13)
         ========================= */
 
         .disponible {
@@ -495,13 +524,21 @@
 
             font-size: 13px;
 
-            font-weight: 600;
+            font-weight: 700;
 
             display: inline-flex;
 
             align-items: center;
 
             gap: 6px;
+
+            background: rgba(53, 122, 56, 0.1);
+
+            padding: 4px 10px;
+
+            border-radius: 15px;
+
+            border: 1px solid rgba(53, 122, 56, 0.3);
         }
 
 
@@ -510,21 +547,100 @@
 
             font-size: 13px;
 
-            font-weight: 600;
+            font-weight: 700;
 
             display: inline-flex;
 
             align-items: center;
 
             gap: 6px;
+
+            background: rgba(163, 59, 50, 0.1);
+
+            padding: 4px 10px;
+
+            border-radius: 15px;
+
+            border: 1px solid rgba(163, 59, 50, 0.3);
         }
 
 
         /* =========================
-           BOTÓN VER PLATO
+           HU13: ESTILOS PARA PLATOS AGOTADOS
         ========================= */
 
+        .plato-card.no-disponible-card {
+            opacity: 0.75;
+
+            filter: grayscale(80%);
+
+            background: #f0f0f0;
+
+            border-color: #ccc;
+        }
+
+
+        .plato-card.no-disponible-card:hover {
+            opacity: 0.95;
+
+            filter: grayscale(20%);
+        }
+
+
+        /* Cinta diagonal "AGOTADO" */
+        .etiqueta-agotado {
+            position: absolute;
+
+            top: 15px;
+
+            right: -35px;
+
+            background: #a33b32;
+
+            color: white;
+
+            padding: 5px 40px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            transform: rotate(45deg);
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
+            z-index: 10;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+           BOTONES DE ACCIÓN (HU24: Táctiles)
+        ========================= */
+
+        .acciones-plato {
+            display: flex;
+
+            gap: 8px;
+
+            margin-top: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
         .btn-ver {
+            flex: 1;
+
+            /* HU24: Ancho mínimo para toque cómodo */
+            min-width: 100px;
+
+            /* HU24: Altura táctil mínima recomendada (48px) */
+            min-height: 48px;
+
             display: inline-flex;
 
             align-items: center;
@@ -533,9 +649,7 @@
 
             gap: 8px;
 
-            margin-top: 15px;
-
-            padding: 10px 18px;
+            padding: 12px 18px;
 
             border-radius: 25px;
 
@@ -559,10 +673,16 @@
             box-shadow:
                 0 4px 10px
                 rgba(92,46,14,0.25);
+
+            font-size: 14px;
+
+            /* HU24: Mejora el toque en móviles */
+            touch-action: manipulation;
         }
 
 
-        .btn-ver:hover {
+        .btn-ver:hover,
+        .btn-ver:active {
             background:
                 linear-gradient(
                     135deg,
@@ -578,6 +698,85 @@
             box-shadow:
                 0 6px 15px
                 rgba(212,162,76,0.35);
+        }
+
+
+        /* Botón de WhatsApp */
+        .btn-whatsapp {
+            flex: 1;
+
+            min-width: 100px;
+
+            min-height: 48px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 12px 18px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #25D366,
+                    #128C7E
+                );
+
+            color: white;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 4px 10px
+                rgba(37, 211, 102, 0.3);
+
+            font-size: 14px;
+
+            touch-action: manipulation;
+        }
+
+
+        .btn-whatsapp:hover,
+        .btn-whatsapp:active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #128C7E,
+                    #075E54
+                );
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 6px 15px
+                rgba(37, 211, 102, 0.5);
+        }
+
+
+        /* Botón deshabilitado */
+        .btn-ver.deshabilitado {
+            background: #999;
+
+            cursor: not-allowed;
+
+            pointer-events: none;
+
+            box-shadow: none;
+
+            width: 100%;
         }
 
 
@@ -612,11 +811,15 @@
             color: #8b4513;
 
             margin-bottom: 10px;
+
+            font-size: clamp(18px, 2.5vw, 22px);
         }
 
 
         .sin-platos p {
             color: #6b5a4b;
+
+            font-size: 15px;
         }
 
 
@@ -642,17 +845,41 @@
         }
 
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
+        /* ================================================
+           HU24: MEDIA QUERIES PARA DISPOSITIVOS MÓVILES
+        ================================================ */
 
-        @media (max-width: 750px) {
+
+        /* ---------- TABLETS (hasta 1024px) ---------- */
+        @media (max-width: 1024px) {
 
             header {
-                padding: 20px 15px;
+                padding: 20px 25px;
             }
 
+            main {
+                width: 95%;
 
+                padding: 30px 25px;
+
+                margin: 30px auto;
+            }
+
+            .platos-grid {
+                gap: 20px;
+            }
+
+        }
+
+
+        /* ---------- CELULARES GRANDES (hasta 768px) ---------- */
+        @media (max-width: 768px) {
+
+            header {
+                padding: 18px 15px;
+            }
+
+            /* Logo y marca en columna */
             .header-top {
                 flex-direction: column;
 
@@ -661,63 +888,205 @@
                 gap: 15px;
             }
 
-
-            .marca h1 {
-                font-size: 24px;
-            }
-
-
             .logo {
-                width: 110px;
+                width: 100px;
 
-                height: 110px;
+                height: 100px;
             }
 
+            /* Navegación apilada y táctil */
+            nav {
+                gap: 8px;
+
+                margin-top: 15px;
+
+                padding-top: 15px;
+            }
+
+            nav a {
+                padding: 10px 16px;
+
+                font-size: 14px;
+
+                min-height: 44px;
+            }
 
             main {
                 width: 95%;
 
                 padding: 25px 18px;
 
-                margin: 25px auto;
+                margin: 20px auto;
+
+                border-radius: 12px;
             }
 
-
-            .titulo-menu h2 {
-                font-size: 30px;
-            }
-
-
+            /* Tarjetas en una sola columna */
             .platos-grid {
                 grid-template-columns: 1fr;
 
                 gap: 20px;
             }
 
-
             .imagen-plato {
-                height: 200px;
+                height: 220px;
 
                 padding: 12px;
             }
 
+            /* Botones en fila táctil */
+            .acciones-plato {
+                flex-direction: row;
 
-            .imagen-plato img {
-                max-width: 100%;
-
-                max-height: 180px;
+                gap: 10px;
             }
 
+            .btn-ver,
+            .btn-whatsapp {
+                font-size: 14px;
 
+                padding: 12px 14px;
+
+                min-height: 50px;
+            }
+
+            /* Pie de tarjeta: precio arriba, botones abajo */
             .plato-footer {
+                flex-direction: column;
+
                 align-items: flex-start;
 
-                flex-direction: column;
+                gap: 8px;
             }
 
+        }
 
-            .btn-ver {
+
+        /* ---------- CELULARES PEQUEÑOS (hasta 480px) ---------- */
+        @media (max-width: 480px) {
+
+            header {
+                padding: 15px 10px;
+            }
+
+            .logo {
+                width: 90px;
+
+                height: 90px;
+            }
+
+            .marca h1 {
+                font-size: 20px;
+
+                letter-spacing: 0.5px;
+            }
+
+            .marca .lema {
+                font-size: 12px;
+            }
+
+            nav {
+                gap: 6px;
+            }
+
+            nav a {
+                padding: 8px 12px;
+
+                font-size: 13px;
+
+                border-radius: 20px;
+
+                min-height: 42px;
+            }
+
+            nav a i {
+                font-size: 12px;
+            }
+
+            main {
                 width: 100%;
+
+                padding: 20px 12px;
+
+                margin: 15px auto;
+
+                border-radius: 0;
+
+                border-top: 4px solid #8b4513;
+            }
+
+            .titulo-menu h2 {
+                font-size: 24px;
+
+                gap: 8px;
+            }
+
+            .titulo-menu p {
+                font-size: 13px;
+            }
+
+            .imagen-plato {
+                height: 180px;
+
+                padding: 10px;
+            }
+
+            .plato-info {
+                padding: 15px;
+            }
+
+            .plato-info h3 {
+                font-size: 18px;
+            }
+
+            .descripcion {
+                font-size: 13px;
+            }
+
+            .precio {
+                font-size: 18px;
+            }
+
+            .etiqueta-agotado {
+                font-size: 10px;
+
+                padding: 4px 35px;
+
+                top: 12px;
+
+                right: -30px;
+            }
+
+            /* Botones apilados en pantallas muy pequeñas */
+            .acciones-plato {
+                flex-direction: column;
+
+                gap: 8px;
+            }
+
+            .btn-ver,
+            .btn-whatsapp {
+                width: 100%;
+
+                min-height: 52px;
+
+                font-size: 15px;
+
+                padding: 14px 16px;
+            }
+
+            .sin-platos {
+                padding: 40px 15px;
+            }
+
+            .sin-platos .icono-vacio {
+                font-size: 45px;
+            }
+
+            footer {
+                font-size: 12px;
+
+                padding: 15px 10px;
             }
 
         }
@@ -739,7 +1108,7 @@
         <div class="header-top">
 
             <img
-                src="{% static 'core/img/img.png' %}"
+                src="{% static 'core/img/logo.png' %}"
                 alt="Logo Las Ricuras de la Abuela Lola"
                 class="logo"
             >
@@ -771,19 +1140,9 @@
                 Inicio
             </a>
 
-            <a href="{% url 'historia' %}">
-                <i class="fa-solid fa-book"></i>
-                Historia
-            </a>
-
             <a href="{% url 'menu' %}">
                 <i class="fa-solid fa-book-open-reader"></i>
                 Menú
-            </a>
-
-            <a href="{% url 'reservas' %}">
-                <i class="fa-solid fa-calendar-check"></i>
-                Reservas
             </a>
 
             <a href="{% url 'Platos' %}">
@@ -843,7 +1202,7 @@
                 {% for plato in platos %}
 
 
-                    <article class="plato-card">
+                    <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}">
 
 
                         <!-- =========================
@@ -857,7 +1216,18 @@
                                 <img
                                     src="{{ plato.imagen.url }}"
                                     alt="{{ plato.nombre }}"
+                                    loading="lazy"
                                 >
+
+                            {% endif %}
+
+
+                            <!-- HU13: Cinta de AGOTADO -->
+                            {% if not plato.disponible %}
+
+                                <div class="etiqueta-agotado">
+                                    <i class="fa-solid fa-ban"></i> Agotado
+                                </div>
 
                             {% endif %}
 
@@ -932,18 +1302,44 @@
 
 
                             <!-- =========================
-                                 VER DETALLE
+                                 ACCIONES (HU13 + WhatsApp)
                             ========================= -->
 
-                            <a
-                                href="{% url 'plato_detalle' plato.id %}"
-                                class="btn-ver"
-                            >
+                            <div class="acciones-plato">
 
-                                <i class="fa-solid fa-eye"></i>
-                                Ver plato
+                                {% if plato.disponible %}
 
-                            </a>
+                                    <!-- Botón Ver plato -->
+                                    <a
+                                        href="{% url 'plato_detalle' plato.id %}"
+                                        class="btn-ver"
+                                    >
+                                        <i class="fa-solid fa-eye"></i>
+                                        Ver
+                                    </a>
+
+
+                                    <!-- Botón WhatsApp con tu número -->
+                                    <a
+                                        href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio"
+                                        target="_blank"
+                                        class="btn-whatsapp"
+                                    >
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                        Pedir
+                                    </a>
+
+                                {% else %}
+
+                                    <!-- Botón deshabilitado -->
+                                    <a href="#" class="btn-ver deshabilitado">
+                                        <i class="fa-solid fa-bell-slash"></i>
+                                        No disponible
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
 
 
                         </div>
