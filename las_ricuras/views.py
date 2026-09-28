@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-
 from .models import Plato
 from .forms import PlatoForm
 
@@ -17,7 +16,6 @@ def inicio(request):
 
 def menu(request):
     platos = Plato.objects.filter(disponible=True)
-
     return render(request, 'menu.html', {
         'platos': platos
     })
@@ -34,7 +32,6 @@ def perfil(request):
 @staff_member_required
 def Platos(request):
     platos = Plato.objects.all()
-
     return render(request, 'Platos.html', {
         'platos': platos
     })
@@ -42,7 +39,6 @@ def Platos(request):
 
 def plato_detalle(request, id):
     plato = get_object_or_404(Plato, id=id)
-
     return render(request, 'plato_detalle.html', {
         'plato': plato
     })
@@ -50,14 +46,11 @@ def plato_detalle(request, id):
 
 @staff_member_required
 def crear_plato(request):
-
     if request.method == 'POST':
         form = PlatoForm(request.POST, request.FILES)
-
         if form.is_valid():
             form.save()
             return redirect('Platos')
-
     else:
         form = PlatoForm()
 
@@ -68,7 +61,6 @@ def crear_plato(request):
 
 @staff_member_required
 def editar_plato(request, id):
-
     plato = get_object_or_404(Plato, id=id)
 
     if request.method == 'POST':
@@ -81,7 +73,6 @@ def editar_plato(request, id):
         if form.is_valid():
             form.save()
             return redirect('Platos')
-
     else:
         form = PlatoForm(instance=plato)
 
@@ -91,10 +82,8 @@ def editar_plato(request, id):
     })
 
 
-
 @staff_member_required
 def eliminar_plato(request, id):
-
     plato = get_object_or_404(Plato, id=id)
 
     if request.method == 'POST':
@@ -106,18 +95,15 @@ def eliminar_plato(request, id):
     })
 
 
-
 def login_view(request):
     return render(request, 'login.html')
 
 
 def registro(request):
-
     if request.user.is_authenticated:
         return redirect('inicio')
 
     if request.method == 'POST':
-
         username = request.POST.get('username', '').strip()
         email = request.POST.get('email', '').strip()
         password1 = request.POST.get('password1', '')
@@ -128,7 +114,6 @@ def registro(request):
                 request,
                 'Todos los campos son obligatorios.'
             )
-
             return render(request, 'registro.html')
 
         if password1 != password2:
@@ -136,7 +121,6 @@ def registro(request):
                 request,
                 'Las contraseñas no coinciden.'
             )
-
             return render(request, 'registro.html')
 
         if len(password1) < 8:
@@ -144,7 +128,6 @@ def registro(request):
                 request,
                 'La contraseña debe tener al menos 8 caracteres.'
             )
-
             return render(request, 'registro.html')
 
         if User.objects.filter(username=username).exists():
@@ -152,7 +135,6 @@ def registro(request):
                 request,
                 'Ese nombre de usuario ya está en uso.'
             )
-
             return render(request, 'registro.html')
 
         if User.objects.filter(email=email).exists():
@@ -160,11 +142,9 @@ def registro(request):
                 request,
                 'Ese correo electrónico ya está registrado.'
             )
-
             return render(request, 'registro.html')
 
         try:
-
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -181,12 +161,10 @@ def registro(request):
             return redirect('login')
 
         except Exception as e:
-
             messages.error(
                 request,
                 f'Ocurrió un error al crear la cuenta: {str(e)}'
             )
-
             return render(request, 'registro.html')
 
     return render(request, 'registro.html')

@@ -96,7 +96,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'las_ricuras' / 'static',
+    BASE_DIR / 'las_ricuras' / 'static/',
 ]
 LOGIN_REDIRECT_URL = 'inicio'      
 LOGOUT_REDIRECT_URL = 'portada'
