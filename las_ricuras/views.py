@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+
 from .models import Plato
 from .forms import PlatoForm
 
@@ -11,11 +12,23 @@ def portada(request):
 
 
 def inicio(request):
-    return render(request, 'inicio.html')
+    contexto = {
+        'metodos': [
+            {'nombre': 'Nequi', 'icono': '📱'},
+            {'nombre': 'Efectivo', 'icono': '💵'},
+            {'nombre': 'Bancolombia', 'icono': '🏦'},
+        ]
+    }
+    return render(request, 'inicio.html', contexto)
 
+
+# ---------- SECCIONES ----------
 
 def menu(request):
-    platos = Plato.objects.filter(disponible=True)
+    # Traemos todos los platos,
+    # disponibles primero y luego los agotados
+    platos = Plato.objects.all().order_by('-disponible', 'nombre')
+
     return render(request, 'menu.html', {
         'platos': platos
     })
@@ -29,9 +42,12 @@ def perfil(request):
     return render(request, 'perfil.html')
 
 
+# ---------- PLATOS ----------
+
 @staff_member_required
 def Platos(request):
     platos = Plato.objects.all()
+
     return render(request, 'Platos.html', {
         'platos': platos
     })
@@ -39,6 +55,7 @@ def Platos(request):
 
 def plato_detalle(request, id):
     plato = get_object_or_404(Plato, id=id)
+
     return render(request, 'plato_detalle.html', {
         'plato': plato
     })
@@ -48,9 +65,11 @@ def plato_detalle(request, id):
 def crear_plato(request):
     if request.method == 'POST':
         form = PlatoForm(request.POST, request.FILES)
+
         if form.is_valid():
             form.save()
             return redirect('Platos')
+
     else:
         form = PlatoForm()
 
@@ -73,6 +92,7 @@ def editar_plato(request, id):
         if form.is_valid():
             form.save()
             return redirect('Platos')
+
     else:
         form = PlatoForm(instance=plato)
 
@@ -94,6 +114,8 @@ def eliminar_plato(request, id):
         'plato': plato
     })
 
+
+# ---------- AUTENTICACIÓN ----------
 
 def login_view(request):
     return render(request, 'login.html')
