@@ -6,7 +6,6 @@ urlpatterns = [
     # --- Portada e Inicio ---
     path('', views.portada, name='portada'),
     path('inicio/', views.inicio, name='inicio'),
-    path('historia/', views.historia, name='historia'),
 
     # --- Autenticación ---
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -16,7 +15,6 @@ urlpatterns = [
 
     # --- Secciones del restaurante ---
     path('menu/', views.menu, name='menu'),
-    path('reservas/', views.reservas, name='reservas'),
     path('contacto/', views.contacto, name='contacto'),
 
     # --- Platos ---
