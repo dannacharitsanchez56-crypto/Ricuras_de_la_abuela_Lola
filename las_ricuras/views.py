@@ -15,25 +15,27 @@ def inicio(request):
     return render(request, 'inicio.html')
 
 
-def historia(request):
-    return render(request, 'historia.html')
 
-
-# ---------- SECCIONES ----------
+# ---------- SECCIONES --------
 def menu(request):
-    platos = Plato.objects.filter(disponible=True)
+    # Traemos todos los platos, disponibles primero y luego los agotados
+    platos = Plato.objects.all().order_by('-disponible', 'nombre')
     return render(request, 'menu.html', {
         'platos': platos
     })
 
-
-def reservas(request):
-    return render(request, 'reservas.html')
-
-
 def contacto(request):
     return render(request, 'contacto.html')
 
+def inicio(request):
+    contexto = {
+        'metodos': [
+            {'nombre': 'Nequi', 'icono': '📱'},
+            {'nombre': 'Efectivo', 'icono': '💵'},
+            {'nombre': 'Bancolombia', 'icono': '🏦'},
+        ]
+    }
+    return render(request, 'inicio.html', contexto)
 
 def perfil(request):
     return render(request, 'perfil.html')

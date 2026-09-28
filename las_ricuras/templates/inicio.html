@@ -22,11 +22,23 @@ Cada receta guarda una historia, un recuerdo y el auténtico sabor de la cocina 
         🕐 Lunes a viernes: 6:00 a.m.—3:30 p.m.<br>
         🕐 Sábados y domingos: 8:00 a.m.—3:30 p.m.
     </p>
-
+<h3>Métodos de pago</h3>
+<div style="background: #fdf6ec; padding: 20px 25px; border-radius: 10px; border-left: 5px solid #d4a24c; margin: 15px 0 25px;">
+    <p style="margin: 0 0 12px; color: #8b4513; font-size: 1.05em;">
+        Para tu comodidad, aceptamos:
+    </p>
+    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px;">
+        {% for metodo in metodos %}
+        <li style="background: #fff; padding: 10px 18px; border-radius: 25px; border: 1px solid #d4a24c; color: #5c2e0e; font-weight: 600;">
+            {{ metodo.icono }} {{ metodo.nombre }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
     <h3>¿Quieres visitarnos?</h3>
     <p>
        Queremos compartir contigo una experiencia llena de tradición, familia y buenos recuerdos. Ven a visitarnos y déjate conquistar por el auténtico sabor de nuestra cocina. Te esperamos para que disfrutes de nuestros deliciosos platos y vivas una experiencia que te hará sentir como en casa. ¡Ven y descubre por qué nuestro sabor sigue conquistando corazones!
     </p>
-    <a href="{% url 'reservas' %}" class="btn">Reservar mesa</a>
+
     <a href="{% url 'menu' %}" class="btn">Ver menú</a>
 {% endblock %}
