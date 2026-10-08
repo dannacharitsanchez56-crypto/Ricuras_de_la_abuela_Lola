@@ -1,4 +1,5 @@
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -93,12 +94,23 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
 STATICFILES_DIRS = [
-    BASE_DIR / 'las_ricuras' / 'static/',
+    BASE_DIR / 'las_ricuras' / 'static',
 ]
-LOGIN_REDIRECT_URL = 'inicio'      
-LOGOUT_REDIRECT_URL = 'portada'
+
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'inicio'
+LOGOUT_REDIRECT_URL = 'login'
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'error',
+}
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

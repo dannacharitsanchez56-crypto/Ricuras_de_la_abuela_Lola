@@ -4,25 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta · Ricuras de la Abuela Lola</title>
-    <!-- Tailwind CSS v3 -->
+    <title>Registro · Ricuras de la Abuela Lola</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #fdfaf5;
         }
-        .registro-card {
-            transition: box-shadow 0.2s ease, transform 0.15s ease;
+        .login-card {
+            transition: box-shadow 0.15s ease, transform 0.1s ease;
         }
-        .registro-card:hover {
-            box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
-            transform: translateY(-2px);
+        .login-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
+            transform: translateY(-1px);
         }
-        input {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            background-color: rgba(248, 250, 252, 0.7);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 0.75rem;
+            color: #334155;
             transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        input::placeholder {
+            color: #94a3b8;
         }
         input:focus {
             outline: none;
@@ -34,113 +43,97 @@
         }
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
         }
     </style>
 </head>
 <body class="antialiased text-slate-700 min-h-screen flex items-center justify-center p-4 md:p-6">
 
     <main class="w-full max-w-md">
-        <div class="registro-card bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div class="login-card bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
 
-            <!-- Logo y título -->
             <div class="text-center mb-8">
                 <div class="w-24 h-24 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4 overflow-hidden border-4 border-white">
                     <img src="{% static 'core/img/logo.png' %}" alt="Logo Abuela Lola" class="w-full h-full object-cover">
                 </div>
                 <h1 class="text-2xl font-bold text-slate-800">Crear Cuenta</h1>
-                <p class="text-sm text-slate-500 mt-1">Únete a Las Ricuras de la Abuela Lola</p>
+                <p class="text-sm text-slate-500 mt-1">Únete a Ricuras de la Abuela Lola</p>
             </div>
 
-            <!-- Formulario de registro -->
-            <form method="post" class="space-y-5">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 rounded-xl p-3 text-sm flex items-center gap-2
+                        {% if message.tags == 'success' %}
+                            bg-emerald-50 border border-emerald-200 text-emerald-700
+                        {% elif message.tags == 'error' %}
+                            bg-rose-50 border border-rose-200 text-rose-700
+                        {% else %}
+                            bg-amber-50 border border-amber-200 text-amber-700
+                        {% endif %}">
+                        {% if message.tags == 'success' %}
+                            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        {% elif message.tags == 'error' %}
+                            <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form action="{% url 'registro' %}" method="post" class="space-y-5">
                 {% csrf_token %}
 
-                <!-- Campo: Usuario -->
                 <div class="space-y-1.5">
                     <label for="username" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-user text-slate-400"></i>
-                        Nombre de Usuario
+                        <i class="fa-solid fa-user text-slate-400" aria-hidden="true"></i>
+                        Nombre de usuario
                     </label>
-                    <input type="text" name="username" id="username" placeholder="Elige un nombre de usuario" required
-                        value="{{ request.POST.username|default:'' }}"
-                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
+                    <input type="text" name="username" id="username" placeholder="Tu nombre de usuario" required autofocus>
                 </div>
 
-                <!-- Campo: Email -->
                 <div class="space-y-1.5">
                     <label for="email" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-envelope text-slate-400"></i>
-                        Correo Electrónico
+                        <i class="fa-solid fa-envelope text-slate-400" aria-hidden="true"></i>
+                        Correo electrónico
                     </label>
-                    <input type="email" name="email" id="email" placeholder="tu@correo.com" required
-                        value="{{ request.POST.email|default:'' }}"
-                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
+                    <input type="email" name="email" id="email" placeholder="tucorreo@ejemplo.com" required>
                 </div>
 
-                <!-- Campo: Contraseña -->
                 <div class="space-y-1.5">
                     <label for="password1" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-lock text-slate-400"></i>
+                        <i class="fa-solid fa-lock text-slate-400" aria-hidden="true"></i>
                         Contraseña
                     </label>
-                    <input type="password" name="password1" id="password1" placeholder="Mínimo 8 caracteres" required
-                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
+                    <input type="password" name="password1" id="password1" placeholder="Mínimo 8 caracteres" required>
                 </div>
 
-                <!-- Campo: Confirmar Contraseña -->
                 <div class="space-y-1.5">
                     <label for="password2" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-lock text-slate-400"></i>
-                        Confirmar Contraseña
+                        <i class="fa-solid fa-lock text-slate-400" aria-hidden="true"></i>
+                        Confirmar contraseña
                     </label>
-                    <input type="password" name="password2" id="password2" placeholder="Repite tu contraseña" required
-                        class="w-full px-4 py-2.5 bg-slate-50/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder:text-slate-400 transition-all">
+                    <input type="password" name="password2" id="password2" placeholder="Repite tu contraseña" required>
                 </div>
 
-                <!-- Mostrar mensajes (errores o éxitos) -->
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="rounded-xl p-3 text-sm flex items-center gap-2
-                            {% if message.tags == 'success' %}
-                                bg-emerald-50 border border-emerald-200 text-emerald-700
-                            {% elif message.tags == 'error' %}
-                                bg-rose-50 border border-rose-200 text-rose-700
-                            {% else %}
-                                bg-amber-50 border border-amber-200 text-amber-700
-                            {% endif %}">
-                            {% if message.tags == 'success' %}
-                                <i class="fa-solid fa-circle-check"></i>
-                            {% elif message.tags == 'error' %}
-                                <i class="fa-solid fa-circle-xmark"></i>
-                            {% else %}
-                                <i class="fa-solid fa-circle-info"></i>
-                            {% endif %}
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <!-- Botón de submit -->
                 <button type="submit"
-                        class="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-700 text-white text-sm font-semibold rounded-xl border border-amber-700 hover:bg-amber-800 hover:border-amber-800 transition-all duration-150 shadow-sm mt-2">
-                    <i class="fa-solid fa-user-plus"></i>
-                    Crear Cuenta
+                        class="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-amber-700 text-white text-sm font-medium rounded-xl border border-amber-700 hover:bg-amber-800 hover:border-amber-800 transition-all duration-150 shadow-sm hover:shadow">
+                    <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                    Crear cuenta
                 </button>
             </form>
 
-            <!-- Enlace a login -->
             <div class="mt-6 text-center text-sm text-slate-500 border-t border-slate-200/60 pt-5">
                 ¿Ya tienes cuenta?
                 <a href="{% url 'login' %}" class="font-medium text-amber-700 hover:text-amber-800 hover:underline transition-colors">
-                    Inicia Sesión
+                    Inicia sesión
                 </a>
             </div>
         </div>
 
         <div class="mt-6 text-xs text-slate-400 text-center">
             <span class="flex items-center justify-center gap-2">
-                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i>
                 Las Ricuras de la Abuela Lola · Django + Tailwind
             </span>
         </div>
