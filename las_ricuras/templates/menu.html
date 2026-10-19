@@ -114,7 +114,7 @@
 
         .titulo-menu {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         .titulo-menu h2 {
@@ -143,171 +143,173 @@
             border-radius: 10px;
         }
 
-        /* PLATOS */
+        /* FILTROS DE CATEGORÍA */
+        .filtros-categoria {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn-filtro {
+            padding: 10px 20px;
+            border: 2px solid #d4a24c;
+            background: transparent;
+            color: #5c2e0e;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        .btn-filtro:hover, .btn-filtro.activo {
+            background: #d4a24c;
+            color: white;
+        }
+
+        /* LISTA DE PLATOS (MODO COMPACTO) */
         .platos-grid {
-            display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(min(100%, 270px), 1fr)
-            );
-            gap: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .plato-card {
+            display: flex;
+            flex-direction: row;
             background: #fffaf3;
             border: 1px solid #ead8bd;
             border-radius: 16px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
             box-shadow: 0 4px 12px rgba(92,46,14,.08);
             transition: .3s;
         }
 
         .plato-card:hover {
-            transform: translateY(-5px);
+            transform: translateX(5px);
             box-shadow: 0 10px 25px rgba(92,46,14,.18);
         }
 
         .plato-card.no-disponible-card {
-            opacity: .7;
+            opacity: .6;
             filter: grayscale(60%);
         }
 
-        /* IMAGEN */
+        /* Imagen compacta */
         .imagen-plato {
-            height: 210px;
+            width: 180px;
+            min-width: 180px;
+            height: 180px;
             background: linear-gradient(135deg, #f5efe6, #ead8bd);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 15px;
             position: relative;
-            overflow: hidden;
         }
 
         .imagen-plato img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        /* ETIQUETA AGOTADO */
         .etiqueta-agotado {
             position: absolute;
             top: 15px;
-            right: -35px;
+            left: -30px;
             background: #a33b32;
             color: white;
-            padding: 5px 40px;
+            padding: 4px 35px;
             font-size: 11px;
             font-weight: bold;
-            transform: rotate(45deg);
+            transform: rotate(-45deg);
         }
 
-        /* INFORMACIÓN */
+        /* Info compacta */
         .plato-info {
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             flex-direction: column;
             flex: 1;
+            justify-content: center;
+        }
+
+        .plato-header-lista {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+            gap: 10px;
         }
 
         .plato-info h3 {
             color: #5c2e0e;
             font-size: clamp(18px, 2.5vw, 22px);
-            margin-bottom: 8px;
+            margin: 0;
+        }
+
+        .precio {
+            color: #8b4513;
+            font-size: 22px;
+            font-weight: bold;
+            white-space: nowrap;
         }
 
         .descripcion {
             color: #5f5146;
             font-size: 14px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .plato-footer {
+        .plato-footer-lista {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: auto;
-            padding-top: 15px;
+            padding-top: 10px;
             border-top: 1px solid #ead8bd;
-            flex-wrap: wrap;
         }
 
-        .precio {
-            color: #8b4513;
-            font-size: 21px;
-            font-weight: bold;
-        }
-
-        .disponible,
-        .no-disponible {
-            font-size: 13px;
+        .disponible, .no-disponible {
+            font-size: 12px;
             font-weight: 600;
             padding: 4px 10px;
             border-radius: 15px;
         }
+        .disponible { color: #357a38; background: rgba(53,122,56,.1); }
+        .no-disponible { color: #a33b32; background: rgba(163,59,50,.1); }
 
-        .disponible {
-            color: #357a38;
-            background: rgba(53,122,56,.1);
-        }
-
-        .no-disponible {
-            color: #a33b32;
-            background: rgba(163,59,50,.1);
-        }
-
-        /* BOTONES */
         .acciones-plato {
             display: flex;
             gap: 8px;
-            margin-top: 15px;
         }
 
-        .btn-ver,
-        .btn-whatsapp {
-            flex: 1;
-            min-height: 48px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 15px;
-            border-radius: 25px;
+        .btn-ver, .btn-whatsapp {
+            padding: 8px 18px;
+            border-radius: 20px;
             color: white;
             text-decoration: none;
             font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             transition: .3s;
         }
 
-        .btn-ver {
-            background: linear-gradient(135deg, #8b4513, #5c2e0e);
-        }
-
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-        }
-
-        .btn-ver:hover,
-        .btn-whatsapp:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-ver.deshabilitado {
-            background: #999;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
+        .btn-ver { background: linear-gradient(135deg, #8b4513, #5c2e0e); }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        
+        .btn-ver:hover, .btn-whatsapp:hover { transform: translateY(-2px); }
+        .btn-ver.deshabilitado { background: #999; cursor: not-allowed; }
 
         /* SIN PLATOS */
         .sin-platos {
@@ -324,15 +326,6 @@
             margin-bottom: 15px;
         }
 
-        .sin-platos h3 {
-            color: #8b4513;
-            margin-bottom: 10px;
-        }
-
-        .sin-platos p {
-            color: #6b5a4b;
-        }
-
         /* FOOTER */
         footer {
             background: #2e241c;
@@ -344,64 +337,24 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            header {
-                padding: 18px 15px;
-            }
+            header { padding: 18px 15px; }
+            .header-top { flex-direction: column; text-align: center; }
+            .logo { width: 100px; height: 100px; }
+            main { width: 95%; padding: 25px 18px; margin: 20px auto; }
 
-            .header-top {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .logo {
-                width: 100px;
-                height: 100px;
-            }
-
-            main {
-                width: 95%;
-                padding: 25px 18px;
-                margin: 20px auto;
-            }
-
-            .platos-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .plato-footer {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .acciones-plato {
-                flex-direction: row;
-            }
+            /* En celular vuelve a ser tarjeta vertical */
+            .plato-card { flex-direction: column; }
+            .imagen-plato { width: 100%; height: 200px; }
+            .etiqueta-agotado { left: auto; right: -35px; transform: rotate(45deg); }
+            .plato-header-lista { flex-direction: column; }
+            .plato-footer-lista { flex-direction: column; align-items: flex-start; }
+            .acciones-plato { width: 100%; margin-top: 10px; }
+            .btn-ver, .btn-whatsapp { flex: 1; }
         }
 
         @media (max-width: 480px) {
-            nav a {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-
-            main {
-                width: 100%;
-                border-radius: 0;
-                padding: 20px 12px;
-            }
-
-            .imagen-plato {
-                height: 180px;
-            }
-
-            .acciones-plato {
-                flex-direction: column;
-            }
-
-            .btn-ver,
-            .btn-whatsapp {
-                width: 100%;
-            }
+            nav a { padding: 8px 12px; font-size: 13px; }
+            main { width: 100%; border-radius: 0; padding: 20px 12px; }
         }
     </style>
 </head>
@@ -409,192 +362,126 @@
 <body>
 
 <header>
-
     <div class="header-top">
-
-        <img
-            src="{% static 'core/img/logo.png' %}"
-            alt="Logo Las Ricuras de la Abuela Lola"
-            class="logo"
-        >
-
+        <img src="{% static 'core/img/logo.png' %}" alt="Logo Las Ricuras de la Abuela Lola" class="logo">
         <div class="marca">
             <h1>Las Ricuras de la Abuela Lola</h1>
             <p class="lema">Donde cada plato sabe a hogar</p>
         </div>
-
     </div>
 
     <nav>
-        <a href="{% url 'inicio' %}">
-            <i class="fa-solid fa-house"></i> Inicio
-        </a>
-
-        <a href="{% url 'menu' %}">
-            <i class="fa-solid fa-book-open-reader"></i> Menú
-        </a>
-
-        <a href="{% url 'Platos' %}">
-            <i class="fa-solid fa-plate-wheat"></i> Platos
-        </a>
-
-        <a href="{% url 'contacto' %}">
-            <i class="fa-solid fa-envelope"></i> Contacto
-        </a>
-
-        <a href="{% url 'login' %}">
-            <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
-        </a>
+        <a href="{% url 'inicio' %}"><i class="fa-solid fa-house"></i> Inicio</a>
+        <a href="{% url 'menu' %}"><i class="fa-solid fa-book-open-reader"></i> Menú</a>
+        <a href="{% url 'Platos' %}"><i class="fa-solid fa-plate-wheat"></i> Platos</a>
+        <a href="{% url 'contacto' %}"><i class="fa-solid fa-envelope"></i> Contacto</a>
+        <a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión</a>
     </nav>
-
 </header>
 
 <main>
-
     <section class="titulo-menu">
-
-        <h2>
-            <i class="fa-solid fa-utensils"></i>
-            Nuestro Menú
-        </h2>
-
+        <h2><i class="fa-solid fa-utensils"></i> Nuestro Menú</h2>
         <div class="linea"></div>
-
-        <p>
-            Descubre los sabores tradicionales de nuestra cocina,
-            preparados con cariño y ese toque especial de la Abuela Lola.
-        </p>
-
+        <p>Descubre los sabores tradicionales de nuestra cocina, preparados con cariño y ese toque especial de la Abuela Lola.</p>
     </section>
 
+    <!-- FILTROS DE CATEGORÍA -->
+    <div class="filtros-categoria">
+        <button class="btn-filtro activo" onclick="filtrarPlatos('todos', this)">Todos</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('almuerzos', this)">Almuerzos</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('bebidas', this)">Bebidas</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('postres', this)">Postres</button>
+    </div>
+
     {% if platos %}
-
         <div class="platos-grid">
-
             {% for plato in platos %}
-
-                <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}">
-
+                
+                <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}" 
+                         data-categoria="{{ plato.categoria.nombre|lower|default:'todos' }}">
+                    
                     <div class="imagen-plato">
-
                         {% if plato.imagen %}
-                            <img
-                                src="{{ plato.imagen.url }}"
-                                alt="{{ plato.nombre }}"
-                                loading="lazy"
-                            >
+                            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" loading="lazy">
+                        {% else %}
+                            <i class="fa-solid fa-utensils" style="font-size: 40px; color: #d4a24c;"></i>
                         {% endif %}
 
                         {% if not plato.disponible %}
                             <div class="etiqueta-agotado">
-                                <i class="fa-solid fa-ban"></i>
-                                Agotado
+                                <i class="fa-solid fa-ban"></i> Agotado
                             </div>
                         {% endif %}
-
                     </div>
 
                     <div class="plato-info">
-
-                        <h3>{{ plato.nombre }}</h3>
-
-                        {% if plato.descripcion %}
-                            <p class="descripcion">
-                                {{ plato.descripcion }}
-                            </p>
-                        {% else %}
-                            <p class="descripcion">
-                                Delicioso plato preparado con el sabor
-                                tradicional de nuestra casa.
-                            </p>
-                        {% endif %}
-
-                        <div class="plato-footer">
-
-                            <span class="precio">
-                                ${{ plato.precio|floatformat:0 }}
-                            </span>
-
-                            {% if plato.disponible %}
-                                <span class="disponible">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                    Disponible
-                                </span>
-                            {% else %}
-                                <span class="no-disponible">
-                                    <i class="fa-solid fa-circle-xmark"></i>
-                                    No disponible
-                                </span>
-                            {% endif %}
-
+                        <div class="plato-header-lista">
+                            <h3>{{ plato.nombre }}</h3>
+                            <span class="precio">${{ plato.precio|floatformat:0 }}</span>
                         </div>
 
-                        <div class="acciones-plato">
+                        <p class="descripcion">
+                            {{ plato.descripcion|default:"Delicioso plato preparado con el sabor tradicional de nuestra casa." }}
+                        </p>
 
+                        <div class="plato-footer-lista">
                             {% if plato.disponible %}
-
-                                <a
-                                    href="{% url 'plato_detalle' plato.id %}"
-                                    class="btn-ver"
-                                >
-                                    <i class="fa-solid fa-eye"></i>
-                                    Ver plato
-                                </a>
-
-                                <a
-                                    href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio"
-                                    target="_blank"
-                                    class="btn-whatsapp"
-                                >
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                    Pedir
-                                </a>
-
+                                <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible</span>
                             {% else %}
-
-                                <span class="btn-ver deshabilitado">
-                                    <i class="fa-solid fa-ban"></i>
-                                    Agotado
-                                </span>
-
+                                <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> No disponible</span>
                             {% endif %}
 
+                            <div class="acciones-plato">
+                                {% if plato.disponible %}
+                                    <a href="{% url 'plato_detalle' plato.id %}" class="btn-ver">
+                                        <i class="fa-solid fa-eye"></i> Ver
+                                    </a>
+                                    <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio" target="_blank" class="btn-whatsapp">
+                                        <i class="fa-brands fa-whatsapp"></i> Pedir
+                                    </a>
+                                {% else %}
+                                    <span class="btn-ver deshabilitado"><i class="fa-solid fa-ban"></i> Agotado</span>
+                                {% endif %}
+                            </div>
                         </div>
-
                     </div>
-
                 </article>
-
             {% endfor %}
-
         </div>
-
     {% else %}
-
         <div class="sin-platos">
-
-            <div class="icono-vacio">
-                <i class="fa-solid fa-utensils"></i>
-            </div>
-
+            <div class="icono-vacio"><i class="fa-solid fa-utensils"></i></div>
             <h3>No hay platos disponibles</h3>
-
-            <p>
-                En este momento no hay platos registrados en el menú.
-            </p>
-
+            <p>En este momento no hay platos registrados en el menú.</p>
         </div>
-
     {% endif %}
-
 </main>
 
 <footer>
-    <p>
-        &copy; 2026 Las Ricuras de la Abuela Lola —
-        Todos los derechos reservados
-    </p>
+    <p>&copy; 2026 Las Ricuras de la Abuela Lola — Todos los derechos reservados</p>
 </footer>
+
+<!-- SCRIPT PARA LOS FILTROS -->
+<script>
+function filtrarPlatos(categoria, boton) {
+    // 1. Cambiar el botón activo
+    document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
+    boton.classList.add('activo');
+
+    // 2. Filtrar las tarjetas
+    const platos = document.querySelectorAll('.plato-card');
+    platos.forEach(plato => {
+        const catPlato = plato.getAttribute('data-categoria');
+        
+        if (categoria === 'todos' || catPlato === categoria) {
+            plato.style.display = 'flex'; // Mostrar
+        } else {
+            plato.style.display = 'none'; // Ocultar
+        }
+    });
+}
+</script>
 
 </body>
 </html>

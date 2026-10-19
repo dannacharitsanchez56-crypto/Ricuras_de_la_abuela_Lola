@@ -8,305 +8,187 @@
 
     <title>{{ plato.nombre }} | Ricuras de la Abuela Lola</title>
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5efe6;
-            color: #2e241c;
-            line-height: 1.6;
+            font-family: 'Nunito', sans-serif;
+            background-color: #f7f3eb;
+            color: #3a2c21;
+            line-height: 1.5;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* HEADER */
         header {
-            background: linear-gradient(135deg, #5c2e0e, #8b4513, #a0522d);
-            padding: 22px 40px;
-            border-bottom: 4px solid #d4a24c;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+            background: #5c2e0e;
+            padding: 15px 20px;
+            border-bottom: 3px solid #d4a24c;
         }
 
         .header-top {
-            max-width: 1200px;
+            max-width: 900px;
             margin: auto;
             display: flex;
             align-items: center;
-            gap: 25px;
-        }
-
-        .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: white;
-            padding: 6px;
-            object-fit: cover;
-            box-shadow: 0 0 0 4px #d4a24c;
-        }
-
-        .marca h1 {
-            color: #fdf6ec;
-            font-size: clamp(22px, 3vw, 34px);
-            margin-bottom: 5px;
-        }
-
-        .lema {
-            color: #d4a24c;
-            font-style: italic;
-        }
-
-        /* NAVEGACIÓN */
-        nav {
-            display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            max-width: 1200px;
-            margin: 20px auto 0;
-            padding-top: 18px;
-            border-top: 2px solid rgba(212, 162, 76, .5);
+            gap: 15px;
+        }
+
+        .logo { width: 60px; height: 60px; border-radius: 50%; background: white; border: 2px solid #d4a24c; }
+        .marca h1 { color: #fdf6ec; font-family: 'Lora', serif; font-size: 22px; }
+
+        nav {
+            display: flex; justify-content: center; gap: 15px; margin-top: 10px; flex-wrap: wrap;
         }
 
         nav a {
-            color: #fdf6ec;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: rgba(0, 0, 0, .25);
-            border: 1px solid rgba(212, 162, 76, .5);
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: .3s;
+            color: #fdf6ec; text-decoration: none; font-size: 13px; font-weight: 600; opacity: 0.8;
         }
 
-        nav a:hover {
-            background: #d4a24c;
-            color: #5c2e0e;
-            transform: translateY(-2px);
-        }
+        nav a:hover { opacity: 1; color: #d4a24c; }
 
-        /* CONTENIDO */
         main {
             flex: 1;
-            width: 92%;
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 16px;
-            border-top: 5px solid #8b4513;
-            box-shadow: 0 8px 30px rgba(92, 46, 14, .15);
-        }
-
-        .titulo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .titulo h2 {
-            color: #5c2e0e;
-            font-size: clamp(28px, 4vw, 36px);
-        }
-
-        .titulo h2 i {
-            color: #d4a24c;
-        }
-
-        .titulo p {
-            color: #8b4513;
-            font-style: italic;
-        }
-
-        /* DETALLE */
-        .detalle {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        /* IMAGEN */
-        .imagen-container {
-            min-height: 350px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f5efe6, #ead8bd);
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .plato-imagen {
-            max-width: 100%;
-            max-height: 400px;
-            object-fit: contain;
+            width: 90%;
+            max-width: 800px; /* Más angosto para que no se estire el texto */
+            margin: 30px auto;
+            background: #fffdf9;
+            border: 1px solid #e6dac7;
             border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(92, 46, 14, .2);
+            box-shadow: 0 10px 25px rgba(92, 46, 14, .08);
+            overflow: hidden;
         }
 
-        .sin-imagen {
+        .imagen-container {
             width: 100%;
             height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 80px;
-            color: #8b4513;
             background: #ead8bd;
-            border-radius: 12px;
+            position: relative;
         }
 
-        /* INFORMACIÓN */
-        .informacion h3 {
+        .plato-imagen { width: 100%; height: 100%; object-fit: cover; }
+        .sin-imagen { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-size: 60px; color: #8b4513; opacity: 0.5; }
+
+        .etiqueta-destacada {
+            position: absolute; bottom: 15px; left: 15px;
+            background: #d4a24c; color: #5c2e0e;
+            padding: 4px 12px; font-size: 11px; font-weight: 700; border-radius: 4px; text-transform: uppercase;
+        }
+
+        .informacion { padding: 25px; }
+
+        .titulo-plato {
+            font-family: 'Lora', serif;
             color: #5c2e0e;
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .descripcion-titulo {
-            color: #8b4513;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .descripcion {
-            color: #5f5146;
-            margin-bottom: 25px;
-            line-height: 1.8;
-        }
-
-        .precio {
-            color: #8b4513;
             font-size: 30px;
-            font-weight: bold;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .precio-disponibilidad {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
 
-        /* DISPONIBILIDAD */
-        .disponible,
-        .no-disponible {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 25px;
+        .precio {
+            font-family: 'Lora', serif;
+            color: #8b4513;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        .disponible {
-            background: #dcefd8;
-            color: #376b2d;
+        .disponible, .no-disponible {
+            font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+            display: inline-flex; align-items: center; gap: 5px;
         }
 
-        .no-disponible {
-            background: #f5d6d2;
-            color: #8b2d23;
+        .disponible { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .no-disponible { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+        .descripcion {
+            color: #5f5146;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .descripcion.expandida {
+            -webkit-line-clamp: unset;
         }
 
-        /* BOTONES */
+        .btn-leer-mas {
+            background: none; border: none; color: #8b4513; font-weight: bold; cursor: pointer;
+            font-size: 14px; margin-bottom: 20px; display: block;
+        }
+
+        .separador { border-bottom: 2px dashed #e6dac7; margin: 15px 0; }
+
         .acciones {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 10px;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
-            padding: 11px 20px;
-            border-radius: 25px;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 15px;
             transition: .3s;
+            flex: 1;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: 2px solid #25D366;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            border-color: #128C7E;
         }
 
         .btn-volver {
-            background: #ead8bd;
+            background: transparent;
             color: #5c2e0e;
+            border: 2px solid #d4a24c;
+            flex: 0.5;
         }
 
-        .btn-editar {
-            background: #8b4513;
-            color: white;
-        }
+        .btn-volver:hover { background: #f7f3eb; }
 
-        .btn:hover {
-            background: #d4a24c;
-            color: #5c2e0e;
-            transform: translateY(-2px);
-        }
-
-        /* FOOTER */
         footer {
-            background: #2e241c;
-            color: #d4a24c;
-            text-align: center;
-            padding: 20px;
-            border-top: 4px solid #8b4513;
+            background: #2e241c; color: #d4a24c; text-align: center; padding: 15px; font-size: 13px;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 750px) {
-
-            header {
-                padding: 20px 15px;
-            }
-
-            .header-top {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-
-            .logo {
-                width: 110px;
-                height: 110px;
-            }
-
-            main {
-                width: 95%;
-                padding: 25px 18px;
-                margin: 25px auto;
-            }
-
-            .detalle {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .imagen-container {
-                min-height: 250px;
-            }
-
-            .informacion h3 {
-                font-size: 27px;
-            }
-
-            .acciones {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+        @media (max-width: 600px) {
+            .imagen-container { height: 220px; }
+            .informacion { padding: 20px; }
+            .titulo-plato { font-size: 26px; }
+            .precio-disponibilidad { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .acciones { flex-direction: column; }
+            .btn-volver { flex: 1; }
         }
     </style>
 </head>
@@ -314,154 +196,83 @@
 <body>
 
 <header>
-
     <div class="header-top">
-
-        <img
-            src="{% static 'core/img/logo.png' %}"
-            alt="Logo Las Ricuras de la Abuela Lola"
-            class="logo"
-        >
-
+        <img src="{% static 'core/img/logo.png' %}" alt="Logo" class="logo">
         <div class="marca">
             <h1>Las Ricuras de la Abuela Lola</h1>
-            <p class="lema">Donde cada plato sabe a hogar</p>
         </div>
-
     </div>
-
     <nav>
-
-        <a href="{% url 'inicio' %}">
-            <i class="fa-solid fa-house"></i>
-            Inicio
-        </a>
-
-        <a href="{% url 'menu' %}">
-            <i class="fa-solid fa-book-open-reader"></i>
-            Menú
-        </a>
-
-        <a href="{% url 'Platos' %}">
-            <i class="fa-solid fa-plate-wheat"></i>
-            Platos
-        </a>
-
-        <a href="{% url 'contacto' %}">
-            <i class="fa-solid fa-envelope"></i>
-            Contacto
-        </a>
-
-        <a href="{% url 'login' %}">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            Iniciar sesión
-        </a>
-
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'menu' %}">Menú</a>
+        <a href="{% url 'Platos' %}">Platos</a>
+        <a href="{% url 'login' %}">Iniciar sesión</a>
     </nav>
-
 </header>
 
 <main>
+    <div class="imagen-container">
+        {% if plato.imagen %}
+            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
+        {% else %}
+            <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
+        {% endif %}
 
-    <div class="titulo">
-
-        <h2>
-            <i class="fa-solid fa-utensils"></i>
-            Detalle del plato
-        </h2>
-
-        <p>
-            Información completa del plato seleccionado
-        </p>
-
+        {% if plato.disponible %}
+            <div class="etiqueta-destacada">Hecho en casa</div>
+        {% endif %}
     </div>
 
-    <div class="detalle">
-
-        <div class="imagen-container">
-
-            {% if plato.imagen %}
-
-                <img
-                    src="{{ plato.imagen.url }}"
-                    alt="{{ plato.nombre }}"
-                    class="plato-imagen"
-                >
-
-            {% else %}
-
-                <div class="sin-imagen">
-                    <i class="fa-solid fa-utensils"></i>
-                </div>
-
-            {% endif %}
-
-        </div>
-
-        <div class="informacion">
-
-            <h3>{{ plato.nombre }}</h3>
-
-            <p class="descripcion-titulo">
-                Descripción
-            </p>
-
-            <p class="descripcion">
-                {{ plato.descripcion|linebreaksbr }}
-            </p>
-
-            <p class="precio">
-                ${{ plato.precio|floatformat:0 }}
-            </p>
-
+    <div class="informacion">
+        <h1 class="titulo-plato">{{ plato.nombre }}</h1>
+        
+        <div class="precio-disponibilidad">
+            <div class="precio">${{ plato.precio|floatformat:0 }}</div>
+            
             {% if plato.disponible %}
-
-                <span class="disponible">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Disponible
-                </span>
-
+                <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible hoy</span>
             {% else %}
-
-                <span class="no-disponible">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                    Agotado
-                </span>
-
+                <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
             {% endif %}
-
-            <div class="acciones">
-
-                <a
-                    href="{% url 'Platos' %}"
-                    class="btn btn-volver"
-                >
-                    <i class="fa-solid fa-arrow-left"></i>
-                    Volver a platos
-                </a>
-
-                <a
-                    href="{% url 'editar_plato' plato.id %}"
-                    class="btn btn-editar"
-                >
-                    <i class="fa-solid fa-pen"></i>
-                    Editar plato
-                </a>
-
-            </div>
-
         </div>
 
-    </div>
+        <div class="separador"></div>
 
+        <p class="descripcion" id="texto-descripcion">
+            {{ plato.descripcion|linebreaksbr }}
+        </p>
+        
+        <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">Leer descripción completa</button>
+
+        <div class="acciones">
+            <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}" target="_blank" class="btn btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+            </a>
+            <a href="{% url 'Platos' %}" class="btn btn-volver">
+                <i class="fa-solid fa-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
 </main>
 
 <footer>
-    <p>
-        &copy; 2026 Las Ricuras de la Abuela Lola —
-        Todos los derechos reservados
-    </p>
+    <p>&copy; 2026 Las Ricuras de la Abuela Lola</p>
 </footer>
+
+<script>
+    function toggleDescripcion() {
+        const descripcion = document.getElementById('texto-descripcion');
+        const boton = document.getElementById('btn-leer-mas');
+        
+        descripcion.classList.toggle('expandida');
+        
+        if (descripcion.classList.contains('expandida')) {
+            boton.innerText = 'Leer menos';
+        } else {
+            boton.innerText = 'Leer descripción completa';
+        }
+    }
+</script>
 
 </body>
 </html>
