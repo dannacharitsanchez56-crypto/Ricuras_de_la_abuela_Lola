@@ -19,7 +19,7 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
 
     path('menu/', views.menu, name='menu'),
-    path('contacto/', views.contacto, name='contacto'),
+
 
     path('platos/', views.Platos, name='Platos'),
     path('platos/nuevo/', views.crear_plato, name='crear_plato'),

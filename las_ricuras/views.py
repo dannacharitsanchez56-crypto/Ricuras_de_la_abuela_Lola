@@ -28,8 +28,7 @@ def menu(request):
     return render(request, 'menu.html', {'platos': platos})
 
 
-def contacto(request):
-    return render(request, 'contacto.html')
+
 
 
 @login_required
