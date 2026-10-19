@@ -1,58 +1,135 @@
-{% load static %} 
+{% load static %}
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido - Las Ricuras de la Abuela Lola</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #8B4513; 
+            /* El fondo se mantiene igual */
+            background-image: linear-gradient(rgba(46, 26, 16, 0.8), rgba(46, 26, 16, 0.9)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
+            font-family: 'Lato', sans-serif;
+            padding: 20px;
         }
+
         .contenedor-bienvenida {
-            background-color: rgba(0,0,0,0.5);
-            padding: 50px;
-            border-radius: 20px;
-            max-width: 90%; 
+            /* AQUÍ ESTÁ EL TRUCO: Fondo semi-transparente + Desenfoque */
+            background-color: rgba(253, 246, 236, 0.85); /* Crema con 85% de opacidad */
+            backdrop-filter: blur(10px); /* Desenfoca lo que está detrás */
+            -webkit-backdrop-filter: blur(10px); /* Para Safari */
+            
+            padding: 50px 40px;
+            border-radius: 15px;
+            max-width: 480px; 
+            width: 100%;
+            text-align: center;
+            
+            /* Borde dorado simple, quitamos el doble borde para que no se vea pesado */
+            border: 1px solid rgba(212, 162, 76, 0.8);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); /* Sombra más suave y difuminada */
         }
         
         .logo-portada {
-            width: 180px;         
-            height: 180px;
+            width: 170px;         
+            height: 170px;
             object-fit: cover;   
             border-radius: 50%; 
-            border: 5px solid white;
+            border: 4px solid #d4a24c;
+            padding: 4px;
+            background: #fff;
             margin-bottom: 20px;   
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 25px rgba(0,0,0, 0.2); 
+            animation: flotar 4s ease-in-out infinite;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .decoracion {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .decoracion .linea {
+            height: 1px;
+            width: 50px;
+            background-color: #d4a24c;
+        }
+
+        .decoracion i {
+            color: #d4a24c;
+            font-size: 14px;
         }
 
         h1 {
-            font-size: 2.5em; 
-            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            color: #4a2c1b;
+            font-size: 34px; 
+            margin-bottom: 15px;
+            line-height: 1.2;
         }
+
         p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
+            font-size: 17px;
+            font-style: italic;
+            color: #6b4c35;
+            margin-bottom: 35px;
         }
+
         .boton-entrar {
-            background-color: #D2691E;
-            color: white;
-            padding: 15px 40px;
+            background: linear-gradient(135deg, #d4a24c, #b8860b); 
+            color: #2e241c;
+            padding: 14px 35px;
             text-decoration: none;
-            font-size: 1.3em;
-            border-radius: 10px;
-            transition: background 0.3s, transform 0.2s;
-            display: inline-block;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 6px; 
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            box-shadow: 0 6px 20px rgba(212, 162, 76, 0.4); 
         }
+
         .boton-entrar:hover {
-            background-color: #A0522D;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 162, 76, 0.6);
+            color: #fff; 
+        }
+
+        @media (max-width: 500px) {
+            .contenedor-bienvenida { padding: 30px 20px; }
+            .logo-portada { width: 130px; height: 130px; }
+            h1 { font-size: 26px; }
+            p { font-size: 15px; }
         }
     </style>
 </head>
@@ -61,10 +138,19 @@
     <div class="contenedor-bienvenida">
         
         <img src="{% static 'core/img/logo.png' %}" alt="Logo Abuela Lola" class="logo-portada">
-        <h1>¡Bienvenidos a Las Ricuras de la Abuela Lola!</h1>
-        <p>Sabor de casa, tradición de siempre</p>
         
-        <a href="{% url 'inicio' %}" class="boton-entrar">Entrar al Sitio</a>
+        <div class="decoracion">
+            <div class="linea"></div>
+            <i class="fa-solid fa-utensils"></i>
+            <div class="linea"></div>
+        </div>
+
+        <h1>¡Bienvenidos!</h1>
+        <p>Las Ricuras de la Abuela Lola<br>Sabor de casa, tradición de siempre</p>
+        
+        <a href="{% url 'inicio' %}" class="boton-entrar">
+            <i class="fa-solid fa-door-open"></i> Entrar al Sitio
+        </a>
     </div>
 
 </body>

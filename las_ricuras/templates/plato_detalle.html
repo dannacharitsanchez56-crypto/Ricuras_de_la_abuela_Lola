@@ -1,264 +1,200 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block titulo %}{{ plato.nombre }} | Ricuras de la Abuela Lola{% endblock %}
 
-    <title>{{ plato.nombre }} | Ricuras de la Abuela Lola</title>
+{% block extra_css %}
+<style>
+    /* Estilos específicos de la tarjeta de detalle */
+    .detalle-card {
+        background: #fffdf9;
+        border: 1px solid #e6dac7;
+        border-radius: 12px;
+        overflow: hidden;
+    }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    .imagen-container {
+        width: 100%;
+        height: 350px;
+        background: #ead8bd;
+        position: relative;
+    }
+
+    .plato-imagen {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .sin-imagen {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 60px;
+        color: #8b4513;
+        opacity: 0.5;
+    }
+
+    .etiqueta-destacada {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        background: #d4a24c;
+        color: #5c2e0e;
+        padding: 4px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 4px;
+        text-transform: uppercase;
+    }
+
+    .informacion {
+        padding: 30px;
+    }
+
+    .titulo-plato {
+        color: #5c2e0e;
+        font-size: 32px;
+        margin-bottom: 5px;
+        line-height: 1.2;
+        border: none;
+        padding: 0;
+    }
+
+    .precio-disponibilidad {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .precio {
+        color: #8b4513;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .disponible, .no-disponible {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .disponible { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .no-disponible { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+    .descripcion {
+        color: #5f5146;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    .descripcion.expandida {
+        -webkit-line-clamp: unset;
+    }
 
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    .btn-leer-mas {
+        background: none;
+        border: none;
+        color: #8b4513;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px;
+        margin-bottom: 25px;
+        display: block;
+        font-family: inherit;
+        text-decoration: underline;
+    }
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f7f3eb;
-            color: #3a2c21;
-            line-height: 1.5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .separador {
+        border-bottom: 2px dashed #e6dac7;
+        margin: 15px 0 25px;
+    }
 
-        header {
-            background: #5c2e0e;
-            padding: 15px 20px;
-            border-bottom: 3px solid #d4a24c;
-        }
+    .acciones {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
 
-        .header-top {
-            max-width: 900px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
+    /* Forzamos a que los botones usen el estilo global y ocupen el ancho */
+    .acciones .btn {
+        flex: 1;
+        margin: 0;
+        padding: 14px 20px;
+        font-size: 16px;
+    }
 
-        .logo { width: 60px; height: 60px; border-radius: 50%; background: white; border: 2px solid #d4a24c; }
-        .marca h1 { color: #fdf6ec; font-family: 'Lora', serif; font-size: 22px; }
+    @media (max-width: 600px) {
+        .imagen-container { height: 250px; }
+        .informacion { padding: 20px; }
+        .titulo-plato { font-size: 26px; }
+        .precio-disponibilidad { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .acciones { flex-direction: column; }
+    }
+</style>
+{% endblock %}
 
-        nav {
-            display: flex; justify-content: center; gap: 15px; margin-top: 10px; flex-wrap: wrap;
-        }
-
-        nav a {
-            color: #fdf6ec; text-decoration: none; font-size: 13px; font-weight: 600; opacity: 0.8;
-        }
-
-        nav a:hover { opacity: 1; color: #d4a24c; }
-
-        main {
-            flex: 1;
-            width: 90%;
-            max-width: 800px; /* Más angosto para que no se estire el texto */
-            margin: 30px auto;
-            background: #fffdf9;
-            border: 1px solid #e6dac7;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(92, 46, 14, .08);
-            overflow: hidden;
-        }
-
-        .imagen-container {
-            width: 100%;
-            height: 300px;
-            background: #ead8bd;
-            position: relative;
-        }
-
-        .plato-imagen { width: 100%; height: 100%; object-fit: cover; }
-        .sin-imagen { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-size: 60px; color: #8b4513; opacity: 0.5; }
-
-        .etiqueta-destacada {
-            position: absolute; bottom: 15px; left: 15px;
-            background: #d4a24c; color: #5c2e0e;
-            padding: 4px 12px; font-size: 11px; font-weight: 700; border-radius: 4px; text-transform: uppercase;
-        }
-
-        .informacion { padding: 25px; }
-
-        .titulo-plato {
-            font-family: 'Lora', serif;
-            color: #5c2e0e;
-            font-size: 30px;
-            margin-bottom: 5px;
-            line-height: 1.2;
-        }
-
-        .precio-disponibilidad {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .precio {
-            font-family: 'Lora', serif;
-            color: #8b4513;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .disponible, .no-disponible {
-            font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
-            display: inline-flex; align-items: center; gap: 5px;
-        }
-
-        .disponible { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-        .no-disponible { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
-
-        .descripcion {
-            color: #5f5146;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .descripcion.expandida {
-            -webkit-line-clamp: unset;
-        }
-
-        .btn-leer-mas {
-            background: none; border: none; color: #8b4513; font-weight: bold; cursor: pointer;
-            font-size: 14px; margin-bottom: 20px; display: block;
-        }
-
-        .separador { border-bottom: 2px dashed #e6dac7; margin: 15px 0; }
-
-        .acciones {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 15px;
-            transition: .3s;
-            flex: 1;
-        }
-
-        .btn-whatsapp {
-            background: #25D366;
-            color: white;
-            border: 2px solid #25D366;
-        }
-
-        .btn-whatsapp:hover {
-            background: #128C7E;
-            border-color: #128C7E;
-        }
-
-        .btn-volver {
-            background: transparent;
-            color: #5c2e0e;
-            border: 2px solid #d4a24c;
-            flex: 0.5;
-        }
-
-        .btn-volver:hover { background: #f7f3eb; }
-
-        footer {
-            background: #2e241c; color: #d4a24c; text-align: center; padding: 15px; font-size: 13px;
-        }
-
-        @media (max-width: 600px) {
-            .imagen-container { height: 220px; }
-            .informacion { padding: 20px; }
-            .titulo-plato { font-size: 26px; }
-            .precio-disponibilidad { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .acciones { flex-direction: column; }
-            .btn-volver { flex: 1; }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <div class="header-top">
-        <img src="{% static 'core/img/logo.png' %}" alt="Logo" class="logo">
-        <div class="marca">
-            <h1>Las Ricuras de la Abuela Lola</h1>
-        </div>
-    </div>
-    <nav>
-        <a href="{% url 'inicio' %}">Inicio</a>
-        <a href="{% url 'menu' %}">Menú</a>
-        <a href="{% url 'Platos' %}">Platos</a>
-        <a href="{% url 'login' %}">Iniciar sesión</a>
-    </nav>
-</header>
-
-<main>
-    <div class="imagen-container">
-        {% if plato.imagen %}
-            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
-        {% else %}
-            <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
-        {% endif %}
-
-        {% if plato.disponible %}
-            <div class="etiqueta-destacada">Hecho en casa</div>
-        {% endif %}
-    </div>
-
-    <div class="informacion">
-        <h1 class="titulo-plato">{{ plato.nombre }}</h1>
-        
-        <div class="precio-disponibilidad">
-            <div class="precio">${{ plato.precio|floatformat:0 }}</div>
-            
-            {% if plato.disponible %}
-                <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible hoy</span>
+{% block contenido %}
+    <div class="detalle-card">
+        <div class="imagen-container">
+            {% if plato.imagen %}
+                <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
             {% else %}
-                <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
+                <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
+            {% endif %}
+
+            {% if plato.disponible %}
+                <div class="etiqueta-destacada">Hecho en casa</div>
             {% endif %}
         </div>
 
-        <div class="separador"></div>
+        <div class="informacion">
+            <h1 class="titulo-plato">{{ plato.nombre }}</h1>
+            
+            <div class="precio-disponibilidad">
+                <div class="precio">${{ plato.precio|floatformat:0 }}</div>
+                
+                {% if plato.disponible %}
+                    <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible hoy</span>
+                {% else %}
+                    <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
+                {% endif %}
+            </div>
 
-        <p class="descripcion" id="texto-descripcion">
-            {{ plato.descripcion|linebreaksbr }}
-        </p>
-        
-        <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">Leer descripción completa</button>
+            <div class="separador"></div>
 
-        <div class="acciones">
-            <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}" target="_blank" class="btn btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
-            </a>
-            <a href="{% url 'Platos' %}" class="btn btn-volver">
-                <i class="fa-solid fa-arrow-left"></i> Volver
-            </a>
+            <p class="descripcion" id="texto-descripcion">
+                {{ plato.descripcion|linebreaksbr }}
+            </p>
+            
+            <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">Leer descripción completa</button>
+
+            <div class="acciones">
+                <!-- AMBOS BOTONES USAN LA MISMA CLASE GLOBAL .btn -->
+                <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}" target="_blank" class="btn">
+                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+                </a>
+                <a href="{% url 'Platos' %}" class="btn">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+            </div>
         </div>
     </div>
-</main>
+{% endblock %}
 
-<footer>
-    <p>&copy; 2026 Las Ricuras de la Abuela Lola</p>
-</footer>
-
+{% block extra_js %}
 <script>
     function toggleDescripcion() {
         const descripcion = document.getElementById('texto-descripcion');
@@ -273,6 +209,4 @@
         }
     }
 </script>
-
-</body>
-</html>
+{% endblock %}

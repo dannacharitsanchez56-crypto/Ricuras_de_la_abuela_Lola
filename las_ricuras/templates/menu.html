@@ -1,403 +1,121 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú | Ricuras de la Abuela Lola</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+{% block titulo %}Menú | Ricuras de la Abuela Lola{% endblock %}
 
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+{% block extra_css %}
+<style>
+    main {
+        width: 90%;
+        max-width: 900px;
+        margin: 30px auto;
+        background: #fffdf9;
+        border: 1px solid #e6dac7;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(92, 46, 14, .08);
+        padding: 30px;
+    }
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8f4ec;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            color: #3a2c21;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .titulo-menu { text-align: center; margin-bottom: 30px; }
+    .titulo-menu h2 { color: #5c2e0e; font-size: 32px; display: inline-flex; align-items: center; gap: 10px; border: none; padding-bottom: 0; }
+    .titulo-menu h2 i { color: #d4a24c; }
+    .titulo-menu p { color: #6b5a4b; max-width: 600px; margin: 10px auto; font-size: 15px; }
+    .linea { width: 80px; height: 2px; background: #d4a24c; margin: 15px auto; }
 
-        /* HEADER ESTILO CASERO */
-        header {
-            background: #5c2e0e;
-            padding: 20px 40px;
-            border-bottom: 3px solid #d4a24c;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
-        }
+    .filtros-categoria {
+        display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+        margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #d4a24c;
+    }
 
-        .header-top {
-            max-width: 1100px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+    .filtros-categoria .btn {
+        padding: 8px 16px; font-size: 13px; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;
+    }
 
-        .logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-            object-fit: cover;
-            border: 2px solid #d4a24c;
-        }
+    .filtros-categoria .btn.activo {
+        background: linear-gradient(135deg, #d4a24c, #b8860b);
+        color: #5c2e0e !important;
+        box-shadow: 0 6px 16px rgba(212, 162, 76, 0.5);
+        transform: translateY(-2px);
+    }
 
-        .marca h1 {
-            color: #fdf6ec;
-            font-family: 'Lora', serif;
-            font-size: 28px;
-            margin-bottom: 2px;
-        }
+    .platos-grid { display: flex; flex-direction: column; gap: 20px; }
 
-        .lema {
-            color: #d4a24c;
-            font-style: italic;
-            font-size: 14px;
-        }
+    .plato-card {
+        display: flex; flex-direction: row; background: transparent;
+        border-bottom: 1px dashed #e6dac7; padding-bottom: 20px; transition: .3s;
+    }
+    .plato-card:last-child { border-bottom: none; padding-bottom: 0; }
+    .plato-card.no-disponible-card { opacity: .6; filter: grayscale(100%); }
 
-        /* NAVEGACIÓN */
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 1100px;
-            margin: 15px auto 0;
-            padding-top: 15px;
-            border-top: 1px solid rgba(212, 162, 76, .3);
-        }
+    .imagen-plato {
+        width: 160px; min-width: 160px; height: 160px; background: #f0e6d6;
+        display: flex; justify-content: center; align-items: center;
+        position: relative; border-radius: 4px; overflow: hidden;
+    }
+    .imagen-plato img { width: 100%; height: 100%; object-fit: cover; }
 
-        nav a {
-            color: #fdf6ec;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: .3s;
-            opacity: 0.8;
-        }
+    .etiqueta-agotado {
+        position: absolute; top: 10px; left: 10px; background: #a33b32; color: white;
+        padding: 2px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 2px;
+    }
 
-        nav a:hover { opacity: 1; color: #d4a24c; }
+    .plato-info { padding: 0 0 0 20px; display: flex; flex-direction: column; flex: 1; justify-content: center; }
+    .plato-header-lista { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; gap: 15px; }
+    .plato-info h3 { color: #5c2e0e; font-size: 22px; margin: 0; line-height: 1.2; border: none; }
+    .categoria-tag { font-size: 10px; color: #8b4513; background: #f0e6d6; padding: 2px 6px; border-radius: 2px; text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 5px; letter-spacing: 0.5px; }
+    .precio { color: #8b4513; font-size: 22px; font-weight: 700; white-space: nowrap; }
+    .descripcion { color: #5f5146; font-size: 14px; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* CONTENEDOR PRINCIPAL */
-        main {
-            flex: 1;
-            width: 90%;
-            max-width: 900px;
-            margin: 30px auto;
-            background: #fffdf9;
-            border: 1px solid #e6dac7;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(92, 46, 14, .08);
-            padding: 30px;
-        }
+    .plato-footer-lista { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: auto; }
 
-        .titulo-menu {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    /* =========================================
+       AQUÍ ESTÁ LA MAGIA PARA EL "DISPONIBLE"
+       ========================================= */
+    .disponible, .no-disponible {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px; /* Bordes bien redondeados */
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-        .titulo-menu h2 {
-            font-family: 'Lora', serif;
-            color: #5c2e0e;
-            font-size: 32px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .disponible {
+        color: #2e7d32; /* Verde más oscuro y elegante */
+        background: #e8f5e9; /* Verde muy suave de fondo */
+        border: 1px solid #c8e6c9;
+    }
 
-        .titulo-menu h2 i { color: #d4a24c; }
+    .no-disponible {
+        color: #c62828;
+        background: #ffebee;
+        border: 1px solid #ffcdd2;
+    }
+    /* ========================================= */
 
-        .titulo-menu p {
-            color: #6b5a4b;
-            max-width: 600px;
-            margin: 10px auto;
-            font-size: 15px;
-        }
+    .acciones-plato { display: flex; gap: 10px; }
+    .acciones-plato .btn { padding: 8px 16px; font-size: 13px; margin-top: 0; margin-right: 0; }
 
-        .linea {
-            width: 80px;
-            height: 2px;
-            background: #d4a24c;
-            margin: 15px auto;
-        }
+    .sin-platos { text-align: center; padding: 40px 20px; background: #f8f4ec; border: 1px dashed #d4a24c; border-radius: 4px; }
+    .icono-vacio { font-size: 40px; color: #d4a24c; margin-bottom: 15px; }
 
-        /* FILTROS ESTILO MENÚ IMPRESO */
-        .filtros-categoria {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px dashed #d4a24c;
-        }
+    @media (max-width: 768px) {
+        main { width: 95%; padding: 20px; margin: 20px auto; }
+        .plato-card { flex-direction: column; gap: 15px; }
+        .imagen-plato { width: 100%; height: 200px; }
+        .plato-info { padding: 0; }
+        .plato-header-lista { flex-direction: column; gap: 5px; }
+        .plato-footer-lista { flex-direction: column; align-items: flex-start; }
+        .acciones-plato { width: 100%; margin-top: 10px; }
+        .acciones-plato .btn { flex: 1; }
+    }
+</style>
+{% endblock %}
 
-        .btn-filtro {
-            padding: 8px 16px;
-            border: 1px solid transparent;
-            background: transparent;
-            color: #6b5a4b;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            transition: .3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-filtro:hover {
-            background: #f0e6d6;
-        }
-
-        .btn-filtro.activo {
-            background: #d4a24c;
-            color: #5c2e0e;
-            border-color: #d4a24c;
-        }
-
-        /* LISTA DE PLATOS */
-        .platos-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .plato-card {
-            display: flex;
-            flex-direction: row;
-            background: transparent;
-            border-bottom: 1px dashed #e6dac7;
-            padding-bottom: 20px;
-            transition: .3s;
-        }
-
-        .plato-card:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .plato-card.no-disponible-card {
-            opacity: .6;
-            filter: grayscale(100%);
-        }
-
-        /* IMAGEN */
-        .imagen-plato {
-            width: 160px;
-            min-width: 160px;
-            height: 160px;
-            background: #f0e6d6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .imagen-plato img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .etiqueta-agotado {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #a33b32;
-            color: white;
-            padding: 2px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 2px;
-        }
-
-        /* INFO DEL PLATO */
-        .plato-info {
-            padding: 0 0 0 20px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .plato-header-lista {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 5px;
-            gap: 15px;
-        }
-
-        .plato-info h3 {
-            font-family: 'Lora', serif;
-            color: #5c2e0e;
-            font-size: 22px;
-            margin: 0;
-            line-height: 1.2;
-        }
-
-        .categoria-tag {
-            font-size: 10px;
-            color: #8b4513;
-            background: #f0e6d6;
-            padding: 2px 6px;
-            border-radius: 2px;
-            text-transform: uppercase;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .precio {
-            font-family: 'Lora', serif;
-            color: #8b4513;
-            font-size: 22px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .descripcion {
-            color: #5f5146;
-            font-size: 14px;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .plato-footer-lista {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: auto;
-        }
-
-        .disponible, .no-disponible {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 2px;
-            text-transform: uppercase;
-        }
-        .disponible { color: #2e7d32; background: #e8f5e9; }
-        .no-disponible { color: #c62828; background: #ffebee; }
-
-        /* BOTONES */
-        .acciones-plato {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-ver, .btn-whatsapp {
-            padding: 8px 16px;
-            border-radius: 4px;
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: .3s;
-            text-transform: uppercase;
-        }
-
-        .btn-ver { 
-            background: #5c2e0e; 
-            border: 1px solid #5c2e0e;
-        }
-        .btn-ver:hover { background: #8b4513; border-color: #8b4513; }
-
-        .btn-whatsapp { 
-            background: #25D366; 
-            border: 1px solid #25D366;
-        }
-        .btn-whatsapp:hover { background: #128C7E; border-color: #128C7E; }
-        
-        .btn-ver.deshabilitado { background: #999; border-color: #999; cursor: not-allowed; }
-
-        /* SIN PLATOS */
-        .sin-platos {
-            text-align: center;
-            padding: 40px 20px;
-            background: #f8f4ec;
-            border: 1px dashed #d4a24c;
-            border-radius: 4px;
-        }
-
-        .icono-vacio {
-            font-size: 40px;
-            color: #d4a24c;
-            margin-bottom: 15px;
-        }
-
-        footer {
-            background: #2e241c;
-            color: #d4a24c;
-            text-align: center;
-            padding: 20px;
-            font-size: 13px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            header { padding: 15px; }
-            .header-top { flex-direction: column; text-align: center; gap: 10px; }
-            main { width: 95%; padding: 20px; margin: 20px auto; }
-            
-            .plato-card { flex-direction: column; gap: 15px; }
-            .imagen-plato { width: 100%; height: 200px; }
-            .plato-info { padding: 0; }
-            .plato-header-lista { flex-direction: column; gap: 5px; }
-            .plato-footer-lista { flex-direction: column; align-items: flex-start; }
-            .acciones-plato { width: 100%; margin-top: 10px; }
-            .btn-ver, .btn-whatsapp { flex: 1; }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <div class="header-top">
-        <img src="{% static 'core/img/logo.png' %}" alt="Logo" class="logo">
-        <div class="marca">
-            <h1>Las Ricuras de la Abuela Lola</h1>
-            <p class="lema">Donde cada plato sabe a hogar</p>
-        </div>
-    </div>
-    <nav>
-        <a href="{% url 'inicio' %}"><i class="fa-solid fa-house"></i> Inicio</a>
-        <a href="{% url 'menu' %}"><i class="fa-solid fa-book-open-reader"></i> Menú</a>
-        <a href="{% url 'Platos' %}"><i class="fa-solid fa-plate-wheat"></i> Platos</a>
-        <a href="{% url 'contacto' %}"><i class="fa-solid fa-envelope"></i> Contacto</a>
-        <a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión</a>
-    </nav>
-</header>
-
-<main>
+{% block contenido %}
     <section class="titulo-menu">
         <h2><i class="fa-solid fa-utensils"></i> Nuestro Menú</h2>
         <div class="linea"></div>
@@ -405,11 +123,11 @@
     </section>
 
     <div class="filtros-categoria">
-        <button class="btn-filtro activo" onclick="filtrarPlatos('todos', this)">Todos</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('plato_fuerte', this)">Platos Fuertes</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('entrada', this)">Entradas</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('bebida', this)">Bebidas</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('postre', this)">Postres</button>
+        <button class="btn activo" onclick="filtrarPlatos('todos', this)">Todos</button>
+        <button class="btn" onclick="filtrarPlatos('plato_fuerte', this)">Platos Fuertes</button>
+        <button class="btn" onclick="filtrarPlatos('entrada', this)">Entradas</button>
+        <button class="btn" onclick="filtrarPlatos('bebida', this)">Bebidas</button>
+        <button class="btn" onclick="filtrarPlatos('postre', this)">Postres</button>
     </div>
 
     {% if platos %}
@@ -444,22 +162,23 @@
                         </p>
 
                         <div class="plato-footer-lista">
+                            <!-- AQUI AGREGAMOS LOS ICONOS Y USAMOS LAS NUEVAS CLASES -->
                             {% if plato.disponible %}
-                                <span class="disponible">Disponible</span>
+                                <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible</span>
                             {% else %}
-                                <span class="no-disponible">Agotado</span>
+                                <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
                             {% endif %}
 
                             <div class="acciones-plato">
                                 {% if plato.disponible %}
-                                    <a href="{% url 'plato_detalle' plato.id %}" class="btn-ver">
+                                    <a href="{% url 'plato_detalle' plato.id %}" class="btn">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </a>
-                                    <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio" target="_blank" class="btn-whatsapp">
+                                    <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio" target="_blank" class="btn">
                                         <i class="fa-brands fa-whatsapp"></i> Pedir
                                     </a>
                                 {% else %}
-                                    <span class="btn-ver deshabilitado">No disponible</span>
+                                    <span class="btn" style="opacity: 0.5; cursor: not-allowed;">No disponible</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -474,15 +193,12 @@
             <p>En este momento no hay platos registrados en el menú.</p>
         </div>
     {% endif %}
-</main>
+{% endblock %}
 
-<footer>
-    <p>&copy; 2026 Las Ricuras de la Abuela Lola — Todos los derechos reservados</p>
-</footer>
-
+{% block extra_js %}
 <script>
 function filtrarPlatos(categoria, boton) {
-    document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
+    document.querySelectorAll('.filtros-categoria .btn').forEach(btn => btn.classList.remove('activo'));
     boton.classList.add('activo');
 
     const platos = document.querySelectorAll('.plato-card');
@@ -497,6 +213,4 @@ function filtrarPlatos(categoria, boton) {
     });
 }
 </script>
-
-</body>
-</html>
+{% endblock %}
