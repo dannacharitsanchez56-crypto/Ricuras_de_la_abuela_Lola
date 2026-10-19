@@ -5,207 +5,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Menú | Ricuras de la Abuela Lola</title>
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5efe6;
-            color: #2e241c;
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f4ec;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            color: #3a2c21;
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
-        /* HEADER */
+        /* HEADER ESTILO CASERO */
         header {
-            background: linear-gradient(135deg, #5c2e0e, #8b4513, #a0522d);
-            padding: 22px 40px;
-            border-bottom: 4px solid #d4a24c;
-            box-shadow: 0 6px 20px rgba(0,0,0,.25);
+            background: #5c2e0e;
+            padding: 20px 40px;
+            border-bottom: 3px solid #d4a24c;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
         }
 
         .header-top {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: auto;
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: white;
-            padding: 6px;
+            padding: 5px;
             object-fit: cover;
-            box-shadow: 0 0 0 4px #d4a24c;
+            border: 2px solid #d4a24c;
         }
 
         .marca h1 {
             color: #fdf6ec;
-            font-size: clamp(20px, 3vw, 32px);
-            margin-bottom: 5px;
+            font-family: 'Lora', serif;
+            font-size: 28px;
+            margin-bottom: 2px;
         }
 
         .lema {
             color: #d4a24c;
             font-style: italic;
+            font-size: 14px;
         }
 
-        /* NAV */
+        /* NAVEGACIÓN */
         nav {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            max-width: 1200px;
-            margin: 20px auto 0;
-            padding-top: 18px;
-            border-top: 2px solid rgba(212,162,76,.5);
+            gap: 15px;
+            max-width: 1100px;
+            margin: 15px auto 0;
+            padding-top: 15px;
+            border-top: 1px solid rgba(212, 162, 76, .3);
         }
 
         nav a {
             color: #fdf6ec;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: rgba(0,0,0,.25);
-            border: 1px solid rgba(212,162,76,.5);
+            font-size: 14px;
             font-weight: 600;
-            min-height: 44px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             transition: .3s;
+            opacity: 0.8;
         }
 
-        nav a:hover {
-            background: #d4a24c;
-            color: #5c2e0e;
-            transform: translateY(-2px);
-        }
+        nav a:hover { opacity: 1; color: #d4a24c; }
 
-        /* CONTENIDO */
+        /* CONTENEDOR PRINCIPAL */
         main {
             flex: 1;
-            width: 92%;
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 18px;
-            border-top: 5px solid #8b4513;
-            box-shadow: 0 8px 30px rgba(92,46,14,.15);
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fffdf9;
+            border: 1px solid #e6dac7;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(92, 46, 14, .08);
+            padding: 30px;
         }
 
         .titulo-menu {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .titulo-menu h2 {
+            font-family: 'Lora', serif;
             color: #5c2e0e;
-            font-size: clamp(24px, 4vw, 38px);
+            font-size: 32px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .titulo-menu h2 i {
-            color: #d4a24c;
-        }
+        .titulo-menu h2 i { color: #d4a24c; }
 
         .titulo-menu p {
             color: #6b5a4b;
-            max-width: 650px;
+            max-width: 600px;
             margin: 10px auto;
+            font-size: 15px;
         }
 
         .linea {
-            width: 90px;
-            height: 4px;
+            width: 80px;
+            height: 2px;
             background: #d4a24c;
             margin: 15px auto;
-            border-radius: 10px;
         }
 
-        /* FILTROS DE CATEGORÍA */
+        /* FILTROS ESTILO MENÚ IMPRESO */
         .filtros-categoria {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #d4a24c;
         }
 
         .btn-filtro {
-            padding: 10px 20px;
-            border: 2px solid #d4a24c;
+            padding: 8px 16px;
+            border: 1px solid transparent;
             background: transparent;
-            color: #5c2e0e;
-            border-radius: 25px;
+            color: #6b5a4b;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 14px;
             transition: .3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-filtro:hover, .btn-filtro.activo {
+        .btn-filtro:hover {
+            background: #f0e6d6;
+        }
+
+        .btn-filtro.activo {
             background: #d4a24c;
-            color: white;
+            color: #5c2e0e;
+            border-color: #d4a24c;
         }
 
-        /* LISTA DE PLATOS (MODO COMPACTO) */
+        /* LISTA DE PLATOS */
         .platos-grid {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
         .plato-card {
             display: flex;
             flex-direction: row;
-            background: #fffaf3;
-            border: 1px solid #ead8bd;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(92,46,14,.08);
+            background: transparent;
+            border-bottom: 1px dashed #e6dac7;
+            padding-bottom: 20px;
             transition: .3s;
         }
 
-        .plato-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 10px 25px rgba(92,46,14,.18);
+        .plato-card:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         .plato-card.no-disponible-card {
             opacity: .6;
-            filter: grayscale(60%);
+            filter: grayscale(100%);
         }
 
-        /* Imagen compacta */
+        /* IMAGEN */
         .imagen-plato {
-            width: 180px;
-            min-width: 180px;
-            height: 180px;
-            background: linear-gradient(135deg, #f5efe6, #ead8bd);
+            width: 160px;
+            min-width: 160px;
+            height: 160px;
+            background: #f0e6d6;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .imagen-plato img {
@@ -216,19 +217,20 @@
 
         .etiqueta-agotado {
             position: absolute;
-            top: 15px;
-            left: -30px;
+            top: 10px;
+            left: 10px;
             background: #a33b32;
             color: white;
-            padding: 4px 35px;
-            font-size: 11px;
+            padding: 2px 8px;
+            font-size: 10px;
             font-weight: bold;
-            transform: rotate(-45deg);
+            text-transform: uppercase;
+            border-radius: 2px;
         }
 
-        /* Info compacta */
+        /* INFO DEL PLATO */
         .plato-info {
-            padding: 15px 20px;
+            padding: 0 0 0 20px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -240,26 +242,42 @@
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 5px;
-            gap: 10px;
+            gap: 15px;
         }
 
         .plato-info h3 {
+            font-family: 'Lora', serif;
             color: #5c2e0e;
-            font-size: clamp(18px, 2.5vw, 22px);
+            font-size: 22px;
             margin: 0;
+            line-height: 1.2;
+        }
+
+        .categoria-tag {
+            font-size: 10px;
+            color: #8b4513;
+            background: #f0e6d6;
+            padding: 2px 6px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
 
         .precio {
+            font-family: 'Lora', serif;
             color: #8b4513;
             font-size: 22px;
-            font-weight: bold;
+            font-weight: 700;
             white-space: nowrap;
         }
 
         .descripcion {
             color: #5f5146;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -273,88 +291,89 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid #ead8bd;
         }
 
         .disponible, .no-disponible {
             font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 15px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
         }
-        .disponible { color: #357a38; background: rgba(53,122,56,.1); }
-        .no-disponible { color: #a33b32; background: rgba(163,59,50,.1); }
+        .disponible { color: #2e7d32; background: #e8f5e9; }
+        .no-disponible { color: #c62828; background: #ffebee; }
 
+        /* BOTONES */
         .acciones-plato {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-ver, .btn-whatsapp {
-            padding: 8px 18px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 4px;
             color: white;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 13px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             transition: .3s;
+            text-transform: uppercase;
         }
 
-        .btn-ver { background: linear-gradient(135deg, #8b4513, #5c2e0e); }
-        .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .btn-ver { 
+            background: #5c2e0e; 
+            border: 1px solid #5c2e0e;
+        }
+        .btn-ver:hover { background: #8b4513; border-color: #8b4513; }
+
+        .btn-whatsapp { 
+            background: #25D366; 
+            border: 1px solid #25D366;
+        }
+        .btn-whatsapp:hover { background: #128C7E; border-color: #128C7E; }
         
-        .btn-ver:hover, .btn-whatsapp:hover { transform: translateY(-2px); }
-        .btn-ver.deshabilitado { background: #999; cursor: not-allowed; }
+        .btn-ver.deshabilitado { background: #999; border-color: #999; cursor: not-allowed; }
 
         /* SIN PLATOS */
         .sin-platos {
             text-align: center;
-            padding: 60px 20px;
-            background: #fffaf3;
+            padding: 40px 20px;
+            background: #f8f4ec;
             border: 1px dashed #d4a24c;
-            border-radius: 15px;
+            border-radius: 4px;
         }
 
         .icono-vacio {
-            font-size: 55px;
+            font-size: 40px;
             color: #d4a24c;
             margin-bottom: 15px;
         }
 
-        /* FOOTER */
         footer {
             background: #2e241c;
             color: #d4a24c;
             text-align: center;
             padding: 20px;
-            border-top: 4px solid #8b4513;
+            font-size: 13px;
         }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            header { padding: 18px 15px; }
-            .header-top { flex-direction: column; text-align: center; }
-            .logo { width: 100px; height: 100px; }
-            main { width: 95%; padding: 25px 18px; margin: 20px auto; }
-
-            /* En celular vuelve a ser tarjeta vertical */
-            .plato-card { flex-direction: column; }
+            header { padding: 15px; }
+            .header-top { flex-direction: column; text-align: center; gap: 10px; }
+            main { width: 95%; padding: 20px; margin: 20px auto; }
+            
+            .plato-card { flex-direction: column; gap: 15px; }
             .imagen-plato { width: 100%; height: 200px; }
-            .etiqueta-agotado { left: auto; right: -35px; transform: rotate(45deg); }
-            .plato-header-lista { flex-direction: column; }
+            .plato-info { padding: 0; }
+            .plato-header-lista { flex-direction: column; gap: 5px; }
             .plato-footer-lista { flex-direction: column; align-items: flex-start; }
             .acciones-plato { width: 100%; margin-top: 10px; }
             .btn-ver, .btn-whatsapp { flex: 1; }
-        }
-
-        @media (max-width: 480px) {
-            nav a { padding: 8px 12px; font-size: 13px; }
-            main { width: 100%; border-radius: 0; padding: 20px 12px; }
         }
     </style>
 </head>
@@ -363,13 +382,12 @@
 
 <header>
     <div class="header-top">
-        <img src="{% static 'core/img/logo.png' %}" alt="Logo Las Ricuras de la Abuela Lola" class="logo">
+        <img src="{% static 'core/img/logo.png' %}" alt="Logo" class="logo">
         <div class="marca">
             <h1>Las Ricuras de la Abuela Lola</h1>
             <p class="lema">Donde cada plato sabe a hogar</p>
         </div>
     </div>
-
     <nav>
         <a href="{% url 'inicio' %}"><i class="fa-solid fa-house"></i> Inicio</a>
         <a href="{% url 'menu' %}"><i class="fa-solid fa-book-open-reader"></i> Menú</a>
@@ -386,38 +404,38 @@
         <p>Descubre los sabores tradicionales de nuestra cocina, preparados con cariño y ese toque especial de la Abuela Lola.</p>
     </section>
 
-    <!-- FILTROS DE CATEGORÍA -->
     <div class="filtros-categoria">
         <button class="btn-filtro activo" onclick="filtrarPlatos('todos', this)">Todos</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('almuerzos', this)">Almuerzos</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('bebidas', this)">Bebidas</button>
-        <button class="btn-filtro" onclick="filtrarPlatos('postres', this)">Postres</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('plato_fuerte', this)">Platos Fuertes</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('entrada', this)">Entradas</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('bebida', this)">Bebidas</button>
+        <button class="btn-filtro" onclick="filtrarPlatos('postre', this)">Postres</button>
     </div>
 
     {% if platos %}
         <div class="platos-grid">
             {% for plato in platos %}
-                
                 <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}" 
-                         data-categoria="{{ plato.categoria.nombre|lower|default:'todos' }}">
+                         data-categoria="{{ plato.categoria }}">
                     
                     <div class="imagen-plato">
                         {% if plato.imagen %}
                             <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" loading="lazy">
                         {% else %}
-                            <i class="fa-solid fa-utensils" style="font-size: 40px; color: #d4a24c;"></i>
+                            <i class="fa-solid fa-utensils" style="font-size: 30px; color: #d4a24c;"></i>
                         {% endif %}
 
                         {% if not plato.disponible %}
-                            <div class="etiqueta-agotado">
-                                <i class="fa-solid fa-ban"></i> Agotado
-                            </div>
+                            <div class="etiqueta-agotado">Agotado</div>
                         {% endif %}
                     </div>
 
                     <div class="plato-info">
                         <div class="plato-header-lista">
-                            <h3>{{ plato.nombre }}</h3>
+                            <div>
+                                <span class="categoria-tag">{{ plato.get_categoria_display }}</span>
+                                <h3>{{ plato.nombre }}</h3>
+                            </div>
                             <span class="precio">${{ plato.precio|floatformat:0 }}</span>
                         </div>
 
@@ -427,9 +445,9 @@
 
                         <div class="plato-footer-lista">
                             {% if plato.disponible %}
-                                <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible</span>
+                                <span class="disponible">Disponible</span>
                             {% else %}
-                                <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> No disponible</span>
+                                <span class="no-disponible">Agotado</span>
                             {% endif %}
 
                             <div class="acciones-plato">
@@ -441,7 +459,7 @@
                                         <i class="fa-brands fa-whatsapp"></i> Pedir
                                     </a>
                                 {% else %}
-                                    <span class="btn-ver deshabilitado"><i class="fa-solid fa-ban"></i> Agotado</span>
+                                    <span class="btn-ver deshabilitado">No disponible</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -462,22 +480,19 @@
     <p>&copy; 2026 Las Ricuras de la Abuela Lola — Todos los derechos reservados</p>
 </footer>
 
-<!-- SCRIPT PARA LOS FILTROS -->
 <script>
 function filtrarPlatos(categoria, boton) {
-    // 1. Cambiar el botón activo
     document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
     boton.classList.add('activo');
 
-    // 2. Filtrar las tarjetas
     const platos = document.querySelectorAll('.plato-card');
     platos.forEach(plato => {
         const catPlato = plato.getAttribute('data-categoria');
         
         if (categoria === 'todos' || catPlato === categoria) {
-            plato.style.display = 'flex'; // Mostrar
+            plato.style.display = 'flex';
         } else {
-            plato.style.display = 'none'; // Ocultar
+            plato.style.display = 'none';
         }
     });
 }
