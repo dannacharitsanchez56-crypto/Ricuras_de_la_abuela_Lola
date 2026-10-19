@@ -7,6 +7,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('admin/', admin.site.urls),
     path('', include('las_ricuras.urls')),
+    path('carta/', include('menu.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(
