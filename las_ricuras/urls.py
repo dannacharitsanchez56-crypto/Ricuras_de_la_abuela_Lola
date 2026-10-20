@@ -20,11 +20,11 @@ urlpatterns = [
 
     path('menu/', views.menu, name='menu'),
 
-
     path('platos/', views.Platos, name='Platos'),
     path('platos/nuevo/', views.crear_plato, name='crear_plato'),
     path('platos/<int:id>/', views.plato_detalle, name='plato_detalle'),
     path('platos/<int:id>/editar/', views.editar_plato, name='editar_plato'),
     path('platos/<int:id>/eliminar/', views.eliminar_plato, name='eliminar_plato'),
     path('contacto/', views.contacto, name='contacto'),
+    path('resumen-ventas/', views.resumen_ventas, name='resumen_ventas'),
 ]

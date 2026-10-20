@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Resumen de ventas — Las Ricuras de la Abuela Lola{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filtro-ventas {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 15px;
+        background: #fdf6ec;
+        padding: 20px 25px;
+        border-radius: 10px;
+        border-left: 5px solid #d4a24c;
+        margin: 15px 0 25px;
+    }
+
+    .filtro-ventas .campo {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .filtro-ventas label {
+        color: #8b4513;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .filtro-ventas input[type="date"] {
+        padding: 9px 12px;
+        border: 1px solid #d4a24c;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        color: #2e241c;
+        background: #fff;
+    }
+
+    .filtro-ventas .btn {
+        margin: 0;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: inherit;
+    }
+
+    .tarjetas-resumen {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .tarjeta {
+        flex: 1;
+        min-width: 220px;
+        background: #fff;
+        border: 1px solid #d4a24c;
+        border-top: 5px solid #8b4513;
+        border-radius: 12px;
+        padding: 22px;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.12);
+    }
+
+    .tarjeta .etiqueta {
+        color: #8b4513;
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+    .tarjeta .valor {
+        color: #5c2e0e;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<h2>Resumen de ventas</h2>
+
+<p>Elige un período para ver cuánto se vendió. Si no eliges fechas, se muestran todas las ventas.</p>
+
+<form method="get" class="filtro-ventas">
+    <div class="campo">
+        <label for="fecha_inicio">Desde</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}">
+    </div>
+    <div class="campo">
+        <label for="fecha_fin">Hasta</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}">
+    </div>
+    <button type="submit" class="btn">
+        <i class="fa-solid fa-magnifying-glass"></i> Consultar
+    </button>
+</form>
+
+<div class="tarjetas-resumen">
+    <div class="tarjeta">
+        <p class="etiqueta"><i class="fa-solid fa-sack-dollar"></i> Total vendido</p>
+        <p class="valor">${{ total_vendido }}</p>
+    </div>
+    <div class="tarjeta">
+        <p class="etiqueta"><i class="fa-solid fa-receipt"></i> Cantidad de ventas</p>
+        <p class="valor">{{ cantidad_ventas }}</p>
+    </div>
+</div>
+
+{% endblock %}
