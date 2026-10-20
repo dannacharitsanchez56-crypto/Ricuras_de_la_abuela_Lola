@@ -312,6 +312,12 @@
             <i class="fa-solid fa-envelope"></i>
             Contacto
         </a>
+                {% if user.is_authenticated and user.is_staff %}
+        <a href="{% url 'resumen_ventas' %}">
+            <i class="fa-solid fa-chart-line"></i>
+            Resumen de ventas
+        </a>
+        {% endif %}
     </nav>
 </header>
 

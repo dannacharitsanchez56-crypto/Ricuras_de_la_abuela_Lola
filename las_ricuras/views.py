@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Sum, Count
+from .models import Venta
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Plato
 from .forms import PlatoForm
@@ -239,3 +242,28 @@ def registro(request):
             return render(request, 'registro.html')
 
     return render(request, 'registro.html')
+
+@staff_member_required
+def resumen_ventas(request):
+    ventas = Venta.objects.all()
+
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    if fecha_inicio:
+        ventas = ventas.filter(fecha__date__gte=fecha_inicio)
+    if fecha_fin:
+        ventas = ventas.filter(fecha__date__lte=fecha_fin)
+
+    resumen = ventas.aggregate(
+        total_vendido=Sum('total'),
+        cantidad_ventas=Count('id'),
+    )
+
+    contexto = {
+        'total_vendido': resumen['total_vendido'] or 0,
+        'cantidad_ventas': resumen['cantidad_ventas'],
+        'fecha_inicio': fecha_inicio or '',
+        'fecha_fin': fecha_fin or '',
+    }
+    return render(request, 'resumen_ventas.html', contexto)

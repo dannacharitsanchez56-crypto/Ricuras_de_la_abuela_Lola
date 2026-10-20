@@ -65,3 +65,18 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+
+class Venta(models.Model):
+    plato = models.ForeignKey(Plato, on_delete=models.PROTECT)
+    cantidad = models.PositiveIntegerField(default=1)
+    total = models.DecimalField(max_digits=12, decimal_places=2, editable=False)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # El total se calcula solo: precio del plato x cantidad
+        self.total = self.plato.precio * self.cantidad
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.cantidad} x {self.plato.nombre} - ${self.total}"
