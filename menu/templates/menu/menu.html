@@ -1,5 +1,5 @@
-
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% load static %}
 
 {% block titulo %}
@@ -419,7 +419,7 @@
                             </div>
 
                             <span class="precio">
-                                ${{ plato.precio|floatformat:0 }}
+                                ${{ plato.precio|cop }}
                             </span>
                         </div>
 

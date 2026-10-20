@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% load static %}
 
 {% block titulo %}Menú | Ricuras de la Abuela Lola{% endblock %}
@@ -129,7 +130,7 @@
                                 <span class="categoria-tag">{{ plato.get_categoria_display }}</span>
                                 <h3>{{ plato.nombre }}</h3>
                             </div>
-                            <span class="precio">${{ plato.precio|floatformat:0 }}</span>
+                            <span class="precio">${{ plato.precio|cop }}</span>
                         </div>
 
                         <p class="descripcion">
