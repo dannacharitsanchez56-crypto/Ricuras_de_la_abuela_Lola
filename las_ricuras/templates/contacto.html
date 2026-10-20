@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Contacto — Las Ricuras de la Abuela Lola{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 1. Contenedor principal */
+    .contacto-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .contacto-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .contacto-header h2 {
+        font-family: 'Playfair Display', serif;
+        color: #5c2e0e;
+        font-size: 38px;
+        border: none;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+
+    .contacto-header p {
+        font-size: 17px;
+        color: #6b5a4b;
+        font-style: italic;
+    }
+
+    /* 2. Cuadrícula de dos columnas */
+    .contacto-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 30px;
+        align-items: stretch;
+    }
+
+    /* --- Columna Izquierda: Datos --- */
+    .info-contacto {
+        background: #fdf6ec;
+        padding: 30px;
+        border-radius: 12px;
+        border-left: 5px solid #d4a24c;
+        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
+    }
+
+    .info-contacto h3 {
+        font-family: 'Playfair Display', serif;
+        color: #5c2e0e;
+        margin-top: 0;
+        margin-bottom: 25px;
+        font-size: 22px;
+        border-bottom: 2px dashed #d4a24c;
+        padding-bottom: 10px;
+    }
+
+    .dato-contacto {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .dato-contacto .icono {
+        width: 35px;
+        height: 35px;
+        background: #fff;
+        border: 1px solid #d4a24c;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #8b4513;
+        flex-shrink: 0;
+        font-size: 15px;
+    }
+
+    .dato-contacto p {
+        margin: 0;
+        color: #4a3b31;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .dato-contacto strong {
+        color: #8b4513;
+        display: block;
+        margin-bottom: 3px;
+        font-size: 16px;
+    }
+
+    /* Botón de WhatsApp */
+    .btn-whatsapp {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #25D366;
+        color: white !important;
+        padding: 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+        margin-top: 25px;
+        transition: background 0.3s, transform 0.2s;
+        box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp:hover {
+        background: #128C7E;
+        transform: translateY(-2px);
+    }
+
+    /* --- Columna Derecha: Mapa --- */
+    .mapa-contacto {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e6dac7;
+        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mapa-contacto iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        border: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+        .contacto-grid {
+            grid-template-columns: 1fr;
+        }
+        .mapa-contacto iframe {
+            min-height: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="contacto-wrapper">
+    <div class="contacto-header">
+        <h2>¡Ven y visitanos!</h2>
+        <p>¿Quieres hacer un pedido, o contactarnos? Aquí estamos para ti.</p>
+    </div>
+
+    <div class="contacto-grid">
+        <!-- COLUMNA IZQUIERDA: DATOS -->
+        <div class="info-contacto">
+            <h3>Nuestros Datos</h3>
+            
+            <div class="dato-contacto">
+                <div class="icono"><i class="fa-solid fa-location-dot"></i></div>
+                <p>
+                    <strong>Dirección</strong>
+                    Carrera 8D Bis 159-27<br>
+                    
+                </p>
+            </div>
+
+            <div class="dato-contacto">
+                <div class="icono"><i class="fa-solid fa-phone"></i></div>
+                <p>
+                    <strong>Llámanos o escríbenos</strong>
+                    +57 311 829 9494
+                </p>
+            </div>
+
+            <div class="dato-contacto">
+                <div class="icono"><i class="fa-regular fa-clock"></i></div>
+                <p>
+                    <strong>Horarios de atención</strong>
+                    Lunes a Viernes: 6:00 a.m. — 3:30 p.m.<br>
+                    Sábados y Domingos: 8:00 a.m. — 3:30 p.m.
+                </p>
+            </div>
+
+            <a href="https://wa.me/573118299494?text=Hola,%20quisiera%20hacer%20un%20pedido" target="_blank" class="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Pedir por WhatsApp
+            </a>
+        </div>
+
+        <!-- COLUMNA DERECHA: MAPA -->
+        <div class="mapa-contacto">
+            <iframe 
+                src="https://maps.google.com/maps?width=100%25&height=600&hl=es&q=Carrera%208D%20Bis%20159-27&t=&z=16&ie=UTF8&iwloc=B&output=embed" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

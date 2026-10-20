@@ -7,6 +7,8 @@
     <title>{% block titulo %}Ricuras de la Abuela Lola{% endblock %}</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+   <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}?v=1" type="image/x-icon">
 
     <style>
         * {
@@ -17,7 +19,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5efe6;
+            background: #f5efe6; /* Fondo original claro */
             color: #2e241c;
             line-height: 1.7;
             min-height: 100vh;
@@ -123,7 +125,6 @@
             border-top: 2px solid rgba(212, 162, 76, 0.5);
         }
 
-        /* ===== AQUI ESTA LA CORRECCIÓN DE LOS BOTONES DE ARRIBA ===== */
         nav a, nav button {
             color: #fff;
             text-decoration: none;
@@ -148,7 +149,6 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(212, 162, 76, 0.5);
         }
-        /* ========================================================== */
 
         nav a i, nav button i {
             font-size: 14px;
@@ -160,7 +160,7 @@
             width: 90%;
             margin: 40px auto;
             padding: 40px;
-            background: #fff;
+            background: #fff; /* Contenedor blanco original */
             border-radius: 14px;
             box-shadow: 0 8px 30px rgba(92, 46, 14, 0.15);
             border-top: 5px solid #8b4513;
@@ -291,7 +291,7 @@
             <i class="fa-solid fa-house"></i>
             Inicio
         </a>
-        <a href="{% url 'menu:inicio' %}">
+        <a href="{% url 'menu' %}">
             <i class="fa-solid fa-utensils"></i>
             Menú
         </a>
@@ -299,8 +299,10 @@
             <i class="fa-solid fa-plate-wheat"></i>
             Platos
         </a>
-
-        
+        <a href="{% url 'contacto' %}">
+            <i class="fa-solid fa-envelope"></i>
+            Contacto
+        </a>
     </nav>
 </header>
 
