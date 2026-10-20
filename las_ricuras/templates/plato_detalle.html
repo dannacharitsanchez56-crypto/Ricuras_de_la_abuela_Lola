@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block titulo %}{{ plato.nombre }} | Ricuras de la Abuela Lola{% endblock %}
-
 {% block extra_css %}
 <style>
-    /* Estilos específicos de la tarjeta de detalle */
     .detalle-card {
         background: #fffdf9;
         border: 1px solid #e6dac7;
@@ -37,17 +34,20 @@
         opacity: 0.5;
     }
 
+    /* ETIQUETA HECHO EN CASA: Misma forma que el botón, color original */
     .etiqueta-destacada {
         position: absolute;
         bottom: 15px;
         left: 15px;
-        background: #d4a24c;
+        background: #d4a24c; /* Color original */
         color: #5c2e0e;
-        padding: 4px 12px;
-        font-size: 11px;
+        padding: 8px 20px; /* Relleno tipo botón */
+        font-size: 12px;
         font-weight: 700;
-        border-radius: 4px;
+        border-radius: 25px; /* Bordes redondeados tipo botón */
         text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
 
     .informacion {
@@ -76,11 +76,12 @@
         font-weight: 700;
     }
 
+    /* ETIQUETAS DISPONIBLE/AGOTADO: Misma forma que el botón, colores originales */
     .disponible, .no-disponible {
         font-size: 12px;
         font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 4px;
+        padding: 8px 20px; /* Relleno tipo botón */
+        border-radius: 25px; /* Bordes redondeados tipo botón */
         display: inline-flex;
         align-items: center;
         gap: 5px;
@@ -122,13 +123,77 @@
         margin: 15px 0 25px;
     }
 
+    .caja-pedido {
+        background: #f8f4ec;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e6dac7;
+        margin-bottom: 20px;
+    }
+
+    .fila-cantidad {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .fila-cantidad:last-child {
+        margin-bottom: 0;
+    }
+
+    .selector-cantidad {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .btn-cantidad {
+        background: #fffdf9;
+        border: none;
+        color: #5c2e0e;
+        font-size: 18px;
+        font-weight: bold;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-cantidad:hover { background: #ead8bd; }
+
+    #cantidad-numero {
+        width: 40px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        line-height: 35px;
+    }
+
+    .total-label { font-size: 16px; color: #5f5146; }
+    .total-precio { font-size: 20px; font-weight: bold; color: #8b4513; }
+
+    /* BOTÓN WHATSAPP: Misma forma que el botón Volver, color original verde */
+    .acciones .btn-whatsapp {
+        background-color: #25D366;
+        color: white;
+        border: none;
+    }
+    .acciones .btn-whatsapp:hover {
+        background-color: #128C7E;
+    }
+
     .acciones {
         display: flex;
         gap: 15px;
         flex-wrap: wrap;
     }
 
-    /* Forzamos a que los botones usen el estilo global y ocupen el ancho */
     .acciones .btn {
         flex: 1;
         margin: 0;
@@ -164,7 +229,9 @@
             <h1 class="titulo-plato">{{ plato.nombre }}</h1>
             
             <div class="precio-disponibilidad">
-                <div class="precio">${{ plato.precio|floatformat:0 }}</div>
+                <div class="precio" id="precio-base" data-precio="{{ plato.precio|floatformat:0 }}">
+                    ${{ plato.precio|floatformat:0 }}
+                </div>
                 
                 {% if plato.disponible %}
                     <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible hoy</span>
@@ -181,11 +248,31 @@
             
             <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">Leer descripción completa</button>
 
+            {% if plato.disponible %}
+            <div class="caja-pedido">
+                <div class="fila-cantidad">
+                    <span class="total-label">Cantidad:</span>
+                    <div class="selector-cantidad">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad(-1)">-</button>
+                        <span id="cantidad-numero">1</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad(1)">+</button>
+                    </div>
+                </div>
+                <div class="fila-cantidad">
+                    <span class="total-label">Total a pagar:</span>
+                    <span class="total-precio" id="total-pagar">${{ plato.precio|floatformat:0 }}</span>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="acciones">
-                <!-- AMBOS BOTONES USAN LA MISMA CLASE GLOBAL .btn -->
-                <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}" target="_blank" class="btn">
-                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
-                </a>
+                {% if plato.disponible %}
+                    <!-- Botón con clase btn-whatsapp para conservar el verde -->
+                    <a href="#" id="btn-whatsapp" target="_blank" class="btn btn-whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+                    </a>
+                {% endif %}
+                
                 <a href="{% url 'Platos' %}" class="btn">
                     <i class="fa-solid fa-arrow-left"></i> Volver
                 </a>
@@ -207,6 +294,42 @@
         } else {
             boton.innerText = 'Leer descripción completa';
         }
+    }
+
+    let cantidad = 1;
+    const precioElement = document.getElementById('precio-base');
+    const nombrePlato = "{{ plato.nombre }}";
+    const numeroWhatsApp = "573118299494"; 
+
+    if (precioElement) {
+        const precioUnitario = parseInt(precioElement.getAttribute('data-precio'));
+
+        function cambiarCantidad(valor) {
+            cantidad += valor;
+            if (cantidad < 1) cantidad = 1;
+
+            document.getElementById('cantidad-numero').innerText = cantidad;
+
+            const total = cantidad * precioUnitario;
+            document.getElementById('total-pagar').innerText = '$' + total.toLocaleString('es-CO');
+
+            actualizarWhatsApp(total);
+        }
+
+        function actualizarWhatsApp(total) {
+            const btnWhatsApp = document.getElementById('btn-whatsapp');
+            
+            let mensaje = `Hola, quiero pedir:\n`;
+            mensaje += `*${cantidad}x ${nombrePlato}*\n`;
+            mensaje += `Total a pagar: $${total.toLocaleString('es-CO')}\n\n`;
+            mensaje += `¿Me confirman disponibilidad y tiempo de entrega?`;
+
+            btnWhatsApp.href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            actualizarWhatsApp(precioUnitario);
+        });
     }
 </script>
 {% endblock %}

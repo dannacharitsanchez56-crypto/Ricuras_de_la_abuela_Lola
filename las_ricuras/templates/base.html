@@ -19,7 +19,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5efe6; /* Fondo original claro */
+            background: #f5efe6;
             color: #2e241c;
             line-height: 1.7;
             min-height: 100vh;
@@ -27,21 +27,23 @@
             flex-direction: column;
         }
 
+        /* REDUCCIÓN: Padding del header bajó de 22px a 10px arriba y abajo */
         header {
             background: linear-gradient(135deg, #5c2e0e 0%, #8b4513 50%, #a0522d 100%);
-            padding: 22px 40px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-            border-bottom: 4px solid #d4a24c;
+            padding: 10px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 3px solid #d4a24c;
         }
 
+        /* REDUCCIÓN: Márgenes más ajustados para la barra superior */
         .barra-superior {
             display: flex;
             justify-content: flex-end;
             align-items: center;
             max-width: 1200px;
-            margin: 0 auto 15px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(212, 162, 76, 0.4);
+            margin: 0 auto 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(212, 162, 76, 0.3);
         }
 
         .sesion-usuario {
@@ -49,7 +51,7 @@
             align-items: center;
             gap: 12px;
             color: #d4a24c;
-            font-size: 14px;
+            font-size: 13px; /* Letra un poco más pequeña */
             font-weight: 600;
         }
 
@@ -62,7 +64,7 @@
             border: none;
             color: #d4a24c;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
@@ -76,43 +78,47 @@
             color: #fdf6ec;
         }
 
+        /* REDUCCIÓN: Gap entre logo y texto bajó de 25px a 15px */
         .header-top {
             display: flex;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            gap: 25px;
+            gap: 15px;
         }
 
+        /* REDUCCIÓN: Logo bajó de 140px a 85px */
         .logo {
-            width: 140px;
-            height: 140px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             background: #fff;
-            padding: 6px;
+            padding: 4px;
             object-fit: cover;
-            box-shadow: 0 0 0 4px #d4a24c, 0 6px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 3px #d4a24c, 0 4px 10px rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
 
+        /* REDUCCIÓN: Letra del título bajó de 34px a 26px */
         .marca h1 {
-            font-size: 34px;
+            font-size: 26px;
             color: #fdf6ec;
             font-weight: 700;
             letter-spacing: 1px;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
             line-height: 1.2;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
         }
 
         .marca .lema {
-            font-size: 15px;
+            font-size: 13px; /* Letra más pequeña */
             color: #d4a24c;
             font-style: italic;
             font-weight: 500;
             letter-spacing: 0.5px;
         }
 
+        /* REDUCCIÓN: Menos margen superior y menos padding */
         nav {
             display: flex;
             flex-wrap: wrap;
@@ -120,47 +126,48 @@
             align-items: center;
             gap: 10px;
             max-width: 1200px;
-            margin: 20px auto 0;
-            padding-top: 18px;
-            border-top: 2px solid rgba(212, 162, 76, 0.5);
+            margin: 10px auto 0;
+            padding-top: 10px;
+            border-top: 1px solid rgba(212, 162, 76, 0.4);
         }
 
+        /* REDUCCIÓN: Botones ligeramente más pequeños */
         nav a, nav button {
             color: #fff;
             text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 25px;
+            padding: 8px 18px;
+            border-radius: 20px;
             background: linear-gradient(135deg, #8b4513, #5c2e0e);
             border: none;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.3s ease;
             cursor: pointer;
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(92, 46, 14, 0.4);
+            gap: 6px;
+            box-shadow: 0 3px 8px rgba(92, 46, 14, 0.3);
         }
 
         nav a:hover, nav button:hover {
             background: linear-gradient(135deg, #d4a24c, #b8860b);
             color: #5c2e0e;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(212, 162, 76, 0.5);
+            box-shadow: 0 5px 12px rgba(212, 162, 76, 0.4);
         }
 
         nav a i, nav button i {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         main {
             flex: 1;
             max-width: 900px;
             width: 90%;
-            margin: 40px auto;
-            padding: 40px;
-            background: #fff; /* Contenedor blanco original */
+            margin: 30px auto;
+            padding: 35px;
+            background: #fff;
             border-radius: 14px;
             box-shadow: 0 8px 30px rgba(92, 46, 14, 0.15);
             border-top: 5px solid #8b4513;
@@ -232,19 +239,21 @@
             background: #2e241c;
             color: #d4a24c;
             text-align: center;
-            padding: 20px;
-            font-size: 14px;
+            padding: 15px; /* Footer un poco más compacto */
+            font-size: 13px;
             margin-top: auto;
             border-top: 4px solid #8b4513;
         }
 
+        /* RESPONSIVE */
         @media (max-width: 750px) {
-            .header-top { flex-direction: column; text-align: center; gap: 15px; }
-            .marca h1 { font-size: 24px; }
-            .logo { width: 120px; height: 120px; }
-            header { padding: 20px 15px; }
+            .header-top { flex-direction: column; text-align: center; gap: 10px; }
+            .marca h1 { font-size: 22px; }
+            .logo { width: 75px; height: 75px; }
+            header { padding: 15px 10px; }
             .barra-superior { justify-content: center; }
-            main { padding: 25px; }
+            main { padding: 25px; margin: 20px auto; }
+            nav { margin: 10px auto 0; padding-top: 10px; }
         }
     </style>
 
