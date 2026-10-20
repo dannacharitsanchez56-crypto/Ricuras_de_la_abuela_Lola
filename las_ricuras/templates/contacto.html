@@ -4,124 +4,96 @@
 {% block titulo %}Contacto — Las Ricuras de la Abuela Lola{% endblock %}
 
 {% block extra_css %}
-<!-- Letra manuscrita para el toque humano -->
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
-
 <style>
-    .contacto-contenedor {
+    /* 1. Contenedor principal */
+    .contacto-wrapper {
         max-width: 1000px;
         margin: 0 auto;
-        padding: 20px;
     }
 
-    /* 1. CABECERA */
     .contacto-header {
         text-align: center;
-        margin-bottom: 50px;
-        position: relative;
+        margin-bottom: 40px;
     }
 
     .contacto-header h2 {
         font-family: 'Playfair Display', serif;
         color: #5c2e0e;
-        font-size: 42px;
+        font-size: 38px;
         border: none;
         padding: 0;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 
-    .contacto-header .nota-mano {
-        font-family: 'Caveat', cursive;
-        color: #d4a24c;
-        font-size: 28px;
-        transform: rotate(-2deg);
-        display: inline-block;
+    .contacto-header p {
+        font-size: 17px;
+        color: #6b5a4b;
+        font-style: italic;
     }
 
-    /* 2. DISEÑO DESALINEADO (Como fotos en la pared) */
-    .contacto-layout {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 50px;
-        align-items: flex-start;
-        justify-content: center;
+    /* 2. Cuadrícula de dos columnas */
+    .contacto-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 30px;
+        align-items: stretch;
     }
 
-    /* --- COLUMNA IZQUIERDA (Nota de papel) --- */
-    .nota-contacto {
-        flex: 1;
-        min-width: 300px;
-        max-width: 450px;
-        background: #fffdf8;
-        padding: 40px 30px;
-        border: 2px dashed #d4a24c;
-        border-radius: 4px;
-        box-shadow: 5px 5px 20px rgba(92, 46, 14, 0.08);
-        position: relative;
-        transform: rotate(-1.5deg); /* Ligeramente torcida */
+    /* --- Columna Izquierda: Datos --- */
+    .info-contacto {
+        background: #fdf6ec;
+        padding: 30px;
+        border-radius: 12px;
+        border-left: 5px solid #d4a24c;
+        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
     }
 
-    /* El "pin" o chincheta que sostiene el papel */
-    .nota-contacto::before {
-        content: '📌';
-        position: absolute;
-        top: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 30px;
-        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
-    }
-
-    .nota-contacto h3 {
+    .info-contacto h3 {
         font-family: 'Playfair Display', serif;
         color: #5c2e0e;
-        font-size: 26px;
         margin-top: 0;
         margin-bottom: 25px;
-        text-align: center;
-        border-bottom: 1px dashed #e6dac7;
-        padding-bottom: 15px;
+        font-size: 22px;
+        border-bottom: 2px dashed #d4a24c;
+        padding-bottom: 10px;
     }
 
     .dato-contacto {
         display: flex;
+        align-items: flex-start;
         gap: 15px;
         margin-bottom: 20px;
-        align-items: flex-start;
     }
 
-    /* Círculo dorado alrededor del icono */
-    .icono-circulo {
-        width: 40px;
-        height: 40px;
-        background: #fdf6ec;
+    .dato-contacto .icono {
+        width: 35px;
+        height: 35px;
+        background: #fff;
         border: 1px solid #d4a24c;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-shrink: 0;
         color: #8b4513;
-        font-size: 18px;
+        flex-shrink: 0;
+        font-size: 15px;
     }
 
     .dato-contacto p {
         margin: 0;
         color: #4a3b31;
-        font-size: 16px;
+        font-size: 15px;
         line-height: 1.5;
     }
 
     .dato-contacto strong {
         color: #8b4513;
         display: block;
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 2px;
+        margin-bottom: 3px;
+        font-size: 16px;
     }
 
-    /* Botón de WhatsApp estilo botón global pero verde */
+    /* Botón de WhatsApp */
     .btn-whatsapp {
         display: flex;
         align-items: center;
@@ -130,13 +102,13 @@
         background: #25D366;
         color: white !important;
         padding: 14px;
-        border-radius: 6px;
+        border-radius: 8px;
         text-decoration: none;
         font-weight: 700;
         font-size: 16px;
-        margin-top: 30px;
-        transition: 0.3s;
-        border: none;
+        margin-top: 25px;
+        transition: background 0.3s, transform 0.2s;
+        box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
     }
 
     .btn-whatsapp:hover {
@@ -144,84 +116,60 @@
         transform: translateY(-2px);
     }
 
-    /* --- COLUMNA DERECHA (Foto del mapa) --- */
-    .foto-mapa {
-        flex: 1.2;
-        min-width: 300px;
-        position: relative;
-        transform: rotate(2deg); /* Torcida al otro lado */
-        transition: transform 0.3s ease;
-    }
-
-    .foto-mapa:hover {
-        transform: rotate(0deg); /* Se endereza al pasar el mouse */
-    }
-
-    /* Marco blanco de foto revelada */
-    .mapa-container {
+    /* --- Columna Derecha: Mapa --- */
+    .mapa-contacto {
         background: #fff;
-        padding: 15px 15px 60px 15px; /* Espacio extra abajo como polaroid */
-        border-radius: 2px;
-        box-shadow: 8px 8px 25px rgba(0,0,0,0.15);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e6dac7;
+        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
+        display: flex;
+        flex-direction: column;
     }
 
-    .mapa-container iframe {
+    .mapa-contacto iframe {
         width: 100%;
-        height: 350px;
-        border: 1px solid #eee;
-        /* Filtro para que el mapa no se vea tan digital */
-        filter: sepia(20%) contrast(110%) brightness(95%);
+        height: 100%;
+        min-height: 400px;
+        border: none;
     }
 
-    /* Texto escrito a mano debajo de la foto */
-    .foto-mapa .leyenda-mapa {
-        font-family: 'Caveat', cursive;
-        color: #8b4513;
-        font-size: 24px;
-        text-align: center;
-        margin-top: 15px;
-        position: absolute;
-        bottom: 15px;
-        left: 0;
-        right: 0;
-    }
-
-    @media (max-width: 768px) {
-        .nota-contacto, .foto-mapa {
-            transform: rotate(0deg); /* Quitamos la rotación en celular */
-            max-width: 100%;
+    /* Responsive */
+    @media (max-width: 800px) {
+        .contacto-grid {
+            grid-template-columns: 1fr;
         }
-        .contacto-header h2 { font-size: 32px; }
+        .mapa-contacto iframe {
+            min-height: 300px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block contenido %}
 
-<div class="contacto-contenedor">
-
+<div class="contacto-wrapper">
     <div class="contacto-header">
-        <h2>¡Ven a visitarnos!</h2>
-        <span class="nota-mano">...te estamos esperando con el almuerzo listo</span>
+        <h2>¡Ven y visítanos!</h2>
+        <p>¿Quieres hacer un pedido, o contactarnos? Aquí estamos para ti.</p>
     </div>
 
-    <div class="contacto-layout">
-        
-        <!-- NOTA DE PAPEL (INFORMACIÓN) -->
-        <div class="nota-contacto">
+    <div class="contacto-grid">
+        <!-- COLUMNA IZQUIERDA: DATOS -->
+        <div class="info-contacto">
             <h3>Nuestros Datos</h3>
             
             <div class="dato-contacto">
-                <div class="icono-circulo"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="icono"><i class="fa-solid fa-location-dot"></i></div>
                 <p>
                     <strong>Dirección</strong>
                     Carrera 8D Bis 159-27<br>
-                    (En la esquina de siempre)
+                    (En la esquina, donde huele a leña)
                 </p>
             </div>
 
             <div class="dato-contacto">
-                <div class="icono-circulo"><i class="fa-solid fa-phone"></i></div>
+                <div class="icono"><i class="fa-solid fa-phone"></i></div>
                 <p>
                     <strong>Llámanos o escríbenos</strong>
                     +57 311 829 9494
@@ -229,42 +177,28 @@
             </div>
 
             <div class="dato-contacto">
-                <div class="icono-circulo"><i class="fa-regular fa-clock"></i></div>
+                <div class="icono"><i class="fa-regular fa-clock"></i></div>
                 <p>
-                    <strong>Horarios</strong>
-                    Lun a Vie: 6:00 a.m. — 3:30 p.m.<br>
-                    Sáb y Dom: 8:00 a.m. — 3:30 p.m.
+                    <strong>Horarios de atención</strong>
+                    Lunes a Viernes: 6:00 a.m. — 3:30 p.m.<br>
+                    Sábados y Domingos: 8:00 a.m. — 3:30 p.m.
                 </p>
             </div>
 
-            <div class="dato-contacto">
-                <div class="icono-circulo"><i class="fa-solid fa-envelope"></i></div>
-                <p>
-                    <strong>Correo</strong>
-                    pedidos@ricurasdelola.com
-                </p>
-            </div>
-
-            <!-- Botón directo a WhatsApp -->
             <a href="https://wa.me/573118299494?text=Hola,%20quisiera%20hacer%20un%20pedido" target="_blank" class="btn-whatsapp">
                 <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Pedir por WhatsApp
             </a>
         </div>
 
-        <!-- FOTO DEL MAPA -->
-        <div class="foto-mapa">
-            <div class="mapa-container">
-                <iframe 
-                    src="https://maps.google.com/maps?width=100%25&height=600&hl=es&q=Carrera%208D%20Bis%20159-27&t=&z=16&ie=UTF8&iwloc=B&output=embed" 
-                    allowfullscreen="" 
-                    loading="lazy">
-                </iframe>
-                <div class="leyenda-mapa">¡No se pierda, aquí lo esperamos!</div>
-            </div>
+        <!-- COLUMNA DERECHA: MAPA -->
+        <div class="mapa-contacto">
+            <iframe 
+                src="https://maps.google.com/maps?width=100%25&height=600&hl=es&q=Carrera%208D%20Bis%20159-27&t=&z=16&ie=UTF8&iwloc=B&output=embed" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
         </div>
-
     </div>
-
 </div>
 
 {% endblock %}

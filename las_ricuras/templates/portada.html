@@ -19,7 +19,7 @@
         }
 
         body {
-            /* El fondo se mantiene igual */
+            /* Fondo de madera oscura */
             background-image: linear-gradient(rgba(46, 26, 16, 0.8), rgba(46, 26, 16, 0.9)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1600&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -33,10 +33,10 @@
         }
 
         .contenedor-bienvenida {
-            /* AQUÍ ESTÁ EL TRUCO: Fondo semi-transparente + Desenfoque */
-            background-color: rgba(253, 246, 236, 0.85); /* Crema con 85% de opacidad */
-            backdrop-filter: blur(10px); /* Desenfoca lo que está detrás */
-            -webkit-backdrop-filter: blur(10px); /* Para Safari */
+            /* Fondo semi-transparente con efecto de vidrio */
+            background-color: rgba(253, 246, 236, 0.9); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
             
             padding: 50px 40px;
             border-radius: 15px;
@@ -44,9 +44,8 @@
             width: 100%;
             text-align: center;
             
-            /* Borde dorado simple, quitamos el doble borde para que no se vea pesado */
-            border: 1px solid rgba(212, 162, 76, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); /* Sombra más suave y difuminada */
+            border: 2px solid #d4a24c;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
         
         .logo-portada {
@@ -102,27 +101,30 @@
             margin-bottom: 35px;
         }
 
+        /* BOTÓN CORREGIDO: Ahora usa el degradado café de tu plantilla */
         .boton-entrar {
-            background: linear-gradient(135deg, #d4a24c, #b8860b); 
-            color: #2e241c;
-            padding: 14px 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #8b4513, #5c2e0e);
+            color: #fff !important;
+            padding: 12px 26px;
+            border-radius: 25px;
             text-decoration: none;
             font-family: 'Lato', sans-serif;
             font-weight: 700;
             font-size: 16px;
-            border-radius: 6px; 
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            transition: 0.3s;
             border: none;
-            box-shadow: 0 6px 20px rgba(212, 162, 76, 0.4); 
+            box-shadow: 0 4px 12px rgba(92, 46, 14, 0.4);
         }
 
         .boton-entrar:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(212, 162, 76, 0.6);
-            color: #fff; 
+            background: linear-gradient(135deg, #d4a24c, #b8860b);
+            color: #5c2e0e !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 162, 76, 0.5);
         }
 
         @media (max-width: 500px) {

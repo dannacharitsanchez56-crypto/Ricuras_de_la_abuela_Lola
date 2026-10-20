@@ -26,4 +26,5 @@ urlpatterns = [
     path('platos/<int:id>/', views.plato_detalle, name='plato_detalle'),
     path('platos/<int:id>/editar/', views.editar_plato, name='editar_plato'),
     path('platos/<int:id>/eliminar/', views.eliminar_plato, name='eliminar_plato'),
+    path('contacto/', views.contacto, name='contacto'),
 ]
