@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Plato, Venta
-
+from .models import Plato, Venta, Resena
 
 admin.site.register(Venta)
 
@@ -20,3 +19,11 @@ class PlatoAdmin(admin.ModelAdmin):
     @admin.action(description='Marcar como no disponible')
     def marcar_no_disponible(self, request, queryset):
         queryset.update(disponible=False)
+
+
+# Configuración para ver las reseñas de forma ordenada
+@admin.register(Resena)
+class ResenaAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'plato', 'estrellas', 'fecha')
+    list_filter = ('estrellas', 'plato')
+    search_fields = ('usuario__username', 'comentario')

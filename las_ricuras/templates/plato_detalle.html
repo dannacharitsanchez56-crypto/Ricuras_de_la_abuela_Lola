@@ -198,6 +198,11 @@
         font-size: 16px;
     }
 
+    .resena-form select, .resena-form textarea {
+        width: 100%; padding: 10px; border: 1px solid #ccc;
+        border-radius: 6px; font-family: inherit; margin-top: 5px; margin-bottom: 10px;
+    }
+
     @media (max-width: 600px) {
         .imagen-container { height: 250px; }
         .informacion { padding: 20px; }
@@ -225,6 +230,18 @@
         <div class="informacion">
             <h1 class="titulo-plato">{{ plato.nombre }}</h1>
             
+            <!-- PROMEDIO DE ESTRELLAS -->
+            <div style="margin-bottom: 15px; color: #d4a24c; font-size: 18px;">
+                {% if promedio %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= promedio %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                    <span style="font-size: 14px; color: #666; margin-left: 5px;">({{ promedio|floatformat:1 }} / 5)</span>
+                {% else %}
+                    <span style="font-size: 14px; color: #666;">Sin reseñas todavía</span>
+                {% endif %}
+            </div>
+
             <div class="precio-disponibilidad">
                 <div class="precio" id="precio-base" data-precio="{{ plato.precio|floatformat:0 }}">
                     ${{ plato.precio|floatformat:0 }}
@@ -264,7 +281,6 @@
 
             <div class="acciones">
                 {% if plato.disponible %}
-                    <!-- IMPORTANTE: Aquí agregamos el id y la clase para que JS funcione -->
                     <a href="#" id="btn-whatsapp" target="_blank" class="btn btn-whatsapp">
                         <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
                     </a>
@@ -274,6 +290,84 @@
                     <i class="fa-solid fa-arrow-left"></i> Volver
                 </a>
             </div>
+
+            <!-- ================= SECCIÓN DE RESEÑAS ================= -->
+            <div style="margin-top: 40px; border-top: 2px dashed #e6dac7; padding-top: 20px;">
+                <h3 style="color: #5c2e0e; margin-bottom: 20px; font-size: 22px;">Opiniones de los clientes</h3>
+
+                <!-- Lista de comentarios -->
+                {% for r in resenas %}
+                    <div style="background: #fffdf9; border: 1px solid #ead8bd; border-left: 4px solid #d4a24c; padding: 15px 20px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <!-- Circulito con la inicial del usuario -->
+                                <div style="width: 35px; height: 35px; background: #ead8bd; color: #5c2e0e; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">
+                                    {{ r.usuario.username|first|upper }}
+                                </div>
+                                <div>
+                                    <strong style="color: #5c2e0e; font-size: 15px;">{{ r.usuario.username }}</strong>
+                                    <div style="color: #d4a24c; font-size: 12px; letter-spacing: 1px; margin-top: 2px;">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= r.estrellas %}★{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- BOTÓN DE ELIMINAR (Solo para administradores) -->
+                            {% if user.is_staff %}
+                                <a href="{% url 'eliminar_resena' r.id %}" 
+                                   onclick="return confirm('¿Estás seguro de que quieres borrar esta reseña?');" 
+                                   style="color: #c62828; background: #ffebee; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                                    <i class="fa-solid fa-trash"></i> Borrar
+                                </a>
+                            {% endif %}
+                            
+                        </div>
+                        <p style="margin: 0 0 10px 45px; font-size: 14px; color: #444;">{{ r.comentario }}</p>
+                        <small style="color: #999; font-size: 11px; margin-left: 45px;">{{ r.fecha|date:"d \d\e F, Y" }}</small>
+                    </div>
+                {% empty %}
+                    <div style="text-align: center; padding: 20px; background: #f8f4ec; border-radius: 8px; border: 1px dashed #d4a24c;">
+                        <p style="color: #777; font-size: 14px; margin: 0;">Aún no hay opiniones. ¡Sé el primero en dejar la tuya!</p>
+                    </div>
+                {% endfor %}
+
+                <!-- Formulario para comentar -->
+                <div style="margin-top: 30px; background: #f8f4ec; padding: 25px; border-radius: 12px; border: 1px solid #e6dac7;">
+                    {% if user.is_authenticated %}
+                        
+                        {% if mi_resena %}
+                            <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;"><i class="fa-solid fa-pen"></i> Edita tu opinión</h4>
+                        {% else %}
+                            <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;"><i class="fa-solid fa-comment-dots"></i> Deja tu opinión</h4>
+                        {% endif %}
+
+                        <form method="POST" class="resena-form" style="display: flex; flex-direction: column; gap: 15px;">
+                            {% csrf_token %}
+                            
+                            <div>
+                                <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">Calificación:</label>
+                                {{ form.estrellas }}
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">Tu opinión:</label>
+                                {{ form.comentario }}
+                            </div>
+
+                            <button type="submit" class="btn" style="padding: 12px; font-size: 15px; align-self: flex-start; border-radius: 8px; cursor: pointer;">
+                                {% if mi_resena %}Actualizar Reseña{% else %}Publicar Reseña{% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <p style="margin: 0; font-size: 15px; text-align: center;">Para dejar un comentario necesitas <a href="{% url 'login' %}" style="color: #8b4513; font-weight: bold; text-decoration: underline;">iniciar sesión</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- ================= FIN RESEÑAS ================= -->
+
         </div>
     </div>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Plato
+from .models import Plato, Resena
 
 
 class PlatoForm(forms.ModelForm):
@@ -37,6 +37,35 @@ class PlatoForm(forms.ModelForm):
             }),
 
             'categoria': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+        }
+
+
+# --- NUEVO FORMULARIO AGREGADO ---
+class ResenaForm(forms.ModelForm):
+
+    class Meta:
+        model = Resena
+
+        fields = [
+            'estrellas',
+            'comentario',
+        ]
+
+        labels = {
+            'estrellas': 'Calificación',
+            'comentario': 'Tu opinión',
+        }
+
+        widgets = {
+            'estrellas': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+
+            'comentario': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Cuéntanos qué te pareció este plato...',
                 'class': 'form-control'
             }),
         }

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User  # <-- Agregamos esta línea
 
 
 class Plato(models.Model):
@@ -80,3 +81,32 @@ class Venta(models.Model):
 
     def __str__(self):
         return f"{self.cantidad} x {self.plato.nombre} - ${self.total}"
+
+
+# --- MODELO DE RESEÑA CORREGIDO ---
+class Resena(models.Model):
+    ESTRELLAS = [
+        (1, '1 Estrella'),
+        (2, '2 Estrellas'),
+        (3, '3 Estrellas'),
+        (4, '4 Estrellas'),
+        (5, '5 Estrellas'),
+    ]
+
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    estrellas = models.IntegerField(
+        choices=ESTRELLAS,
+        default=5
+    )
+    comentario = models.TextField()
+    
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Esto evita que un usuario deje dos reseñas en el mismo plato
+        unique_together = ('plato', 'usuario')
+
+    def __str__(self):
+        return f"Reseña de {self.usuario.username} - {self.plato.nombre}"
