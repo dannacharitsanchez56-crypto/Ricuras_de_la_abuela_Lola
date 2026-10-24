@@ -1,25 +1,51 @@
+
 {% extends 'base.html' %}
 
 {% block titulo %}Resumen de ventas — Las Ricuras de la Abuela Lola{% endblock %}
 
 {% block extra_css %}
 <style>
+    .ventas-contenedor {
+        width: 100%;
+        color: #3b281d;
+    }
+
+    .ventas-contenedor h2 {
+        color: #74390f;
+        font-size: 29px;
+        margin-bottom: 12px;
+    }
+
+    .ventas-descripcion {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .ventas-linea {
+        border: none;
+        border-top: 2px solid #d4a24c;
+        margin: 18px 0 22px;
+    }
+
     .filtro-ventas {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
         gap: 15px;
         background: #fdf6ec;
-        padding: 20px 25px;
-        border-radius: 10px;
+        padding: 22px;
+        border-radius: 12px;
         border-left: 5px solid #d4a24c;
-        margin: 15px 0 25px;
+        margin: 18px 0 25px;
     }
 
     .filtro-ventas .campo {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 7px;
+        flex: 1;
+        min-width: 175px;
     }
 
     .filtro-ventas label {
@@ -29,7 +55,9 @@
     }
 
     .filtro-ventas input[type="date"] {
-        padding: 9px 12px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 12px;
         border: 1px solid #d4a24c;
         border-radius: 8px;
         font-family: inherit;
@@ -38,76 +66,347 @@
         background: #fff;
     }
 
+    .filtro-ventas input[type="date"]:focus {
+        outline: 2px solid #d4a24c;
+        outline-offset: 2px;
+    }
+
+    .botones-periodo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin: 0 0 18px;
+    }
+
+    .boton-periodo {
+        padding: 9px 15px;
+        border: 1px solid #d4a24c;
+        border-radius: 20px;
+        background: #fffaf3;
+        color: #74390f;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .boton-periodo:hover {
+        background: #8b4513;
+        color: #fff;
+    }
+
     .filtro-ventas .btn {
         margin: 0;
         cursor: pointer;
         font-size: 15px;
         font-family: inherit;
+        white-space: nowrap;
+    }
+
+    .boton-limpiar {
+        padding: 11px 15px;
+        border: 1px solid #c9b29c;
+        border-radius: 25px;
+        background: #fff;
+        color: #74390f;
+        font-family: inherit;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .boton-limpiar:hover {
+        background: #f3e5d4;
+    }
+
+    .subtitulo-resultados {
+        color: #74390f;
+        font-size: 19px;
+        margin: 28px 0 15px;
     }
 
     .tarjetas-resumen {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 20px;
     }
 
-    .tarjeta {
-        flex: 1;
-        min-width: 220px;
+    
+.tarjeta {
         background: #fff;
-        border: 1px solid #d4a24c;
+        border: 1px solid #e1b36c;
         border-top: 5px solid #8b4513;
         border-radius: 12px;
-        padding: 22px;
+        padding: 24px 20px;
         text-align: center;
-        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.12);
+        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.09);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tarjeta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 18px rgba(92, 46, 14, 0.13);
+    }
+
+    .tarjeta .icono-tarjeta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        background: #fdf0dc;
+        color: #8b4513;
+        font-size: 20px;
     }
 
     .tarjeta .etiqueta {
         color: #8b4513;
         font-weight: 700;
-        font-size: 15px;
-        margin-bottom: 8px;
+        font-size: 16px;
+        margin: 0 0 12px;
     }
 
     .tarjeta .valor {
         color: #5c2e0e;
         font-size: 32px;
         font-weight: 700;
+        overflow-wrap: anywhere;
         margin: 0;
+    }
+
+    .mensaje-ventas {
+        margin-top: 22px;
+        padding: 17px 20px;
+        border-radius: 10px;
+        background: #fdf6ec;
+        border: 1px solid #ead5b9;
+        color: #704522;
+        line-height: 1.6;
+    }
+
+    .mensaje-ventas i {
+        color: #a45b25;
+        margin-right: 7px;
+    }
+
+    @media (max-width: 600px) {
+        .ventas-contenedor h2 {
+            font-size: 24px;
+        }
+
+        .filtro-ventas {
+            padding: 17px;
+            gap: 12px;
+        }
+
+        .filtro-ventas .campo {
+            min-width: 100%;
+        }
+
+        .filtro-ventas .btn,
+        .boton-limpiar {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .tarjetas-resumen {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .tarjeta {
+            padding: 20px 15px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block contenido %}
 
-<h2>Resumen de ventas</h2>
+<div class="ventas-contenedor">
 
-<p>Elige un período para ver cuánto se vendió. Si no eliges fechas, se muestran todas las ventas.</p>
+    <h2>
+        <i class="fa-solid fa-chart-column"></i>
+        Resumen de ventas
+    </h2>
 
-<form method="get" class="filtro-ventas">
-    <div class="campo">
-        <label for="fecha_inicio">Desde</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}">
-    </div>
-    <div class="campo">
-        <label for="fecha_fin">Hasta</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}">
-    </div>
-    <button type="submit" class="btn">
-        <i class="fa-solid fa-magnifying-glass"></i> Consultar
-    </button>
-</form>
+    <p class="ventas-descripcion">
+        Consulta cuánto se ha vendido en Las Ricuras de la Abuela Lola.
+        Selecciona un período para revisar los resultados de tu negocio.
+    </p>
 
-<div class="tarjetas-resumen">
-    <div class="tarjeta">
-        <p class="etiqueta"><i class="fa-solid fa-sack-dollar"></i> Total vendido</p>
-        <p class="valor">${{ total_vendido }}</p>
+    <hr class="ventas-linea">
+
+    <h3 class="subtitulo-resultados">
+        <i class="fa-regular fa-calendar"></i>
+        ¿Qué período deseas consultar?
+    </h3>
+
+    <div class="botones-periodo">
+        <button type="button" class="boton-periodo"
+                data-periodo="hoy">
+            Hoy
+        </button>
+
+        <button type="button" class="boton-periodo"
+                data-periodo="semana">
+            Esta semana
+        </button>
+
+        <button type="button" class="boton-periodo"
+                data-periodo="mes">
+            Este mes
+        </button>
     </div>
-    <div class="tarjeta">
-        <p class="etiqueta"><i class="fa-solid fa-receipt"></i> Cantidad de ventas</p>
-        <p class="valor">{{ cantidad_ventas }}</p>
+
+    <form method="get" class="filtro-ventas" id="formulario-ventas">
+
+        <div class="campo">
+            <label for="fecha_inicio">Desde</label>
+            <input
+                type="date"
+                id="fecha_inicio"
+                name="fecha_inicio"
+                value="{{ fecha_inicio|default:'' }}"
+            >
+        </div>
+
+        <div class="campo">
+            <label for="fecha_fin">Hasta</label>
+            <input
+                type="date"
+                id="fecha_fin"
+                name="fecha_fin"
+                value="{{ fecha_fin|default:'' }}"
+            >
+        </div>
+
+        <button type="submit" class="btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Consultar
+        </button>
+
+        <button type="button" class="boton-limpiar"
+                id="limpiar-filtros">
+            <i class="fa-solid fa-rotate-left"></i>
+            Ver todas
+        </button>
+
+    </form>
+
+    <h3 class="subtitulo-resultados">
+        <i class="fa-solid fa-chart-pie"></i>
+        Resultados de la consulta
+    </h3>
+
+    <div class="tarjetas-resumen">
+
+        <div class="tarjeta">
+            <div class="icono-tarjeta">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+
+            <p class="etiqueta">Total vendido</p>
+
+            <p class="valor" id="total-vendido"
+                data-total="{{ total_vendido|default:0 }}">
+                 ${{ total_vendido|default:0 }}
+</p>
+        </div>
+
+        <div class="tarjeta">
+            <div class="icono-tarjeta">
+                <i class="fa-solid fa-receipt"></i>
+            </div>
+
+            <p class="etiqueta">Cantidad de ventas</p>
+
+            <p class="valor">{{ cantidad_ventas|default:0 }}</p>
+        </div>
+
     </div>
+
+    {% if cantidad_ventas %}
+        <div class="mensaje-ventas">
+            <i class="fa-solid fa-circle-check"></i>
+            Consulta realizada. Aquí puedes revisar el resumen
+            de las ventas correspondientes al período seleccionado.
+        </div>
+    {% else %}
+        <div class="mensaje-ventas">
+            <i class="fa-solid fa-circle-info"></i>
+            No hay ventas registradas para el período seleccionado.
+            Prueba con otras fechas o selecciona «Ver todas».
+        </div>
+    {% endif %}
+
 </div>
+
+<script>
+   
+document.addEventListener('DOMContentLoaded', function () {
+    const formulario = document.getElementById('formulario-ventas');
+    const fechaInicio = document.getElementById('fecha_inicio');
+    const fechaFin = document.getElementById('fecha_fin');
+    const botonLimpiar = document.getElementById('limpiar-filtros');
+
+    // Mostrar el total vendido con puntos para separar los miles
+    const totalVendido = document.getElementById('total-vendido');
+
+    if (totalVendido) {
+        const monto = Number(totalVendido.dataset.total);
+
+        totalVendido.textContent = '$' + monto.toLocaleString('es-CO', {
+            maximumFractionDigits: 0
+        });
+    }
+
+    function formatoFecha(fecha) {
+        const anio = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+
+        return `${anio}-${mes}-${dia}`;
+    }
+
+    document.querySelectorAll('[data-periodo]').forEach(function (boton) {
+        boton.addEventListener('click', function () {
+            const hoy = new Date();
+            const inicio = new Date(hoy);
+
+            if (boton.dataset.periodo === 'semana') {
+                const diaSemana = (hoy.getDay() + 6) % 7;
+                inicio.setDate(hoy.getDate() - diaSemana);
+            }
+
+            if (boton.dataset.periodo === 'mes') {
+                inicio.setDate(1);
+            }
+
+            fechaInicio.value = formatoFecha(inicio);
+            fechaFin.value = formatoFecha(hoy);
+
+            formulario.requestSubmit();
+        });
+    });
+
+    botonLimpiar.addEventListener('click', function () {
+        fechaInicio.value = '';
+        fechaFin.value = '';
+        formulario.requestSubmit();
+    });
+
+    fechaInicio.addEventListener('change', function () {
+        fechaFin.min = fechaInicio.value || '';
+    });
+
+    fechaFin.addEventListener('change', function () {
+        fechaInicio.max = fechaFin.value || '';
+    });
+});
+
+</script>
 
 {% endblock %}

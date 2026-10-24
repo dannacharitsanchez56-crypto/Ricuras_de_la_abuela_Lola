@@ -1,12 +1,15 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Count, Avg
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Plato, Venta, Resena
+from .models import Plato, Venta, RegistroVenta, Resena
 from .forms import PlatoForm, ResenaForm
 from .decorators import solo_staff
+from decimal import Decimal, InvalidOperation
+from django.utils import timezone
 
 
 def portada(request):
@@ -54,12 +57,14 @@ def Platos(request):
 def plato_detalle(request, id):
     plato = get_object_or_404(Plato, id=id)
     lista_resenas = plato.resena_set.all()
-    
+
     prom = lista_resenas.aggregate(Avg('estrellas'))['estrellas__avg']
 
     mi_resena = None
     if request.user.is_authenticated:
-        mi_resena = Resena.objects.filter(plato=plato, usuario=request.user).first()
+        mi_resena = Resena.objects.filter(
+            plato=plato, usuario=request.user
+        ).first()
 
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -134,10 +139,10 @@ def eliminar_plato(request, id):
 def eliminar_resena(request, resena_id):
     r = get_object_or_404(Resena, id=resena_id)
     plato_id = r.plato.id
-    
+
     r.delete()
     messages.success(request, 'Reseña eliminada.')
-    
+
     return redirect('plato_detalle', id=plato_id)
 # ----------------------------------------
 
@@ -179,24 +184,32 @@ def registro(request):
                 password=password1
             )
             user.save()
-            messages.success(request, '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.')
+            messages.success(
+                request,
+                '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.'
+            )
             return redirect('login')
         except Exception as e:
-            messages.error(request, f'Ocurrió un error al crear la cuenta: {str(e)}')
+            messages.error(
+                request,
+                f'Ocurrió un error al crear la cuenta: {str(e)}'
+            )
             return render(request, 'registro.html')
 
     return render(request, 'registro.html')
 
 
+
 @staff_member_required
 def resumen_ventas(request):
-    ventas = Venta.objects.all()
+    ventas = RegistroVenta.objects.all()
 
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
 
     if fecha_inicio:
         ventas = ventas.filter(fecha__date__gte=fecha_inicio)
+
     if fecha_fin:
         ventas = ventas.filter(fecha__date__lte=fecha_fin)
 
@@ -211,4 +224,29 @@ def resumen_ventas(request):
         'fecha_inicio': fecha_inicio or '',
         'fecha_fin': fecha_fin or '',
     }
+
     return render(request, 'resumen_ventas.html', contexto)
+
+
+@staff_member_required
+def registrar_venta(request):
+    if request.method == 'POST':
+        monto = request.POST.get('monto', '').strip()
+
+        try:
+            monto = Decimal(monto)
+
+            if monto <= 0:
+                messages.error(request, 'Ingresa un monto mayor que cero.')
+                return redirect('registrar_venta')
+
+            RegistroVenta.objects.create(total=monto)
+
+            messages.success(request, 'Venta registrada correctamente.')
+            return redirect('resumen_ventas')
+
+        except (InvalidOperation, ValueError):
+            messages.error(request, 'Ingresa un monto válido.')
+            return redirect('registrar_venta')
+
+    return render(request, 'registrar_venta.html')

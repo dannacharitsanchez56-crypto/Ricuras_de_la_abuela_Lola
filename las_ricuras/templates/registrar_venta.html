@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block titulo %}Registrar venta — Las Ricuras de la Abuela Lola{% endblock %}
+{% block extra_css %}
+
+
+<style>
+    .registro-ventas {
+        max-width: 600px;
+        margin: 30px auto;
+        color: #3b281d;
+    }
+
+    .registro-ventas h2 {
+        color: #74390f;
+        margin-bottom: 12px;
+    }
+
+    .registro-descripcion {
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .formulario-venta {
+        background: #fdf6ec;
+        padding: 25px;
+        border-radius: 12px;
+        border-left: 5px solid #d4a24c;
+        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.08);
+    }
+
+    .campo-venta {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-bottom: 20px;
+    }
+
+    .campo-venta label {
+        color: #8b4513;
+        font-weight: bold;
+    }
+
+    .campo-venta input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px;
+        border: 1px solid #d4a24c;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .boton-registrar {
+        background: #8b4513;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 12px 22px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .boton-registrar:hover {
+        background: #5c2e0e;
+    }
+
+    .boton-volver {
+        color: #74390f;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .nota-venta {
+        background: white;
+        border: 1px solid #ead5b9;
+        border-radius: 8px;
+        padding: 13px;
+        margin-top: 20px;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="registro-ventas">
+
+    <h2>
+        <i class="fa-solid fa-receipt"></i>
+        Registrar venta
+    </h2>
+
+    <p class="registro-descripcion">
+        Ingresa el valor total de la venta realizada.
+        Cuando la guardes, el monto se sumará en el resumen de ventas.
+    </p>
+
+    <form method="post" class="formulario-venta">
+        {% csrf_token %}
+
+        <div class="campo-venta">
+            <label for="total">Monto de la venta (COP)</label>
+
+            <input
+            type="text"
+            name="monto"
+            inputmode="numeric"
+            placeholder="Ejemplo: 1000000"
+            required
+            >
+        </div>
+
+        <button type="submit" class="boton-registrar">
+            <i class="fa-solid fa-check"></i>
+            Guardar venta
+        </button>
+
+        <a href="{% url 'resumen_ventas' %}" class="boton-volver">
+            Volver al resumen
+        </a>
+
+        <div class="nota-venta">
+            <i class="fa-solid fa-circle-info"></i>
+            Escribe el monto en pesos colombianos sin puntos ni signos.
+            Por ejemplo, para registrar un millón de pesos, escribe
+            <strong>1000000</strong>.
+        </div>
+    </form>
+
+</div>
+{% endblock %}
