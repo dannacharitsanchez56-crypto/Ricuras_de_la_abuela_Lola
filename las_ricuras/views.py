@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -243,7 +244,7 @@ def registro(request):
 
     return render(request, 'registro.html')
 
-@staff_member_required
+@permission_required('las_ricuras.view_venta', raise_exception=True)
 def resumen_ventas(request):
     ventas = Venta.objects.all()
 
