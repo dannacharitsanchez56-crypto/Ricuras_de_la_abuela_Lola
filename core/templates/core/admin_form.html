@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios administrativos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fdf6ec;
+            color: #2e241c;
+            margin: 0;
+            padding: 30px 20px;
+        }
+        .contenedor { max-width: 1000px; margin: 0 auto; }
+        h2 { color: #5c2e0e; border-bottom: 3px solid #d4a24c; padding-bottom: 10px; }
+        .mensaje {
+            padding: 12px 18px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            color: #2e5e30;
+        }
+        .mensaje.error { background: #fdecea; border-color: #e53935; color: #8a1c1c; }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b4513, #5c2e0e);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn:hover { background: linear-gradient(135deg, #d4a24c, #b8860b); color: #5c2e0e; }
+        .btn-peligro { background: #a33; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border: 1px solid #d4a24c;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th { background: #8b4513; color: #fff; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #ecd9b8; }
+        .activo { color: #2e7d32; font-weight: 700; }
+        .inactivo { color: #c62828; font-weight: 700; }
+        .acciones { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .acciones form { margin: 0; }
+        .volver { margin-top: 20px; display: inline-block; color: #8b4513; font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h2>Usuarios administrativos</h2>
+
+    {% for m in messages %}
+        <div class="mensaje {% if m.tags == 'error' %}error{% endif %}">{{ m }}</div>
+    {% endfor %}
+
+    <a class="btn" href="{% url 'crear_admin' %}">+ Registrar administrador</a>
+
+    <table>
+        <tr>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        {% for a in admins %}
+        <tr>
+            <td>{{ a.username }}</td>
+            <td>{{ a.first_name }} {{ a.last_name }}</td>
+            <td>{{ a.email }}</td>
+            <td>
+                {% if a.is_active %}
+                    <span class="activo">Activo</span>
+                {% else %}
+                    <span class="inactivo">Inactivo</span>
+                {% endif %}
+            </td>
+            <td>
+                <div class="acciones">
+                    <a class="btn" href="{% url 'editar_admin' a.id %}">Editar</a>
+                    <form method="post" action="{% url 'cambiar_estado_admin' a.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn {% if a.is_active %}btn-peligro{% endif %}"
+                            onclick="return confirm('¿Seguro que quieres cambiar el estado de este usuario?')">
+                            {% if a.is_active %}Desactivar{% else %}Activar{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a class="volver" href="{% url 'inicio' %}">← Volver al inicio</a>
+</div>
+</body>
+</html>
