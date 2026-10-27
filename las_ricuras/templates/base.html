@@ -308,10 +308,16 @@
             <i class="fa-solid fa-plate-wheat"></i>
             Platos
         </a>
-        <a href="{% url 'contacto' %}">
-            <i class="fa-solid fa-envelope"></i>
-            Contacto
-        </a>
+            <a href="{% url 'contacto' %}">
+        <i class="fa-solid fa-envelope"></i>
+        Contacto
+    </a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'crear_pedido' %}">
+        <i class="fa-solid fa-clipboard-list"></i>
+        Pedidos
+    </a>
+    {% endif %}
                 {% if user.is_authenticated and user.is_staff %}
         <a href="{% url 'resumen_ventas' %}">
             <i class="fa-solid fa-chart-line"></i>

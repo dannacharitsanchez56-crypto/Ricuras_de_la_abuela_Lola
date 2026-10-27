@@ -80,6 +80,18 @@
     .sin-platos { text-align: center; padding: 40px 20px; background: #f8f4ec; border: 1px dashed #d4a24c; border-radius: 4px; }
     .icono-vacio { font-size: 40px; color: #d4a24c; margin-bottom: 15px; }
 
+    /* Sección del código QR */
+    .seccion-qr {
+        text-align: center; margin-top: 40px; padding: 30px 20px;
+        background: #f8f4ec; border: 1px dashed #d4a24c; border-radius: 4px;
+    }
+    .seccion-qr h3 { color: #5c2e0e; font-family: 'Playfair Display', serif; border: none; margin-bottom: 8px; }
+    .seccion-qr p { color: #6b5a4b; font-size: 14px; margin: 8px auto; max-width: 450px; }
+    .seccion-qr img {
+        width: 200px; height: 200px; background: #fff; padding: 10px;
+        border: 2px solid #d4a24c; border-radius: 12px; margin-top: 10px;
+    }
+
     @media (max-width: 768px) {
         .plato-card { flex-direction: column; gap: 15px; }
         .imagen-plato { width: 100%; height: 200px; }
@@ -168,6 +180,16 @@
             <p>En este momento no hay platos registrados en el menú.</p>
         </div>
     {% endif %}
+
+    <section class="seccion-qr">
+        <h3><i class="fa-solid fa-qrcode"></i> Escanea y pide desde tu celular</h3>
+        <p>Escanea el código con la cámara de tu celular para abrir nuestro menú y hacer tu pedido de forma rápida.</p>
+        <img src="{% url 'codigo_qr' %}" alt="Código QR del menú"
+             onerror="this.style.display='none'; document.getElementById('qr-fallo').style.display='block';">
+        <p id="qr-fallo" style="display:none; color:#a33b32;">
+            No se pudo acceder al menú con el código QR. Intenta de nuevo o <a href="{% url 'menu' %}">entra aquí</a>.
+        </p>
+    </section>
 {% endblock %}
 
 {% block extra_js %}

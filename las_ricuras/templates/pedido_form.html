@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load currency_filters %}
+{% block titulo %}Nuevo pedido | Ricuras de la Abuela Lola{% endblock %}
+{% block contenido %}
+<h2>Registrar pedido</h2>
+
+{% if messages %}
+  {% for m in messages %}<p style="color:#a33b32;">{{ m }}</p>{% endfor %}
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  <label>Mesa: <input type="text" name="mesa" placeholder="Ej: 4"></label>
+  <table>
+    <tr><th>Plato</th><th>Precio</th><th>Cantidad</th></tr>
+    {% for plato in platos %}
+    <tr>
+      <td>{{ plato.nombre }}</td>
+      <td>${{ plato.precio|cop }}</td>
+      <td><input type="number" name="cantidad_{{ plato.id }}" min="0" value="0" style="width:70px;"></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <button type="submit" class="btn">Registrar pedido</button>
+</form>
+{% endblock %}

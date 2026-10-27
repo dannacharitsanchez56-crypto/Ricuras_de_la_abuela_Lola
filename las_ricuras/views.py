@@ -1,3 +1,14 @@
+from django.contrib import messages
+from .models import Plato, Pedido, DetallePedido
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
+from urllib.parse import quote
+import io
+import qrcode
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.urls import reverse
+from .models import Plato
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -268,3 +279,41 @@ def resumen_ventas(request):
         'fecha_fin': fecha_fin or '',
     }
     return render(request, 'resumen_ventas.html', contexto)
+
+
+def codigo_qr(request):
+    """Genera un QR que abre el chat de WhatsApp del restaurante."""
+    mensaje = "Hola, escaneé el código QR y quiero hacer un pedido"
+    url_whatsapp = f"https://wa.me/573118299494?text={quote(mensaje)}"
+    img = qrcode.make(url_whatsapp)
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+@login_required
+def crear_pedido(request):
+    platos = Plato.objects.filter(disponible=True)
+    if request.method == "POST":
+        mesa = request.POST.get("mesa", "")
+        seleccionados = []
+        for plato in platos:
+            cantidad = int(request.POST.get(f"cantidad_{plato.id}", 0) or 0)
+            if cantidad > 0:
+                seleccionados.append((plato, cantidad))
+
+        if not seleccionados:
+            messages.error(request, "Debes seleccionar al menos un plato.")
+        else:
+            pedido = Pedido.objects.create(mesero=request.user, mesa=mesa)
+            for plato, cantidad in seleccionados:
+                DetallePedido.objects.create(pedido=pedido, plato=plato, cantidad=cantidad)
+            pedido.calcular_total()
+            return redirect("pedido_detalle", pedido.id)
+
+    return render(request, "pedido_form.html", {"platos": platos})
+
+
+@login_required
+def pedido_detalle(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    return render(request, "pedido_detalle.html", {"pedido": pedido})

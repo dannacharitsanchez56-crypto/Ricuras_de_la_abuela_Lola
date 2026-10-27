@@ -1,6 +1,16 @@
 from django.contrib import admin
-from .models import Plato, Venta
+from .models import Plato, Venta, Pedido, DetallePedido
 
+
+
+class DetalleInline(admin.TabularInline):
+    model = DetallePedido
+    extra = 0
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display = ("id", "mesa", "mesero", "total", "fecha")
+    inlines = [DetalleInline]
 
 admin.site.register(Venta)
 

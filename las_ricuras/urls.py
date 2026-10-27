@@ -27,4 +27,8 @@ urlpatterns = [
     path('platos/<int:id>/eliminar/', views.eliminar_plato, name='eliminar_plato'),
     path('contacto/', views.contacto, name='contacto'),
     path('resumen-ventas/', views.resumen_ventas, name='resumen_ventas'),
+    path("qr/", views.codigo_qr, name="codigo_qr"),
+    path("pedidos/nuevo/", views.crear_pedido, name="crear_pedido"),
+    path("pedidos/<int:pedido_id>/", views.pedido_detalle, name="pedido_detalle"),
+
 ]

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load currency_filters %}
+{% block titulo %}Pedido #{{ pedido.id }} | Ricuras de la Abuela Lola{% endblock %}
+{% block contenido %}
+<h2>Pedido #{{ pedido.id }}</h2>
+<p>Mesa: {{ pedido.mesa|default:"-" }} | Mesero: {{ pedido.mesero }} | {{ pedido.fecha|date:"d/m/Y H:i" }}</p>
+
+<table>
+  <tr><th>Plato</th><th>Cantidad</th><th>Subtotal</th></tr>
+  {% for d in pedido.detalles.all %}
+  <tr>
+    <td>{{ d.plato.nombre }}</td>
+    <td>{{ d.cantidad }}</td>
+    <td>${{ d.subtotal|cop }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Total: ${{ pedido.total|cop }}</h3>
+<a href="{% url 'crear_pedido' %}" class="btn">Nuevo pedido</a>
+{% endblock %}
