@@ -21,7 +21,7 @@ class PlatoAdmin(admin.ModelAdmin):
         queryset.update(disponible=False)
 
 
-# Configuración para ver las reseñas de forma ordenada
+
 @admin.register(Resena)
 class ResenaAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'plato', 'estrellas', 'fecha')

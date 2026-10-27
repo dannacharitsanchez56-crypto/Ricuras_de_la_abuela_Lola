@@ -42,7 +42,7 @@ class PlatoForm(forms.ModelForm):
         }
 
 
-# --- NUEVO FORMULARIO AGREGADO ---
+
 class ResenaForm(forms.ModelForm):
 
     class Meta:

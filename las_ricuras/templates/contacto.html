@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block titulo %}Contacto — Las Ricuras de la Abuela Lola{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* 1. Contenedor principal */
+    
     .contacto-wrapper {
         max-width: 1000px;
         margin: 0 auto;
@@ -31,7 +30,7 @@
         font-style: italic;
     }
 
-    /* 2. Cuadrícula de dos columnas */
+    
     .contacto-grid {
         display: grid;
         grid-template-columns: 1fr 1.2fr;
@@ -39,7 +38,6 @@
         align-items: stretch;
     }
 
-    /* --- Columna Izquierda: Datos --- */
     .info-contacto {
         background: #fdf6ec;
         padding: 30px;
@@ -93,7 +91,6 @@
         font-size: 16px;
     }
 
-    /* Botón de WhatsApp */
     .btn-whatsapp {
         display: flex;
         align-items: center;
@@ -116,7 +113,6 @@
         transform: translateY(-2px);
     }
 
-    /* --- Columna Derecha: Mapa --- */
     .mapa-contacto {
         background: #fff;
         border-radius: 12px;
@@ -134,7 +130,6 @@
         border: none;
     }
 
-    /* Responsive */
     @media (max-width: 800px) {
         .contacto-grid {
             grid-template-columns: 1fr;
@@ -155,7 +150,7 @@
     </div>
 
     <div class="contacto-grid">
-        <!-- COLUMNA IZQUIERDA: DATOS -->
+      
         <div class="info-contacto">
             <h3>Nuestros Datos</h3>
             
@@ -190,7 +185,6 @@
             </a>
         </div>
 
-        <!-- COLUMNA DERECHA: MAPA -->
         <div class="mapa-contacto">
             <iframe 
                 src="https://maps.google.com/maps?width=100%25&height=600&hl=es&q=Carrera%208D%20Bis%20159-27&t=&z=16&ie=UTF8&iwloc=B&output=embed" 

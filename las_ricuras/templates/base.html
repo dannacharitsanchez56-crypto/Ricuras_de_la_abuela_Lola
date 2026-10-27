@@ -27,7 +27,7 @@
             flex-direction: column;
         }
 
-        /* REDUCCIÓN: Padding del header bajó de 22px a 10px arriba y abajo */
+        
         header {
             background: linear-gradient(135deg, #5c2e0e 0%, #8b4513 50%, #a0522d 100%);
             padding: 10px 30px;
@@ -35,7 +35,7 @@
             border-bottom: 3px solid #d4a24c;
         }
 
-        /* REDUCCIÓN: Márgenes más ajustados para la barra superior */
+        
         .barra-superior {
             display: flex;
             justify-content: flex-end;
@@ -51,7 +51,7 @@
             align-items: center;
             gap: 12px;
             color: #d4a24c;
-            font-size: 13px; /* Letra un poco más pequeña */
+            font-size: 13px; 
             font-weight: 600;
         }
 
@@ -78,7 +78,7 @@
             color: #fdf6ec;
         }
 
-        /* REDUCCIÓN: Gap entre logo y texto bajó de 25px a 15px */
+        
         .header-top {
             display: flex;
             align-items: center;
@@ -87,7 +87,7 @@
             gap: 15px;
         }
 
-        /* REDUCCIÓN: Logo bajó de 140px a 85px */
+        
         .logo {
             width: 85px;
             height: 85px;
@@ -99,7 +99,7 @@
             flex-shrink: 0;
         }
 
-        /* REDUCCIÓN: Letra del título bajó de 34px a 26px */
+        
         .marca h1 {
             font-size: 26px;
             color: #fdf6ec;
@@ -111,14 +111,14 @@
         }
 
         .marca .lema {
-            font-size: 13px; /* Letra más pequeña */
+            font-size: 13px; 
             color: #d4a24c;
             font-style: italic;
             font-weight: 500;
             letter-spacing: 0.5px;
         }
 
-        /* REDUCCIÓN: Menos margen superior y menos padding */
+        
         nav {
             display: flex;
             flex-wrap: wrap;
@@ -131,7 +131,7 @@
             border-top: 1px solid rgba(212, 162, 76, 0.4);
         }
 
-        /* REDUCCIÓN: Botones ligeramente más pequeños */
+        
         nav a, nav button {
             color: #fff;
             text-decoration: none;
@@ -239,13 +239,13 @@
             background: #2e241c;
             color: #d4a24c;
             text-align: center;
-            padding: 15px; /* Footer un poco más compacto */
+            padding: 15px; 
             font-size: 13px;
             margin-top: auto;
             border-top: 4px solid #8b4513;
         }
 
-        /* RESPONSIVE */
+        
         @media (max-width: 750px) {
             .header-top { flex-direction: column; text-align: center; gap: 10px; }
             .marca h1 { font-size: 22px; }
@@ -333,6 +333,5 @@
 </footer>
 
 {% block extra_js %}{% endblock %}
-
 </body>
 </html>
