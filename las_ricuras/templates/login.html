@@ -1,154 +1,126 @@
+
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión · Ricuras de la Abuela Lola</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #fdfaf5;
-        }
-        .login-card {
-            transition: box-shadow 0.15s ease, transform 0.1s ease;
-        }
-        .login-card:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
-            transform: translateY(-1px);
-        }
-        #id_username,
-        #id_password {
-            width: 100%;
-            padding: 0.625rem 1rem;
-            background-color: rgba(248, 250, 252, 0.7);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 0.75rem;
-            color: #334155;
-            transition: border-color 0.15s, box-shadow 0.15s;
-        }
-        #id_username::placeholder,
-        #id_password::placeholder {
-            color: #94a3b8;
-        }
-        #id_username:focus,
-        #id_password:focus {
-            outline: none;
-            border-color: #8B4513;
-            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
-        }
-        .btn-primary {
-            transition: all 0.15s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-1px);
-        }
-        .btn-primary:active {
-            transform: translateY(0px);
-        }
-    </style>
-</head>
-<body class="antialiased text-slate-700 min-h-screen flex items-center justify-center p-4 md:p-6">
 
-    <main class="w-full max-w-md">
-        <div class="login-card bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
+{% block titulo %}Iniciar Sesión · Ricuras de la Abuela Lola{% endblock %}
 
-            <div class="text-center mb-8">
-                <div class="w-24 h-24 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center shadow-lg mx-auto mb-4 overflow-hidden border-4 border-white">
-                    <img src="{% static 'core/img/Logo.png' %}" alt="Logo Abuela Lola" class="w-full h-full object-cover">
-                </div>
-                <h1 class="text-2xl font-bold text-slate-800">Ricuras de la Abuela Lola</h1>
-                <p class="text-sm text-slate-500 mt-1">Inicia sesión para continuar</p>
+{% block body_class %}login-body{% endblock %}
+
+{% block contenido %}
+
+<div class="login-card">
+
+    <div style="text-align: center; margin-bottom: 27px;">
+        <img
+            src="{% static 'core/img/Logo.png' %}"
+            alt="Logo Abuela Lola"
+            class="login-logo"
+            style="margin-bottom: 13px;"
+        >
+
+        <h2 class="login-titulo" style="border-bottom: none; padding-bottom: 0; margin-bottom: 7px;">
+            Ricuras de la Abuela Lola
+        </h2>
+
+        <p class="login-subtitulo">
+            Inicia sesión para continuar
+        </p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="login-mensaje
+                {% if message.tags == 'success' %}
+                    login-exito
+                {% elif message.tags == 'error' %}
+                    login-error
+                {% else %}
+                    login-aviso
+                {% endif %}">
+
+                {% if message.tags == 'success' %}
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                {% elif message.tags == 'error' %}
+                    <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+                {% else %}
+                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                {% endif %}
+
+                {{ message }}
             </div>
+        {% endfor %}
+    {% endif %}
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="mb-4 rounded-xl p-3 text-sm flex items-center gap-2
-                        {% if message.tags == 'success' %}
-                            bg-emerald-50 border border-emerald-200 text-emerald-700
-                        {% elif message.tags == 'error' %}
-                            bg-rose-50 border border-rose-200 text-rose-700
-                        {% else %}
-                            bg-amber-50 border border-amber-200 text-amber-700
-                        {% endif %}">
-                        {% if message.tags == 'success' %}
-                            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        {% elif message.tags == 'error' %}
-                            <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
-                        {% else %}
-                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        {% endif %}
-                        {{ message }}
-                    </div>
-                {% endfor %}
+    <form action="{% url 'login' %}" method="post" novalidate>
+        {% csrf_token %}
+
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+
+        <div class="login-campo">
+            <label
+                for="{{ form.username.id_for_label }}"
+                class="login-etiqueta"
+            >
+                <i class="fa-solid fa-user" aria-hidden="true"></i>
+                Usuario
+            </label>
+
+            {{ form.username }}
+
+            {% if form.username.errors %}
+                <p class="login-mensaje login-error">
+                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                    {{ form.username.errors.0 }}
+                </p>
             {% endif %}
+        </div>
 
-            <form action="{% url 'login' %}" method="post" class="space-y-5" novalidate>
-                {% csrf_token %}
+        <div class="login-campo">
+            <label
+                for="{{ form.password.id_for_label }}"
+                class="login-etiqueta"
+            >
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                Contraseña
+            </label>
 
-                {% if request.GET.next %}
-                    <input type="hidden" name="next" value="{{ request.GET.next }}">
-                {% endif %}
+            {{ form.password }}
 
-                <div class="space-y-1.5">
-                    <label for="{{ form.username.id_for_label }}" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-user text-slate-400" aria-hidden="true"></i>
-                        Usuario
-                    </label>
-                    {{ form.username }}
-                    {% if form.username.errors %}
-                        <p class="text-rose-600 text-xs mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                            {{ form.username.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
+            {% if form.password.errors %}
+                <p class="login-mensaje login-error">
+                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                    {{ form.password.errors.0 }}
+                </p>
+            {% endif %}
+        </div>
 
-                <div class="space-y-1.5">
-                    <label for="{{ form.password.id_for_label }}" class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-lock text-slate-400" aria-hidden="true"></i>
-                        Contraseña
-                    </label>
-                    {{ form.password }}
-                    {% if form.password.errors %}
-                        <p class="text-rose-600 text-xs mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                            {{ form.password.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
-
-                {% if form.non_field_errors %}
-                    <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-sm text-rose-700 flex items-center gap-2">
-                        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                        {{ form.non_field_errors.0 }}
-                    </div>
-                {% endif %}
-
-                <button type="submit"
-                        class="btn-primary w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-amber-700 text-white text-sm font-medium rounded-xl border border-amber-700 hover:bg-amber-800 hover:border-amber-800 transition-all duration-150 shadow-sm hover:shadow">
-                    <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
-                    Entrar
-                </button>
-            </form>
-
-            <div class="mt-6 text-center text-sm text-slate-500 border-t border-slate-200/60 pt-5">
-                ¿No tienes cuenta?
-                <a href="{% url 'registro' %}" class="font-medium text-amber-700 hover:text-amber-800 hover:underline transition-colors">
-                    Regístrate
-                </a>
+        {% if form.non_field_errors %}
+            <div class="login-mensaje login-error">
+                <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                {{ form.non_field_errors.0 }}
             </div>
-        </div>
+        {% endif %}
 
-        <div class="mt-6 text-xs text-slate-400 text-center">
-            <span class="flex items-center justify-center gap-2">
-                <i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i>
-                Las Ricuras de la Abuela Lola · Django + Tailwind
-            </span>
-        </div>
-    </main>
+        <button type="submit" class="login-boton">
+            <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+            Entrar
+        </button>
+    </form>
 
-</body>
-</html>
+    <div class="login-registro">
+        ¿No tienes cuenta?
+
+        <a href="{% url 'registro' %}">
+            Regístrate
+        </a>
+    </div>
+</div>
+
+<div class="login-nota">
+    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+    Las Ricuras de la Abuela Lola · Django
+</div>
+
+{% endblock %}
