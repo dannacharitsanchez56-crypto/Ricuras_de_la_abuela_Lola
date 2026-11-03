@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -8,17 +7,134 @@
 
 {% block contenido %}
 
+<style>
+    .login-logo {
+        max-width: 140px;
+        height: auto;
+        display: block;
+        margin: 0 auto 15px auto;
+    }
+
+    .login-titulo {
+        font-size: 22px;
+        color: var(--terracota-oscuro);
+        font-family: Georgia, serif;
+    }
+
+    .login-subtitulo {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .login-campo input {
+        width: 100%;
+        padding: 12px 15px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #e8c59c;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        background-color: var(--blanco);
+        color: var(--cafe);
+        transition: border-color 0.3s;
+    }
+
+    .login-campo input:focus {
+        outline: none;
+        border-color: var(--terracota);
+        box-shadow: 0 0 5px rgba(216, 140, 77, 0.3);
+    }
+
+    .login-etiqueta {
+        font-weight: 700;
+        color: var(--cafe);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .login-boton {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #bd6d36, #98471f);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .login-boton:hover {
+        background: linear-gradient(135deg, #e7b06c, #d58a43);
+        color: var(--cafe);
+    }
+
+    .login-registro {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .login-registro a {
+        color: var(--terracota-oscuro);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .login-registro a:hover {
+        text-decoration: underline;
+    }
+
+    .login-mensaje {
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .login-error {
+        background-color: #fde8e8;
+        color: #c53030;
+        border-left: 4px solid #c53030;
+    }
+
+    .login-exito {
+        background-color: #def7ec;
+        color: #03543f;
+        border-left: 4px solid #03543f;
+    }
+
+    .login-nota {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #888;
+    }
+</style>
+
 <div class="login-card">
 
-    <div style="text-align: center; margin-bottom: 27px;">
+    <div style="text-align: center; margin-bottom: 10px;">
         <img
             src="{% static 'core/img/Logo.png' %}"
             alt="Logo Abuela Lola"
             class="login-logo"
-            style="margin-bottom: 13px;"
         >
 
-        <h2 class="login-titulo" style="border-bottom: none; padding-bottom: 0; margin-bottom: 7px;">
+        <h2 class="login-titulo" style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;">
             Ricuras de la Abuela Lola
         </h2>
 
@@ -59,10 +175,7 @@
         {% endif %}
 
         <div class="login-campo">
-            <label
-                for="{{ form.username.id_for_label }}"
-                class="login-etiqueta"
-            >
+            <label for="{{ form.username.id_for_label }}" class="login-etiqueta">
                 <i class="fa-solid fa-user" aria-hidden="true"></i>
                 Usuario
             </label>
@@ -70,7 +183,7 @@
             {{ form.username }}
 
             {% if form.username.errors %}
-                <p class="login-mensaje login-error">
+                <p class="login-mensaje login-error" style="margin-top: -10px;">
                     <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
                     {{ form.username.errors.0 }}
                 </p>
@@ -78,10 +191,7 @@
         </div>
 
         <div class="login-campo">
-            <label
-                for="{{ form.password.id_for_label }}"
-                class="login-etiqueta"
-            >
+            <label for="{{ form.password.id_for_label }}" class="login-etiqueta">
                 <i class="fa-solid fa-lock" aria-hidden="true"></i>
                 Contraseña
             </label>
@@ -89,7 +199,7 @@
             {{ form.password }}
 
             {% if form.password.errors %}
-                <p class="login-mensaje login-error">
+                <p class="login-mensaje login-error" style="margin-top: -10px;">
                     <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
                     {{ form.password.errors.0 }}
                 </p>
@@ -111,7 +221,6 @@
 
     <div class="login-registro">
         ¿No tienes cuenta?
-
         <a href="{% url 'registro' %}">
             Regístrate
         </a>
