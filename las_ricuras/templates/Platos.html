@@ -1,20 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
+{% block titulo %}Platos | Las Ricuras de la Abuela Lola{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Platos | Las Ricuras de la Abuela Lola</title>
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+{% block contenido %}
+<div class="contenedor-platos">
     <style>
-        /* Encerramos los estilos aquí para que no dañen la barra superior naranja */
         .contenedor-platos .titulo { text-align: center; margin-bottom: 35px; margin-top: 20px; }
         .contenedor-platos .titulo h2 { color: #5c2e0e; font-size: 36px; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 12px; border-bottom: none; }
         .contenedor-platos .titulo h2 i { color: #d4a24c; font-size: 32px; }
@@ -69,7 +60,6 @@
         .contenedor-platos .sin-platos h3 { color: #5c2e0e; font-size: 25px; margin-bottom: 10px; border-bottom: none; }
     </style>
 
-    <!-- CONTENIDO DE LA PÁGINA -->
     <div class="titulo">
         <h2>
             <i class="fa-solid fa-utensils"></i>
@@ -127,45 +117,21 @@
                             </a>
                         </div>
                     </div>
-
-                {% endfor %}
-
-            </div>
-
-        {% else %}
-
-            <div class="sin-platos">
-
-                <div class="icono">
-                    <i class="fa-solid fa-utensils"></i>
                 </div>
-
-                <h3>Todavía no hay platos registrados</h3>
-
-                <p>
-                    Agrega el primer plato de Ricuras de la Abuela Lola.
-                </p>
-
-                <a href="{% url 'crear_plato' %}" class="btn-agregar">
-                    <i class="fa-solid fa-plus"></i>
-                    Agregar primer plato
-                </a>
-
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sin-platos">
+            <div class="icono">
+                <i class="fa-solid fa-utensils"></i>
             </div>
-
-        {% endif %}
-
-    </main>
-
-    <footer>
-
-        <p>
-            &copy; 2026 Las Ricuras de la Abuela Lola —
-            Todos los derechos reservados
-        </p>
-
-    </footer>
-
-</body>
-
-</html>
+            <h3>Todavía no hay platos registrados</h3>
+            <p>Agrega el primer plato de Ricuras de la Abuela Lola.</p>
+            <a href="{% url 'crear_plato' %}" class="btn-agregar" style="margin: 0 auto;">
+                <i class="fa-solid fa-plus"></i> Agregar primer plato
+            </a>
+        </div>
+    {% endif %}
+    
+</div>
+{% endblock %}

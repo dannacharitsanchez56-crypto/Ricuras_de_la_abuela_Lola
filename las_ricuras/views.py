@@ -48,7 +48,7 @@ def perfil(request):
     return render(request, 'perfil.html')
 
 
-@solo_staff
+# AQUÍ QUITAMOS EL @solo_staff PARA QUE SE VEA LA PÁGINA
 def Platos(request):
     platos = Plato.objects.all()
     return render(request, 'Platos.html', {'platos': platos})
@@ -163,7 +163,6 @@ def eliminar_plato(request, id):
     return render(request, 'plato_confirmar_eliminar.html', {'plato': plato})
 
 
-# --- NUEVA FUNCIÓN PARA BORRAR RESEÑA ---
 @solo_staff
 def eliminar_resena(request, resena_id):
     r = get_object_or_404(Resena, id=resena_id)
@@ -173,7 +172,7 @@ def eliminar_resena(request, resena_id):
     messages.success(request, 'Reseña eliminada.')
 
     return redirect('plato_detalle', id=plato_id)
-# ----------------------------------------
+
 
 
 def registro(request):
