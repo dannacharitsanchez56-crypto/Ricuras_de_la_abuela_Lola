@@ -110,18 +110,47 @@ def crear_plato(request):
     return render(request, 'plato_form.html', {'form': form})
 
 
+
 @solo_staff
 def editar_plato(request, id):
     plato = get_object_or_404(Plato, id=id)
+
     if request.method == 'POST':
-        form = PlatoForm(request.POST, request.FILES, instance=plato)
+        form = PlatoForm(
+            request.POST,
+            request.FILES,
+            instance=plato
+        )
+
         if form.is_valid():
             form.save()
-            messages.success(request, 'Plato actualizado correctamente.')
+
+            messages.success(
+                request,
+                f'El plato "{plato.nombre}" '
+                'se actualizó correctamente.'
+            )
+
             return redirect('Platos')
+
+        messages.error(
+            request,
+            'No se pudo actualizar el plato. '
+            'Revisa los campos marcados.'
+        )
+
     else:
         form = PlatoForm(instance=plato)
-    return render(request, 'plato_form.html', {'form': form, 'plato': plato})
+
+    contexto = {
+        'form': form,
+        'plato': plato,
+        'titulo': 'Editar producto',
+        'boton_texto': 'Guardar cambios',
+    }
+
+    return render(request, 'plato_form.html', contexto)
+
 
 
 @solo_staff

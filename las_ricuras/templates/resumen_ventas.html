@@ -1,8 +1,6 @@
 
 {% extends 'base.html' %}
-
 {% block titulo %}Resumen de ventas — Las Ricuras de la Abuela Lola{% endblock %}
-
 {% block extra_css %}
 <style>
     .ventas-contenedor {
@@ -222,7 +220,6 @@
     }
 </style>
 {% endblock %}
-
 {% block contenido %}
 
 <div class="ventas-contenedor">
@@ -352,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fechaFin = document.getElementById('fecha_fin');
     const botonLimpiar = document.getElementById('limpiar-filtros');
 
-    // Mostrar el total vendido con puntos para separar los miles
+
     const totalVendido = document.getElementById('total-vendido');
 
     if (totalVendido) {
@@ -408,5 +405,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
-
 {% endblock %}

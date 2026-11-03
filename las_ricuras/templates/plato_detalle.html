@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block titulo %}{{ plato.nombre }} | Ricuras de la Abuela Lola{% endblock %}
+
 {% block extra_css %}
 <style>
     .detalle-card {
@@ -85,8 +86,17 @@
         gap: 5px;
     }
 
-    .disponible { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-    .no-disponible { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    .disponible {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    .no-disponible {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
 
     .descripcion {
         color: #5f5146;
@@ -98,7 +108,7 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    
+
     .descripcion.expandida {
         -webkit-line-clamp: unset;
     }
@@ -135,7 +145,7 @@
         align-items: center;
         margin-bottom: 10px;
     }
-    
+
     .fila-cantidad:last-child {
         margin-bottom: 0;
     }
@@ -161,7 +171,9 @@
         transition: 0.2s;
     }
 
-    .btn-cantidad:hover { background: #ead8bd; }
+    .btn-cantidad:hover {
+        background: #ead8bd;
+    }
 
     #cantidad-numero {
         width: 40px;
@@ -173,16 +185,15 @@
         line-height: 35px;
     }
 
-    .total-label { font-size: 16px; color: #5f5146; }
-    .total-precio { font-size: 20px; font-weight: bold; color: #8b4513; }
-
-    .acciones .btn-whatsapp {
-        background-color: #25D366;
-        color: white;
-        border: none;
+    .total-label {
+        font-size: 16px;
+        color: #5f5146;
     }
-    .acciones .btn-whatsapp:hover {
-        background-color: #128C7E;
+
+    .total-precio {
+        font-size: 20px;
+        font-weight: bold;
+        color: #8b4513;
     }
 
     .acciones {
@@ -198,229 +209,303 @@
         font-size: 16px;
     }
 
-    .resena-form select, .resena-form textarea {
-        width: 100%; padding: 10px; border: 1px solid #ccc;
-        border-radius: 6px; font-family: inherit; margin-top: 5px; margin-bottom: 10px;
+    .acciones .btn-whatsapp {
+        background-color: #25D366;
+        color: white;
+        border: none;
+    }
+
+    .acciones .btn-whatsapp:hover {
+        background-color: #128C7E;
+    }
+
+    .resena-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-family: inherit;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    /* Estrellas CSS */
+    .stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+
+    .stars input {
+        display: none;
+    }
+
+    .stars label {
+        color: #ccc;
+        font-size: 26px;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+        color: #d4a24c;
     }
 
     @media (max-width: 600px) {
         .imagen-container { height: 250px; }
         .informacion { padding: 20px; }
         .titulo-plato { font-size: 26px; }
-        .precio-disponibilidad { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+        .precio-disponibilidad {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
         .acciones { flex-direction: column; }
     }
 </style>
 {% endblock %}
 
-{% block contenido %}
-    <div class="detalle-card">
-        <div class="imagen-container">
-            {% if plato.imagen %}
-                <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
-            {% else %}
-                <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
-            {% endif %}
 
-            {% if plato.disponible %}
-                <div class="etiqueta-destacada">Hecho en casa</div>
+{% block contenido %}
+<div class="detalle-card">
+
+    <div class="imagen-container">
+        {% if plato.imagen %}
+            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
+        {% else %}
+            <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
+        {% endif %}
+
+        {% if plato.disponible %}
+            <div class="etiqueta-destacada">Hecho en casa</div>
+        {% endif %}
+    </div>
+
+    <div class="informacion">
+        <h1 class="titulo-plato">{{ plato.nombre }}</h1>
+
+        <div style="margin-bottom: 15px; color: #d4a24c; font-size: 18px;">
+            {% if promedio %}
+                {% for i in "12345" %}
+                    {% if forloop.counter <= promedio %}★{% else %}☆{% endif %}
+                {% endfor %}
+                <span style="font-size: 14px; color: #666; margin-left: 5px;">
+                    ({{ promedio|floatformat:1 }} / 5)
+                </span>
+            {% else %}
+                <span style="font-size: 14px; color: #666;">Sin reseñas todavía</span>
             {% endif %}
         </div>
 
-        <div class="informacion">
-            <h1 class="titulo-plato">{{ plato.nombre }}</h1>
-            
-            <!-- PROMEDIO DE ESTRELLAS -->
-            <div style="margin-bottom: 15px; color: #d4a24c; font-size: 18px;">
-                {% if promedio %}
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= promedio %}★{% else %}☆{% endif %}
-                    {% endfor %}
-                    <span style="font-size: 14px; color: #666; margin-left: 5px;">({{ promedio|floatformat:1 }} / 5)</span>
-                {% else %}
-                    <span style="font-size: 14px; color: #666;">Sin reseñas todavía</span>
-                {% endif %}
+        <div class="precio-disponibilidad">
+            <div class="precio" id="precio-base" data-precio="{{ plato.precio|floatformat:0 }}">
+                ${{ plato.precio|floatformat:0 }}
             </div>
-
-            <div class="precio-disponibilidad">
-                <div class="precio" id="precio-base" data-precio="{{ plato.precio|floatformat:0 }}">
-                    ${{ plato.precio|floatformat:0 }}
-                </div>
-                
-                {% if plato.disponible %}
-                    <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible hoy</span>
-                {% else %}
-                    <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
-                {% endif %}
-            </div>
-
-            <div class="separador"></div>
-
-            <p class="descripcion" id="texto-descripcion">
-                {{ plato.descripcion|linebreaksbr }}
-            </p>
-            
-            <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">Leer descripción completa</button>
 
             {% if plato.disponible %}
-            <div class="caja-pedido">
-                <div class="fila-cantidad">
-                    <span class="total-label">Cantidad:</span>
-                    <div class="selector-cantidad">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad(-1)">-</button>
-                        <span id="cantidad-numero">1</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad(1)">+</button>
-                    </div>
-                </div>
-                <div class="fila-cantidad">
-                    <span class="total-label">Total a pagar:</span>
-                    <span class="total-precio" id="total-pagar">${{ plato.precio|floatformat:0 }}</span>
+                <span class="disponible">
+                    <i class="fa-solid fa-circle-check"></i> Disponible hoy
+                </span>
+            {% else %}
+                <span class="no-disponible">
+                    <i class="fa-solid fa-circle-xmark"></i> Agotado
+                </span>
+            {% endif %}
+        </div>
+
+        <div class="separador"></div>
+
+        <p class="descripcion" id="texto-descripcion">
+            {{ plato.descripcion|linebreaksbr }}
+        </p>
+
+        <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">
+            Leer descripción completa
+        </button>
+
+        {% if plato.disponible %}
+        <div class="caja-pedido">
+            <div class="fila-cantidad">
+                <span class="total-label">Cantidad:</span>
+                <div class="selector-cantidad">
+                    <button type="button" class="btn-cantidad" onclick="cambiarCantidad(-1)">-</button>
+                    <span id="cantidad-numero">1</span>
+                    <button type="button" class="btn-cantidad" onclick="cambiarCantidad(1)">+</button>
                 </div>
             </div>
+
+            <div class="fila-cantidad">
+                <span class="total-label">Total a pagar:</span>
+                <span class="total-precio" id="total-pagar">${{ plato.precio|floatformat:0 }}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="acciones">
+            {% if plato.disponible %}
+                <a href="#" id="btn-whatsapp" target="_blank" class="btn btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+                </a>
             {% endif %}
 
-            <div class="acciones">
-                {% if plato.disponible %}
-                    <a href="#" id="btn-whatsapp" target="_blank" class="btn btn-whatsapp">
-                        <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
-                    </a>
-                {% endif %}
-                
-                <a href="{% url 'Platos' %}" class="btn">
-                    <i class="fa-solid fa-arrow-left"></i> Volver
-                </a>
-            </div>
+            <a href="{% url 'Platos' %}" class="btn">
+                <i class="fa-solid fa-arrow-left"></i> Volver
+            </a>
+        </div>
 
-            <!-- ================= SECCIÓN DE RESEÑAS ================= -->
-            <div style="margin-top: 40px; border-top: 2px dashed #e6dac7; padding-top: 20px;">
-                <h3 style="color: #5c2e0e; margin-bottom: 20px; font-size: 22px;">Opiniones de los clientes</h3>
+        <div style="margin-top: 40px; border-top: 2px dashed #e6dac7; padding-top: 20px;">
+            <h3 style="color: #5c2e0e; margin-bottom: 20px; font-size: 22px;">
+                Opiniones de los clientes
+            </h3>
 
-                <!-- Lista de comentarios -->
-                {% for r in resenas %}
-                    <div style="background: #fffdf9; border: 1px solid #ead8bd; border-left: 4px solid #d4a24c; padding: 15px 20px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <!-- Circulito con la inicial del usuario -->
-                                <div style="width: 35px; height: 35px; background: #ead8bd; color: #5c2e0e; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">
-                                    {{ r.usuario.username|first|upper }}
-                                </div>
-                                <div>
-                                    <strong style="color: #5c2e0e; font-size: 15px;">{{ r.usuario.username }}</strong>
-                                    <div style="color: #d4a24c; font-size: 12px; letter-spacing: 1px; margin-top: 2px;">
-                                        {% for i in "12345" %}
-                                            {% if forloop.counter <= r.estrellas %}★{% else %}☆{% endif %}
-                                        {% endfor %}
-                                    </div>
+            {% for r in resenas %}
+                <div style="background: #fffdf9; border: 1px solid #ead8bd; border-left: 4px solid #d4a24c; padding: 15px 20px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 35px; height: 35px; background: #ead8bd; color: #5c2e0e; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">
+                                {{ r.usuario.username|first|upper }}
+                            </div>
+
+                            <div>
+                                <strong style="color: #5c2e0e; font-size: 15px;">
+                                    {{ r.usuario.username }}
+                                </strong>
+
+                                <div style="color: #d4a24c; font-size: 12px; letter-spacing: 1px; margin-top: 2px;">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= r.estrellas %}★{% else %}☆{% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
-                            
-                            <!-- BOTÓN DE ELIMINAR (Solo para administradores) -->
-                            {% if user.is_staff %}
-                                <a href="{% url 'eliminar_resena' r.id %}" 
-                                   onclick="return confirm('¿Estás seguro de que quieres borrar esta reseña?');" 
-                                   style="color: #c62828; background: #ffebee; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px;">
-                                    <i class="fa-solid fa-trash"></i> Borrar
-                                </a>
-                            {% endif %}
-                            
                         </div>
-                        <p style="margin: 0 0 10px 45px; font-size: 14px; color: #444;">{{ r.comentario }}</p>
-                        <small style="color: #999; font-size: 11px; margin-left: 45px;">{{ r.fecha|date:"d \d\e F, Y" }}</small>
-                    </div>
-                {% empty %}
-                    <div style="text-align: center; padding: 20px; background: #f8f4ec; border-radius: 8px; border: 1px dashed #d4a24c;">
-                        <p style="color: #777; font-size: 14px; margin: 0;">Aún no hay opiniones. ¡Sé el primero en dejar la tuya!</p>
-                    </div>
-                {% endfor %}
 
-                <!-- Formulario para comentar -->
-                <div style="margin-top: 30px; background: #f8f4ec; padding: 25px; border-radius: 12px; border: 1px solid #e6dac7;">
-                    {% if user.is_authenticated %}
-                        
-                        {% if mi_resena %}
-                            <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;"><i class="fa-solid fa-pen"></i> Edita tu opinión</h4>
-                        {% else %}
-                            <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;"><i class="fa-solid fa-comment-dots"></i> Deja tu opinión</h4>
+                        {% if user.is_staff %}
+                            <a href="{% url 'eliminar_resena' r.id %}"
+                               onclick="return confirm('¿Estás seguro de que quieres borrar esta reseña?');"
+                               style="color: #c62828; background: #ffebee; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                                <i class="fa-solid fa-trash"></i> Borrar
+                            </a>
                         {% endif %}
+                    </div>
 
-                        <form method="POST" class="resena-form" style="display: flex; flex-direction: column; gap: 15px;">
-                            {% csrf_token %}
-                            
-                            <div>
-                                <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">Calificación:</label>
-                                {{ form.estrellas }}
-                            </div>
-                            
-                            <div>
-                                <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">Tu opinión:</label>
-                                {{ form.comentario }}
-                            </div>
+                    <p style="margin: 0 0 10px 45px; font-size: 14px; color: #444;">
+                        {{ r.comentario }}
+                    </p>
 
-                            <button type="submit" class="btn" style="padding: 12px; font-size: 15px; align-self: flex-start; border-radius: 8px; cursor: pointer;">
-                                {% if mi_resena %}Actualizar Reseña{% else %}Publicar Reseña{% endif %}
-                            </button>
-                        </form>
-                    {% else %}
-                        <p style="margin: 0; font-size: 15px; text-align: center;">Para dejar un comentario necesitas <a href="{% url 'login' %}" style="color: #8b4513; font-weight: bold; text-decoration: underline;">iniciar sesión</a>.</p>
-                    {% endif %}
+                    <small style="color: #999; font-size: 11px; margin-left: 45px;">
+                        {{ r.fecha|date:"d \d\e F, Y" }}
+                    </small>
                 </div>
-            </div>
-            <!-- ================= FIN RESEÑAS ================= -->
+            {% empty %}
+                <div style="text-align: center; padding: 20px; background: #f8f4ec; border-radius: 8px; border: 1px dashed #d4a24c;">
+                    <p style="color: #777; font-size: 14px; margin: 0;">
+                        Aún no hay opiniones. ¡Sé el primero en dejar la tuya!
+                    </p>
+                </div>
+            {% endfor %}
 
+            <div style="margin-top: 30px; background: #f8f4ec; padding: 25px; border-radius: 12px; border: 1px solid #e6dac7;">
+                {% if user.is_authenticated %}
+                    {% if mi_resena %}
+                        <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;">
+                            <i class="fa-solid fa-pen"></i> Edita tu opinión
+                        </h4>
+                    {% else %}
+                        <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;">
+                            <i class="fa-solid fa-comment-dots"></i> Deja tu opinión
+                        </h4>
+                    {% endif %}
+
+                    <form method="POST" class="resena-form" style="display: flex; flex-direction: column; gap: 15px;">
+                        {% csrf_token %}
+
+                        <div>
+                            <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">
+                                Calificación:
+                            </label>
+                            
+                            <div class="stars">
+                                {% for i in "54321" %}
+                                    <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}" {% if mi_resena.estrellas|stringformat:"s" == i %}checked{% endif %} required>
+                                    <label for="star{{ i }}"><i class="fa-solid fa-star"></i></label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">
+                                Tu opinión:
+                            </label>
+                            {{ form.comentario }}
+                        </div>
+
+                        <button type="submit" class="btn" style="padding: 12px; font-size: 15px; align-self: flex-start; border-radius: 8px; cursor: pointer;">
+                            {% if mi_resena %}Actualizar Reseña{% else %}Publicar Reseña{% endif %}
+                        </button>
+                    </form>
+                {% else %}
+                    <p style="margin: 0; font-size: 15px; text-align: center;">
+                        Para dejar un comentario necesitas
+                        <a href="{% url 'login' %}" style="color: #8b4513; font-weight: bold; text-decoration: underline;">iniciar sesión</a>.
+                    </p>
+                {% endif %}
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
+
 
 {% block extra_js %}
 <script>
     function toggleDescripcion() {
-        const descripcion = document.getElementById('texto-descripcion');
-        const boton = document.getElementById('btn-leer-mas');
-        
-        descripcion.classList.toggle('expandida');
-        
-        if (descripcion.classList.contains('expandida')) {
+        var texto = document.getElementById('texto-descripcion');
+        var boton = document.getElementById('btn-leer-mas');
+
+        texto.classList.toggle('expandida');
+
+        if (texto.classList.contains('expandida')) {
             boton.innerText = 'Leer menos';
         } else {
             boton.innerText = 'Leer descripción completa';
         }
     }
 
-    let cantidad = 1;
-    const precioElement = document.getElementById('precio-base');
-    const nombrePlato = "{{ plato.nombre }}";
-    const numeroWhatsApp = "573118299494"; 
+    var numeroWsp = "573118299494";
+    var cantidad = 1;
+    var cajaPrecio = document.getElementById('precio-base');
 
-    if (precioElement) {
-        const precioUnitario = parseInt(precioElement.getAttribute('data-precio'));
+    if (cajaPrecio) {
+        var precioUnitario = parseInt(cajaPrecio.getAttribute('data-precio'));
+        var nombrePlato = "{{ plato.nombre }}";
 
         function cambiarCantidad(valor) {
             cantidad += valor;
             if (cantidad < 1) cantidad = 1;
 
             document.getElementById('cantidad-numero').innerText = cantidad;
-
-            const total = cantidad * precioUnitario;
-            document.getElementById('total-pagar').innerText = '$' + total.toLocaleString('es-CO');
-
-            actualizarWhatsApp(total);
-        }
-
-        function actualizarWhatsApp(total) {
-            const btnWhatsApp = document.getElementById('btn-whatsapp');
             
-            let mensaje = `Hola, quiero pedir:\n`;
-            mensaje += `*${cantidad}x ${nombrePlato}*\n`;
-            mensaje += `Total a pagar: $${total.toLocaleString('es-CO')}\n\n`;
-            mensaje += `¿Me confirman disponibilidad y tiempo de entrega?`;
-
-            btnWhatsApp.href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            var total = cantidad * precioUnitario;
+            document.getElementById('total-pagar').innerText = '$' + total.toLocaleString('es-CO');
+            armarLinkWsp(total);
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            actualizarWhatsApp(precioUnitario);
-        });
+        function armarLinkWsp(total) {
+            var btn = document.getElementById('btn-whatsapp');
+            var mensaje = "Hola, quiero pedir:\n";
+            mensaje += "*" + cantidad + "x " + nombrePlato + "*\n";
+            mensaje += "Total a pagar: $" + total.toLocaleString('es-CO') + "\n\n";
+            mensaje += "¿Me confirman disponibilidad y tiempo de entrega?";
+
+            btn.href = "https://wa.me/" + numeroWsp + "?text=" + encodeURIComponent(mensaje);
+        }
+
+        armarLinkWsp(precioUnitario);
     }
 </script>
 {% endblock %}
