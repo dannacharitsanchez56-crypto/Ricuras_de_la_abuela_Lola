@@ -21,9 +21,9 @@ class PlatoAdmin(admin.ModelAdmin):
         queryset.update(disponible=False)
 
 
-
 @admin.register(Resena)
 class ResenaAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'plato', 'estrellas', 'fecha')
+    list_display = ('usuario', 'plato', 'estrellas', 'fecha', 'respuesta_admin')
     list_filter = ('estrellas', 'plato')
     search_fields = ('usuario__username', 'comentario')
+    list_editable = ('respuesta_admin',)

@@ -110,8 +110,10 @@ class Resena(models.Model):
         default=5
     )
 
-
     comentario = models.TextField()
+    
+    # 👇 ESTA ES LA LÍNEA NUEVA QUE AGREGAMOS 👇
+    respuesta_admin = models.TextField(blank=True, null=True, verbose_name="Respuesta del Administrador")
 
     fecha = models.DateTimeField(auto_now_add=True)
 
