@@ -272,11 +272,14 @@ def resumen_ventas(request):
         cantidad_ventas=Count('id'),
     )
 
+    detalle_ventas = ventas.order_by('-fecha')
+    
     contexto = {
         'total_vendido': resumen['total_vendido'] or 0,
         'cantidad_ventas': resumen['cantidad_ventas'],
         'fecha_inicio': fecha_inicio or '',
         'fecha_fin': fecha_fin or '',
+        'detalle_ventas': detalle_ventas, 
     }
     return render(request, 'resumen_ventas.html', contexto)
 
