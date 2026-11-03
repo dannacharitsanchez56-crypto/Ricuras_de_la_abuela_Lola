@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -12,7 +11,7 @@
     <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}?v=1" type="image/x-icon">
 
     <style>
-         * {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -43,7 +42,6 @@
             isolation: isolate;
         }
 
-        /* REDUCCIÓN: Padding del header bajó de 22px a 10px arriba y abajo */
         header {
             position: relative;
             z-index: 1;
@@ -53,7 +51,6 @@
             border-bottom: 4px solid var(--dorado);
         }
 
-        /* REDUCCIÓN: Márgenes más ajustados para la barra superior */
         .barra-superior {
             display: flex;
             justify-content: flex-end;
@@ -69,7 +66,7 @@
             align-items: center;
             gap: 12px;
             color: #d4a24c;
-            font-size: 13px; /* Letra un poco más pequeña */
+            font-size: 13px;
             font-weight: 600;
         }
 
@@ -96,16 +93,14 @@
             color: var(--blanco);
         }
 
-        /* REDUCCIÓN: Gap entre logo y texto bajó de 25px a 15px */
         .header-top {
             display: flex;
             align-items: center;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             gap: 15px;
         }
 
-        /* REDUCCIÓN: Logo bajó de 140px a 85px */
         .logo {
             width: 78px;
             height: 78px;
@@ -118,7 +113,6 @@
             flex-shrink: 0;
         }
 
-        /* REDUCCIÓN: Letra del título bajó de 34px a 26px */
         .marca h1 {
             font-family: Georgia, 'Times New Roman', serif;
             font-size: 26px;
@@ -130,14 +124,13 @@
         }
 
         .marca .lema {
-            font-size: 15px; /* Letra más pequeña */
+            font-size: 15px;
             color: #000000;
-            font-style: Georgia, 'Times New Roman', serif;;
+            font-family: Georgia, 'Times New Roman', serif;
             font-weight: 500;
             letter-spacing: .2px;
         }
 
-        /* REDUCCIÓN: Menos margen superior y menos padding */
         nav {
             display: flex;
             flex-wrap: wrap;
@@ -150,14 +143,13 @@
             border-top: 1px solid rgba(116, 60, 29, .2);
         }
 
-                /* REDUCCIÓN: Botones ligeramente más pequeños */
         nav a, nav button {
             color: #fff;
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 22px;
-            background: #5c2e0e; /* <--- CAMBIADO: Café oscuro sólido */
-            border: 1px solid #d4a24c; /* <--- CAMBIADO: Borde dorado para que resalte */
+            background: #5c2e0e;
+            border: 1px solid #d4a24c;
             font-weight: 700;
             font-size: 13px;
             transition: all .25s ease;
@@ -187,7 +179,7 @@
             position: relative;
             z-index: 1;
             flex: 1;
-            max-width: 1000px;
+            max-width: 1200px;
             width: 90%;
             margin: 26px auto;
             padding: 30px 34px;
@@ -259,7 +251,7 @@
             transform: translateY(-1px);
         }
 
-               footer {
+        footer {
             position: relative;
             z-index: 1;
             background: #48291b; 
@@ -277,7 +269,6 @@
             color: #f4d4a5;
         }
     
-        /* Estilos particulares de la página de inicio de sesión */
         body.login-body main {
             max-width: 510px;
             width: 92%;
@@ -303,7 +294,6 @@
             transform: translateY(-1px);
         }
 
-        /* RESPONSIVE */
         @media (max-width: 750px) {
             header {
                 padding: 15px 10px;
