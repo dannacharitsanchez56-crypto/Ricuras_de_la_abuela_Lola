@@ -3,8 +3,11 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('', views.portada, name='portada'),
-    path('inicio/', views.inicio, name='inicio'),
+    # 1. CAMBIO PRINCIPAL: La ruta raíz ahora carga directamente el inicio
+    path('', views.inicio, name='inicio'),
+    
+    # 2. Mantenemos esta ruta por compatibilidad, pero le cambiamos el 'name' para evitar errores
+    path('inicio/', views.inicio, name='inicio_alt'),
 
     path('login/', auth_views.LoginView.as_view(
         template_name='login.html',

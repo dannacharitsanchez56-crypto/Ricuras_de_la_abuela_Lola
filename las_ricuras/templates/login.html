@@ -3,67 +3,101 @@
 
 {% block titulo %}Iniciar Sesión · Ricuras de la Abuela Lola{% endblock %}
 
-{% block body_class %}login-body{% endblock %}
-
 {% block contenido %}
 
 <style>
+    /* 1. Contenedor que centra la tarjeta en toda la pantalla */
+    .login-wrapper {
+        min-height: 75vh; /* Ocupa casi toda la altura de la pantalla */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    /* 2. La tarjeta blanca */
+    .login-card {
+        background: var(--blanco);
+        width: 100%;
+        max-width: 450px;
+        padding: 40px 35px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(59, 29, 11, 0.1);
+        border: 1px solid #e8d5b5;
+        border-top: 5px solid var(--dorado); /* Toque dorado arriba */
+    }
+
     .login-logo {
-        max-width: 140px;
+        max-width: 130px;
         height: auto;
         display: block;
         margin: 0 auto 15px auto;
+        /* Truco para quitar el fondo blanco de la imagen */
+        mix-blend-mode: multiply; 
     }
 
     .login-titulo {
-        font-size: 22px;
-        color: var(--terracota-oscuro);
-        font-family: Georgia, serif;
+        font-family: 'Caveat', cursive;
+        font-size: 2.5rem;
+        color: var(--cafe-oscuro);
+        text-align: center;
+        margin-bottom: 5px;
     }
 
     .login-subtitulo {
-        font-size: 14px;
-        color: #777;
+        font-size: 0.95rem;
+        color: #666;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    /* 3. Estilos para los inputs generados por Django */
+    .login-campo {
         margin-bottom: 20px;
     }
 
     .login-campo input {
         width: 100%;
         padding: 12px 15px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border: 1px solid #e8c59c;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 14px;
-        background-color: var(--blanco);
-        color: var(--cafe);
-        transition: border-color 0.3s;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1rem;
+        background-color: #fafafa;
+        color: var(--texto);
+        transition: all 0.3s ease;
     }
 
     .login-campo input:focus {
         outline: none;
-        border-color: var(--terracota);
-        box-shadow: 0 0 5px rgba(216, 140, 77, 0.3);
+        border-color: var(--dorado);
+        background-color: var(--blanco);
+        box-shadow: 0 0 0 3px rgba(244, 180, 26, 0.2);
     }
 
     .login-etiqueta {
-        font-weight: 700;
-        color: var(--cafe);
-        font-size: 14px;
+        font-weight: 600;
+        color: var(--cafe-oscuro);
+        font-size: 0.95rem;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
+    .login-etiqueta i {
+        color: var(--cafe-medio);
+    }
+
+    /* 4. Botón */
     .login-boton {
         width: 100%;
-        padding: 12px;
-        background: linear-gradient(135deg, #bd6d36, #98471f);
-        color: white;
+        padding: 14px;
+        background-color: var(--cafe-oscuro);
+        color: var(--blanco);
         border: none;
-        border-radius: 8px;
-        font-size: 16px;
+        border-radius: 30px;
+        font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
         display: flex;
@@ -72,37 +106,44 @@
         gap: 10px;
         margin-top: 10px;
         transition: 0.3s;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .login-boton:hover {
-        background: linear-gradient(135deg, #e7b06c, #d58a43);
-        color: var(--cafe);
+        background-color: var(--cafe-medio);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(59, 29, 11, 0.2);
     }
 
+    /* 5. Enlaces y mensajes */
     .login-registro {
         text-align: center;
-        margin-top: 20px;
-        font-size: 14px;
+        margin-top: 25px;
+        font-size: 0.95rem;
+        color: #666;
     }
 
     .login-registro a {
-        color: var(--terracota-oscuro);
-        font-weight: bold;
+        color: var(--cafe-medio);
+        font-weight: 700;
         text-decoration: none;
+        transition: color 0.3s;
     }
 
     .login-registro a:hover {
+        color: var(--dorado);
         text-decoration: underline;
     }
 
     .login-mensaje {
-        padding: 10px;
-        border-radius: 6px;
+        padding: 10px 15px;
+        border-radius: 8px;
         margin-bottom: 15px;
-        font-size: 13px;
+        font-size: 0.85rem;
         display: flex;
         align-items: center;
         gap: 8px;
+        font-weight: 500;
     }
 
     .login-error {
@@ -116,120 +157,132 @@
         color: #03543f;
         border-left: 4px solid #03543f;
     }
+    
+    .login-aviso {
+        background-color: #fef3c7;
+        color: #92400e;
+        border-left: 4px solid #92400e;
+    }
 
     .login-nota {
         text-align: center;
-        margin-top: 20px;
-        font-size: 13px;
+        margin-top: 25px;
+        font-size: 0.85rem;
         color: #888;
     }
 </style>
 
-<div class="login-card">
+<div class="login-wrapper">
+    <div class="login-card">
 
-    <div style="text-align: center; margin-bottom: 10px;">
-        <img
-            src="{% static 'core/img/Logo.png' %}"
-            alt="Logo Abuela Lola"
-            class="login-logo"
-        >
+        <div style="text-align: center; margin-bottom: 10px;">
+            <img
+                src="{% static 'core/img/Logo.png' %}"
+                alt="Logo Abuela Lola"
+                class="login-logo"
+            >
 
-        <h2 class="login-titulo" style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;">
-            Ricuras de la Abuela Lola
-        </h2>
+            <h2 class="login-titulo">
+                ¡Bienvenido de nuevo!
+            </h2>
 
-        <p class="login-subtitulo">
-            Inicia sesión para continuar
-        </p>
-    </div>
+            <p class="login-subtitulo">
+                Inicia sesión para gestionar tus pedidos
+            </p>
+        </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="login-mensaje
-                {% if message.tags == 'success' %}
-                    login-exito
-                {% elif message.tags == 'error' %}
-                    login-error
-                {% else %}
-                    login-aviso
-                {% endif %}">
+        <!-- MENSAJES DE DJANGO -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="login-mensaje
+                    {% if message.tags == 'success' %}
+                        login-exito
+                    {% elif message.tags == 'error' %}
+                        login-error
+                    {% else %}
+                        login-aviso
+                    {% endif %}">
 
-                {% if message.tags == 'success' %}
-                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                {% elif message.tags == 'error' %}
-                    <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
-                {% else %}
-                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                    {% if message.tags == 'success' %}
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                    {% elif message.tags == 'error' %}
+                        <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+                    {% else %}
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                    {% endif %}
+
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="{% url 'login' %}" method="post" novalidate>
+            {% csrf_token %}
+
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+
+            <!-- CAMPO USUARIO -->
+            <div class="login-campo">
+                <label for="{{ form.username.id_for_label }}" class="login-etiqueta">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    Usuario
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+                    <p class="login-mensaje login-error" style="margin-top: 8px; margin-bottom: 0;">
+                        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                        {{ form.username.errors.0 }}
+                    </p>
                 {% endif %}
-
-                {{ message }}
             </div>
-        {% endfor %}
-    {% endif %}
 
-    <form action="{% url 'login' %}" method="post" novalidate>
-        {% csrf_token %}
+            <!-- CAMPO CONTRASEÑA -->
+            <div class="login-campo">
+                <label for="{{ form.password.id_for_label }}" class="login-etiqueta">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Contraseña
+                </label>
 
-        {% if request.GET.next %}
-            <input type="hidden" name="next" value="{{ request.GET.next }}">
-        {% endif %}
+                {{ form.password }}
 
-        <div class="login-campo">
-            <label for="{{ form.username.id_for_label }}" class="login-etiqueta">
-                <i class="fa-solid fa-user" aria-hidden="true"></i>
-                Usuario
-            </label>
-
-            {{ form.username }}
-
-            {% if form.username.errors %}
-                <p class="login-mensaje login-error" style="margin-top: -10px;">
-                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                    {{ form.username.errors.0 }}
-                </p>
-            {% endif %}
-        </div>
-
-        <div class="login-campo">
-            <label for="{{ form.password.id_for_label }}" class="login-etiqueta">
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                Contraseña
-            </label>
-
-            {{ form.password }}
-
-            {% if form.password.errors %}
-                <p class="login-mensaje login-error" style="margin-top: -10px;">
-                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                    {{ form.password.errors.0 }}
-                </p>
-            {% endif %}
-        </div>
-
-        {% if form.non_field_errors %}
-            <div class="login-mensaje login-error">
-                <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-                {{ form.non_field_errors.0 }}
+                {% if form.password.errors %}
+                    <p class="login-mensaje login-error" style="margin-top: 8px; margin-bottom: 0;">
+                        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                        {{ form.password.errors.0 }}
+                    </p>
+                {% endif %}
             </div>
-        {% endif %}
 
-        <button type="submit" class="login-boton">
-            <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
-            Entrar
-        </button>
-    </form>
+            <!-- ERRORES GENERALES -->
+            {% if form.non_field_errors %}
+                <div class="login-mensaje login-error">
+                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                    {{ form.non_field_errors.0 }}
+                </div>
+            {% endif %}
 
-    <div class="login-registro">
-        ¿No tienes cuenta?
-        <a href="{% url 'registro' %}">
-            Regístrate
-        </a>
+            <button type="submit" class="login-boton">
+                <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+                Entrar al Sistema
+            </button>
+        </form>
+
+        <div class="login-registro">
+            ¿No tienes cuenta?
+            <a href="{% url 'registro' %}">
+                Regístrate aquí
+            </a>
+        </div>
     </div>
 </div>
 
 <div class="login-nota">
     <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-    Las Ricuras de la Abuela Lola · Django
+    Las Ricuras de la Abuela Lola · Sistema Seguro
 </div>
 
 {% endblock %}

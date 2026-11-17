@@ -4,444 +4,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Las Ricuras de la Abuela Lola{% endblock %}</title>
 
-    <title>{% block titulo %}Ricuras de la Abuela Lola{% endblock %}</title>
-
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}?v=1" type="image/x-icon">
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --terracota: #d88c4d;
-            --terracota-oscuro: #a95324;
-            --crema: #fff3df;
-            --beige: #6b5230;
-            --dorado: #e4ad65;
-            --cafe: #4a2a1a;
-            --blanco: #fffdf8;
+            --cafe-oscuro: #3b1d0b;
+            --cafe-medio: #5c2e0e;
+            --crema: #fdf5e6;
+            --dorado: #f4b41a;
+            --texto: #4a2c11;
+            --blanco: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background:
-                radial-gradient(ellipse at 0% 35%, #f5d5aa 0%, transparent 27%),
-                radial-gradient(ellipse at 100% 70%, #f5d5aa 0%, transparent 28%),
-                linear-gradient(135deg, #fff4e3, #f9e7ce);
-            color: var(--cafe);
-            line-height: 1.7;
-            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--crema);
+            color: var(--texto);
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
-            position: relative;
-            isolation: isolate;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* =========================================
+           HEADER UNIFICADO
+           ========================================= */
         header {
-            position: relative;
-            z-index: 1;
-            background: linear-gradient(120deg, #d78340, #efb678 50%, #d78340);
-            padding: 10px 30px 14px;
-            box-shadow: 0 4px 14px rgba(93, 48, 22, .16);
-            border-bottom: 4px solid var(--dorado);
+            background-color: var(--cafe-oscuro);
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
-        .barra-superior {
+        .header-container {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(116, 60, 29, .2);
-        }
-
-        .sesion-usuario {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #d4a24c;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .sesion-usuario .separador {
-            color: rgba(74, 42, 26, .5);
-        }
-
-        .btn-salir-top {
-            background: transparent;
-            border: none;
-            color: var(--cafe);
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            transition: color .3s;
-        }
-
-        .btn-salir-top:hover {
-            color: var(--blanco);
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
+            padding: 10px 30px;
+            min-height: 90px;
+        }
+
+        /* Logo */
+        .logo-link img {
+            height: 85px;
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.3s;
+            display: block;
+        }
+
+        .logo-link img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Menú Central */
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu a {
+            color: var(--blanco);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+            padding: 8px 18px;
+            border-radius: 25px;
+        }
+
+        .nav-menu a:hover { 
+            color: var(--dorado); 
+        }
+        
+        .nav-menu a.activo {
+            background-color: var(--dorado);
+            color: var(--cafe-oscuro);
+        }
+
+        /* Sesión de Usuario (Derecha) */
+        .user-section {
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
 
-        .logo {
-            width: 78px;
-            height: 78px;
-            border-radius: 50%;
-            background: var(--blanco);
-            padding: 4px;
-            object-fit: contain;
-            box-shadow: 0 2px 10px rgba(74, 42, 26, .2);
-            border: 2px solid rgba(255, 250, 238, .8);
-            flex-shrink: 0;
-        }
-
-        .marca h1 {
-            font-family: Georgia, 'Times New Roman', serif;
-            font-size: 26px;
-            color: var(--cafe);
-            font-weight: 700;
-            letter-spacing: .2px;
-            line-height: 1.2;
-            margin-bottom: 3px;
-        }
-
-        .marca .lema {
-            font-size: 15px;
-            color: #000000;
-            font-family: Georgia, 'Times New Roman', serif;
-            font-weight: 500;
-            letter-spacing: .2px;
-        }
-
-        nav {
+        .user-info {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             align-items: center;
-            gap: 9px;
-            max-width: 1200px;
-            margin: 12px auto 0;
-            padding-top: 11px;
-            border-top: 1px solid rgba(116, 60, 29, .2);
+            gap: 8px;
+            color: var(--dorado);
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        nav a, nav button {
-            color: #fff;
+        /* Botones de Login / Logout */
+        .btn-sesion {
+            background: transparent;
+            border: 1.5px solid var(--dorado);
+            color: var(--dorado);
+            padding: 8px 20px;
+            border-radius: 25px;
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 22px;
-            background: #5c2e0e;
-            border: 1px solid #d4a24c;
-            font-weight: 700;
-            font-size: 13px;
-            transition: all .25s ease;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
-            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-sesion:hover {
+            background-color: var(--dorado);
+            color: var(--cafe-oscuro);
+        }
+
+        /* =========================================
+           SISTEMA DE DISEÑO GLOBAL (PARA OTRAS PÁGINAS)
+           ========================================= */
+        main { flex: 1; width: 100%; padding-bottom: 40px; }
+
+        /* Contenedor para páginas internas (Menú, Platos, Formularios, etc.) */
+        .contenedor-pagina {
+            max-width: 1100px;
+            width: 90%;
+            margin: 40px auto;
+            background: var(--blanco);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(59, 29, 11, 0.08);
+            border: 1px solid #f0e6d6;
+        }
+
+        /* Títulos de Página */
+        .titulo-pagina {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--cafe-oscuro);
+            text-align: center;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .titulo-pagina i { color: var(--dorado); font-size: 0.8em; }
+
+        .subtitulo-pagina {
+            text-align: center;
+            color: var(--cafe-medio);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .linea-decorativa {
+            width: 80px;
+            height: 3px;
+            background: var(--dorado);
+            margin: 15px auto 30px auto;
+            border-radius: 3px;
+        }
+
+        /* Botones Globales */
+        .btn-general {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            box-shadow: 0 2px 5px rgba(91, 47, 22, .06);
-        }
-
-        nav a:hover,
-        nav button:hover {
-            background: var(--terracota-oscuro);
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 9px rgba(91, 47, 22, .15);
-        }
-
-        nav a i,
-        nav button i {
-            font-size: 12px;
-        }
-
-        main {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            max-width: 1200px;
-            width: 90%;
-            margin: 26px auto;
-            padding: 30px 34px;
-            background: rgba(255, 253, 248, .97);
-            border: 1px solid #e8c59c;
-            border-top: 4px solid var(--terracota);
-            border-radius: 13px;
-            box-shadow: 0 7px 24px rgba(91, 47, 22, .12);
-        }
-
-        h2 {
-            color: var(--terracota-oscuro);
-            margin-bottom: 18px;
-            border-bottom: 2px solid var(--dorado);
-            padding-bottom: 10px;
-            font-weight: 700;
-        }
-
-        h3 {
-            color: var(--terracota-oscuro);
-            margin: 22px 0 10px;
-            font-weight: 700;
-        }
-
-        p {
-            margin-bottom: 12px;
-        }
-
-        ul {
-            margin-left: 25px;
-            margin-bottom: 15px;
-        }
-
-        ul li {
-            padding: 4px 0;
-        }
-
-        main a {
-            color: var(--terracota-oscuro);
-            font-weight: 700;
+            gap: 8px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
             text-decoration: none;
-            border-bottom: 1px dashed var(--dorado);
-            transition: .3s;
-        }
-
-        main a:hover {
-            color: var(--cafe);
-            border-bottom-style: solid;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #bd6d36, #98471f);
-            color: white !important;
-            padding: 11px 24px;
-            border-radius: 24px;
-            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
             border: none;
-            font-weight: 700;
-            margin-top: 12px;
-            margin-right: 8px;
-            transition: .25s;
-            box-shadow: 0 3px 9px rgba(91, 47, 22, .18);
         }
 
-        .btn:hover {
-            background: linear-gradient(135deg, #e7b06c, #d58a43);
-            color: var(--cafe) !important;
-            transform: translateY(-1px);
+        .btn-oscuro {
+            background-color: var(--cafe-oscuro);
+            color: var(--blanco) !important;
+            border: 1.5px solid var(--cafe-oscuro);
+        }
+        .btn-oscuro:hover {
+            background-color: var(--cafe-medio);
+            border-color: var(--cafe-medio);
+            transform: translateY(-2px);
         }
 
-        footer {
-            position: relative;
-            z-index: 1;
-            background: #48291b; 
-            color: #f4d4a5; 
-            text-align: center;
-            padding: 15px;
-            font-size: 13px;
-            font-weight: 600; 
-            margin-top: auto;
-            border-top: 3px solid #e4ad65; 
+        .btn-dorado {
+            background-color: var(--dorado);
+            color: var(--cafe-oscuro) !important;
+            border: 1.5px solid var(--dorado);
+        }
+        .btn-dorado:hover {
+            background-color: #e0a314;
+            border-color: #e0a314;
+            transform: translateY(-2px);
         }
 
-        footer p {
-            margin-bottom: 0;
-            color: #f4d4a5;
+        .btn-borde {
+            background-color: transparent;
+            color: var(--cafe-medio) !important;
+            border: 1.5px solid var(--cafe-medio);
         }
-    
-        body.login-body main {
-            max-width: 510px;
-            width: 92%;
-            padding: 0;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
+        .btn-borde:hover {
+            background-color: var(--crema);
         }
 
-        .login-card {
+        /* Formularios Globales */
+        form p { margin-bottom: 20px; text-align: left; }
+        
+        form label {
+            display: block;
+            font-weight: 600;
+            color: var(--cafe-oscuro);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="email"],
+        form input[type="password"],
+        form select,
+        form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            background-color: #fafafa;
+            color: var(--texto);
+            transition: all 0.3s ease;
+        }
+
+        form input:focus, form select:focus, form textarea:focus {
+            outline: none;
+            border-color: var(--dorado);
+            background-color: var(--blanco);
+            box-shadow: 0 0 0 3px rgba(244, 180, 26, 0.2);
+        }
+
+        /* Tablas Globales */
+        .tabla-oscura {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
             background: var(--blanco);
-            border: 1px solid #e8c59c;
-            border-top: 4px solid var(--terracota);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 26px rgba(91, 47, 22, .14);
-            transition: box-shadow .2s, transform .2s;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .login-card:hover {
-            box-shadow: 0 10px 30px rgba(91, 47, 22, .18);
-            transform: translateY(-1px);
+        .tabla-oscura th {
+            background-color: var(--cafe-oscuro);
+            color: var(--blanco);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
         }
 
-        @media (max-width: 750px) {
-            header {
-                padding: 15px 10px;
-            }
+        .tabla-oscura td {
+            padding: 15px;
+            border-bottom: 1px solid #f0e6d6;
+            color: var(--texto);
+        }
 
-            .header-top {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
+        .tabla-oscura tr:hover td { background-color: var(--crema); }
 
-            .marca h1 {
-                font-size: 22px;
-            }
+        /* =========================================
+           FOOTER
+           ========================================= */
+        footer {
+            background-color: var(--cafe-oscuro);
+            color: var(--blanco);
+            text-align: center;
+            padding: 50px 20px 20px;
+            position: relative;
+            margin-top: auto;
+        }
 
-            .logo {
-                width: 70px;
-                height: 70px;
-            }
+        .footer-wave { position: absolute; top: -49px; left: 0; width: 100%; height: 50px; }
 
-            .barra-superior {
-                justify-content: center;
-            }
+        .footer-content {
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 20px;
+        }
 
-            main {
-                width: 94%;
-                padding: 22px 18px;
-                margin: 18px auto;
-            }
+        .footer-redes a { color: var(--blanco); margin: 0 10px; font-size: 22px; transition: 0.3s; }
+        .footer-redes a:hover { color: var(--dorado); }
 
-            nav {
-                margin: 10px auto 0;
-                padding-top: 10px;
-                gap: 7px;
-            }
+        .footer-frase { font-family: 'Caveat', cursive; font-size: 2rem; color: var(--dorado); margin: 0; }
+        .footer-copy { width: 100%; font-size: 13px; opacity: 0.7; margin-top: 15px; }
 
-            nav a,
-            nav button {
-                padding: 8px 11px;
-                font-size: 12px;
+        /* =========================================
+           RESPONSIVO CELULAR (CORREGIDO Y COMPACTO)
+           ========================================= */
+        @media (max-width: 950px) {
+            /* 1. Header más delgado */
+            .header-container { 
+                flex-direction: column; 
+                padding: 8px 10px; 
+                gap: 8px; 
+                min-height: auto; /* Quitamos la altura mínima para que se ajuste */
             }
+            
+            /* 2. Inicio de sesión arriba a la derecha, más pequeño */
+            .user-section { 
+                order: -1; 
+                width: 100%; 
+                justify-content: flex-end; 
+                padding-bottom: 5px; 
+                margin-bottom: 0; 
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .user-info { font-size: 12px; }
+            .btn-sesion { padding: 5px 12px; font-size: 12px; }
+            
+            /* 3. Logo más pequeño en móvil */
+            .logo-link img { height: 60px; }
+            
+            /* 4. Navegación más compacta */
+            .nav-menu { gap: 5px; }
+            .nav-menu a { font-size: 13px; padding: 6px 10px; }
 
-            body::before,
-            body::after {
-                width: 78px;
-                height: 78px;
-                opacity: .13;
-            }
-
-            body.login-body main {
-                width: 94%;
-                padding: 0;
-            }
-
-            .login-card {
-                padding: 24px 20px;
-            }
-
-            .login-titulo {
-                font-size: 21px;
-            }
+            /* 5. Footer */
+            .footer-content { flex-direction: column; text-align: center; }
+            
+            /* 6. Contenedor de páginas (Menú, Contacto, etc.) */
+            .contenedor-pagina { width: 95%; padding: 20px 15px; }
+            .titulo-pagina { font-size: 2.5rem; }
+            
+            /* 7. Tablas deslizables */
+            .tabla-oscura { display: block; overflow-x: auto; white-space: nowrap; }
         }
     </style>
-
     {% block extra_css %}{% endblock %}
 </head>
+<body>
 
-<body class="{% block body_class %}{% endblock %}">
-
-<header>
-    <div class="barra-superior">
-        <div class="sesion-usuario">
-            {% if user.is_authenticated %}
-                <span class="usuario-info">
-                    <i class="fa-solid fa-user"></i>
-                    {{ user.username }}
-                </span>
-                <span class="separador">|</span>
-                <form action="{% url 'logout' %}" method="post" style="display:inline; margin:0;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-salir-top">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        Salir
-                    </button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn-salir-top">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    Iniciar sesión
-                </a>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="header-top">
-        <img src="{% static 'core/img/Logo.png' %}"
-             alt="Logo Las Ricuras de la Abuela Lola"
-             class="logo">
-
-        <div class="marca">
-            <h1>Las Ricuras de la Abuela Lola</h1>
-            <p class="lema">Donde cada plato sabe a hogar</p>
-        </div>
-    </div>
-
-    <nav>
-        <a href="{% url 'inicio' %}">
-            <i class="fa-solid fa-house"></i>
-            Inicio
-        </a>
-
-        <a href="{% url 'menu' %}">
-            <i class="fa-solid fa-utensils"></i>
-            Menú
-        </a>
-
-        <a href="{% url 'Platos' %}">
-            <i class="fa-solid fa-plate-wheat"></i>
-            Platos
-        </a>
-
-        <a href="{% url 'contacto' %}">
-            <i class="fa-solid fa-envelope"></i>
-            Contacto
-        </a>
-
-        {% if user.is_authenticated and user.is_staff %}
-            <a href="{% url 'resumen_ventas' %}">
-                <i class="fa-solid fa-chart-line"></i>
-                Resumen de ventas
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            
+            <!-- 1. Izquierda: Logo -->
+            <a href="{% url 'inicio' %}" class="logo-link">
+                <img src="{% static 'core/img/Logo.png' %}" alt="Logo Abuela Lola">
             </a>
 
-            <a href="{% url 'registrar_venta' %}" class="nav-link">
-                <i class="fa-solid fa-cash-register"></i>
-                Registrar ventas
-            </a>
-        {% endif %}
-    </nav>
-</header>
+            <!-- 2. Centro: Menú -->
+            <nav class="nav-menu">
+                <!-- VISIBLE PARA TODOS (CLIENTES Y ADMIN) -->
+                <a href="{% url 'inicio' %}" class="{% if request.resolver_match.url_name == 'inicio' %}activo{% endif %}">Inicio</a>
+                <a href="{% url 'menu' %}" class="{% if request.resolver_match.url_name == 'menu' %}activo{% endif %}">Menú</a>
+                <a href="{% url 'contacto' %}" class="{% if request.resolver_match.url_name == 'contacto' %}activo{% endif %}">Contacto</a>
+                
+                <!-- VISIBLE SOLO PARA ADMINISTRADORES (STAFF) -->
+                {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'Platos' %}" class="{% if request.resolver_match.url_name == 'Platos' %}activo{% endif %}">Platos</a>
+                    <a href="{% url 'resumen_ventas' %}" class="{% if request.resolver_match.url_name == 'resumen_ventas' %}activo{% endif %}">Resumen</a>
+                    <a href="{% url 'registrar_venta' %}" class="{% if request.resolver_match.url_name == 'registrar_venta' %}activo{% endif %}">Ventas</a>
+                {% endif %}
+            </nav>
 
-<main>
-    {% block contenido %}{% endblock %}
-</main>
+            <!-- 3. Derecha: Sesión de Usuario -->
+            <div class="user-section">
+                {% if user.is_authenticated %}
+                    <span class="user-info">
+                        <i class="fa-solid fa-circle-user"></i> {{ user.username }}
+                    </span>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline; margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-sesion">
+                            Salir <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-sesion">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                    </a>
+                {% endif %}
+            </div>
 
-<footer>
-    <p>&copy; 2026 Las Ricuras de la Abuela Lola — Todos los derechos reservados</p>
-</footer>
+        </div>
+    </header>
 
-{% block extra_js %}{% endblock %}
+    <!-- CONTENIDO DINÁMICO -->
+    <main>
+        {% block contenido %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.35,192.72,111.51,243.9,101.48,283.44,77.53,321.39,56.44Z" fill="#3b1d0b"></path>
+        </svg>
+        <div class="footer-content">
+            <div class="footer-redes">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+            <p class="footer-frase">¡Gracias por ser parte de nuestra familia! 🤍</p>
+            <div class="footer-copy">
+                <p>&copy; 2026 Las Ricuras de la Abuela Lola. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,59 +1,293 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block titulo %}Inicio — Las Ricuras de la Abuela Lola{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- SECCIÓN HERO (PORTADA CENTRADA) --- */
+    .hero {
+        position: relative;
+        width: 100%;
+        padding: 60px 20px 100px;
+        background-color: var(--crema);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background-image: radial-gradient(circle at 50% 50%, rgba(244, 180, 26, 0.08) 0%, transparent 60%);
+        overflow: hidden;
+    }
+    
+    .hero-imagen img {
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+        object-fit: contain;
+        /* TRUCO: Quita el fondo blanco de la imagen */
+        mix-blend-mode: multiply; 
+        filter: drop-shadow(0px 20px 25px rgba(0,0,0,0.15));
+        animation: flotar 4s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes flotar {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .hero-texto h1 {
+        font-family: 'Caveat', cursive;
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        color: var(--cafe-oscuro);
+        line-height: 1;
+        margin-bottom: 15px;
+    }
+
+    .hero-texto p {
+        font-size: 1.2rem;
+        color: var(--texto);
+        margin-bottom: 35px;
+        font-weight: 500;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-menu {
+        background-color: var(--cafe-oscuro);
+        color: var(--blanco) !important;
+        padding: 15px 40px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s;
+        box-shadow: 0 8px 20px rgba(59, 29, 11, 0.2);
+    }
+
+    .btn-menu:hover { 
+        background-color: var(--cafe-medio); 
+        transform: translateY(-3px);
+    }
+
+    /* ONDA DIVISORIA */
+    .wave-divider {
+        position: absolute;
+        bottom: -1px; left: 0; width: 100%; line-height: 0; z-index: 5;
+    }
+    .wave-divider svg { display: block; width: 100%; height: 70px; }
+
+    /* --- SECCIÓN PLATOS --- */
+    .platos-section {
+        background-color: #f5e6d3;
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+    .titulo-seccion {
+        font-family: 'Caveat', cursive;
+        font-size: clamp(2.5rem, 4vw, 3.8rem);
+        color: var(--cafe-oscuro);
+        margin-bottom: 50px;
+    }
+
+    .platos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Tarjetas Verticales (Imagen arriba, texto abajo) */
+    .plato-card {
+        background: var(--blanco);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(59, 29, 11, 0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #e8d5b5;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .plato-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(59, 29, 11, 0.15);
+    }
+
+    .plato-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-bottom: 3px solid var(--dorado);
+    }
+
+    .plato-info {
+        padding: 25px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    .plato-info h3 {
+        font-family: 'Lora', serif;
+        font-size: 1.5rem;
+        color: var(--cafe-oscuro);
+        margin-bottom: 10px;
+    }
+
+    .plato-info p { 
+        font-size: 0.95rem; 
+        color: #666; 
+        margin-bottom: 20px; 
+        text-align: center;
+    }
+    
+    .plato-info .precio { 
+        font-weight: 700; 
+        color: var(--cafe-medio); 
+        font-size: 1.4rem; 
+    }
+
+    /* --- BARRA INFO --- */
+    .info-bar {
+        max-width: 1000px;
+        margin: 60px auto;
+        background: var(--blanco);
+        padding: 30px 40px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        flex-wrap: wrap;
+        gap: 30px;
+        border: 1px solid #e8d5b5;
+    }
+
+    .info-item { display: flex; align-items: center; gap: 20px; }
+    .info-item i { font-size: 2.5rem; color: var(--cafe-medio); }
+    .info-text h4 { font-family: 'Caveat', cursive; font-size: 1.8rem; color: var(--cafe-oscuro); margin: 0; line-height: 1; }
+    .info-text p { font-size: 0.9rem; margin: 5px 0 0 0; color: #666; }
+
+    .btn-whatsapp {
+        background: #25D366; color: white !important;
+        padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: 700;
+        display: inline-flex; align-items: center; gap: 10px; font-size: 1.05rem;
+        transition: 0.3s;
+        box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp:hover {
+        transform: scale(1.05);
+    }
+
+    /* --- RESPONSIVO CELULAR --- */
+    @media (max-width: 850px) {
+        .hero { padding: 40px 20px 80px; }
+        .hero-texto h1 { font-size: 3.2rem; }
+        .hero-texto p { font-size: 1rem; }
+        
+        .info-bar { flex-direction: column; text-align: center; margin: 30px 20px; }
+        .info-item { flex-direction: column; text-align: center; gap: 10px; }
+        .btn-whatsapp { width: 100%; justify-content: center; }
+    }
+</style>
+{% endblock %}
+
 {% block contenido %}
 
-<h2>Bienvenido a Ricuras de la Abuela Lola</h2>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-imagen">
+        <img src="{% static 'core/img/Logo.png' %}" alt="Abuela Lola">
+    </div>
+    
+    <div class="hero-texto">
+        <h1>Sabor casero,<br>tradición colombiana</h1>
+        <p>Ven y disfruta de los mejores platos preparados con el amor y la sazón de la Abuela Lola.</p>
+        <a href="{% url 'menu' %}" class="btn-menu">
+            Ver nuestro menú <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
 
-<p>
-    Aquí disfrutarás de una experiencia llena de sabor, tradición y esos pequeños detalles que hacen sentir como en casa. Preparamos los mejores platos tradicionales con ingredientes cuidadosamente seleccionados, mucho amor y esa sazón casera que nos ha caracterizado durante años.
+    <!-- Onda divisoria -->
+    <div class="wave-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.35,192.72,111.51,243.9,101.48,283.44,77.53,321.39,56.44Z" fill="#f5e6d3"></path>
+        </svg>
+    </div>
+</section>
 
-    Cada receta guarda una historia, un recuerdo y el auténtico sabor de la cocina tradicional. Queremos que cada persona que nos visite pueda disfrutar de comidas preparadas con dedicación, conservando esas recetas especiales que han pasado de generación en generación.
-</p>
+<!-- PLATOS -->
+<section class="platos-section">
+    <h2 class="titulo-seccion"><i class="fa-solid fa-hat-chef"></i> Nuestros Platos Estrella</h2>
+    
+    <div class="platos-grid">
+        <div class="plato-card">
+            <img src="https://images.unsplash.com/photo-1544025162-811114215b2e?auto=format&fit=crop&w=500&q=80" alt="Bandeja Paisa">
+            <div class="plato-info">
+                <div>
+                    <h3>Bandeja Paisa</h3>
+                    <p>El plato insignia de la casa.</p>
+                </div>
+                <span class="precio">$24.900</span>
+            </div>
+        </div>
 
-<h3>Platos destacados</h3>
+        <div class="plato-card">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80" alt="Tamales">
+            <div class="plato-info">
+                <div>
+                    <h3>Tamales</h3>
+                    <p>Preparados lentamente.</p>
+                </div>
+                <span class="precio">$16.900</span>
+            </div>
+        </div>
 
-<ul>
-    <li><strong>Bandeja paisa</strong> — El plato insignia de la casa</li>
-    <li><strong>Tamales</strong> — Los más pedidos por nuestros clientes</li>
-    <li><strong>Sancocho de gallina</strong> — El favorito de los domingos</li>
-    <li><strong>Asado al barril</strong> — Un asado que te vas a quedar chupando los dedos</li>
-</ul>
+        <div class="plato-card">
+            <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=500&q=80" alt="Sancocho">
+            <div class="plato-info">
+                <div>
+                    <h3>Sancocho de Gallina</h3>
+                    <p>El favorito de los domingos.</p>
+                </div>
+                <span class="precio">$22.900</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h3>Horarios de atención</h3>
+<!-- BARRA INFORMACIÓN -->
+<div class="info-bar">
+    <div class="info-item">
+        <i class="fa-regular fa-clock"></i>
+        <div class="info-text">
+            <h4>Horarios</h4>
+            <p>Lun-Vie: 8:00 am - 3:30 pm<br>Sáb-Dom: 8:00 am - 3:30 pm</p>
+        </div>
+    </div>
 
-<p>
-    🕐 Lunes a viernes: 6:00 a.m.—3:30 p.m.<br>
-    🕐 Sábados y domingos: 8:00 a.m.—3:30 p.m.
-</p>
+    <div class="info-item">
+        <i class="fa-regular fa-credit-card"></i>
+        <div class="info-text">
+            <h4>Pagos</h4>
+            <p>Nequi • Efectivo • Bancolombia</p>
+        </div>
+    </div>
 
-<h3>Métodos de pago</h3>
-
-<div style="background: #fdf6ec; padding: 20px 25px; border-radius: 10px; border-left: 5px solid #d4a24c; margin: 15px 0 25px;">
-
-    <p style="margin: 0 0 12px; color: #8b4513; font-size: 1.05em;">
-        Para tu comodidad, aceptamos:
-    </p>
-
-    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px;">
-
-        {% for metodo in metodos %}
-
-        <li style="background: #fff; padding: 10px 18px; border-radius: 25px; border: 1px solid #d4a24c; color: #5c2e0e; font-weight: 600;">
-            {{ metodo.icono }} {{ metodo.nombre }}
-        </li>
-
-        {% endfor %}
-
-    </ul>
-
+    <a href="https://wa.me/573000000000" class="btn-whatsapp">
+        <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+    </a>
 </div>
-
-<h3>¿Quieres visitarnos?</h3>
-
-<p>
-    Queremos compartir contigo una experiencia llena de tradición, familia y buenos recuerdos. Ven a visitarnos y déjate conquistar por el auténtico sabor de nuestra cocina. Te esperamos para que disfrutes de nuestros deliciosos platos y vivas una experiencia que te hará sentir como en casa. ¡Ven y descubre por qué nuestro sabor sigue conquistando corazones!
-</p>
-
-
 
 {% endblock %}

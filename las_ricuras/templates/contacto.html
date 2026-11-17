@@ -1,96 +1,77 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block titulo %}Contacto — Las Ricuras de la Abuela Lola{% endblock %}
 
 {% block extra_css %}
 <style>
-    
-    .contacto-wrapper {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    .contacto-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .contacto-header h2 {
-        font-family: 'Playfair Display', serif;
-        color: #5c2e0e;
-        font-size: 38px;
-        border: none;
-        padding: 0;
-        margin-bottom: 10px;
-    }
-
-    .contacto-header p {
-        font-size: 17px;
-        color: #6b5a4b;
-        font-style: italic;
-    }
-
-    
+    /* --- CUADRÍCULA PRINCIPAL (2 Columnas) --- */
     .contacto-grid {
         display: grid;
-        grid-template-columns: 1fr 1.2fr;
+        grid-template-columns: 1fr 1.2fr; /* Izquierda un poco más angosta */
         gap: 30px;
         align-items: stretch;
+        margin-top: 20px;
     }
 
+    /* --- TARJETA DE INFORMACIÓN (Izquierda) --- */
     .info-contacto {
-        background: #fdf6ec;
-        padding: 30px;
-        border-radius: 12px;
-        border-left: 5px solid #d4a24c;
-        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
+        background: var(--crema); /* Usa el tono crema de la paleta global */
+        padding: 35px 30px;
+        border-radius: 15px;
+        border: 1px solid #e8d5b5;
+        border-left: 6px solid var(--dorado); /* Detalle dorado */
+        box-shadow: 0 5px 15px rgba(59, 29, 11, 0.04);
     }
 
     .info-contacto h3 {
-        font-family: 'Playfair Display', serif;
-        color: #5c2e0e;
+        font-family: 'Lora', serif;
+        color: var(--cafe-oscuro);
         margin-top: 0;
         margin-bottom: 25px;
-        font-size: 22px;
-        border-bottom: 2px dashed #d4a24c;
-        padding-bottom: 10px;
+        font-size: 1.8rem;
+        border-bottom: 2px dashed #e8d5b5;
+        padding-bottom: 15px;
     }
 
     .dato-contacto {
         display: flex;
         align-items: flex-start;
         gap: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     .dato-contacto .icono {
-        width: 35px;
-        height: 35px;
-        background: #fff;
-        border: 1px solid #d4a24c;
+        width: 40px;
+        height: 40px;
+        background: var(--blanco);
+        border: 1.5px solid #e8d5b5;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #8b4513;
+        color: var(--cafe-medio);
         flex-shrink: 0;
-        font-size: 15px;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
 
     .dato-contacto p {
         margin: 0;
-        color: #4a3b31;
-        font-size: 15px;
-        line-height: 1.5;
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.6;
     }
 
     .dato-contacto strong {
-        color: #8b4513;
+        color: var(--cafe-oscuro);
         display: block;
-        margin-bottom: 3px;
-        font-size: 16px;
+        margin-bottom: 5px;
+        font-size: 1.05rem;
+        font-family: 'Montserrat', sans-serif;
     }
 
+    /* Botón de WhatsApp */
     .btn-whatsapp {
         display: flex;
         align-items: center;
@@ -98,42 +79,62 @@
         gap: 10px;
         background: #25D366;
         color: white !important;
-        padding: 14px;
-        border-radius: 8px;
+        padding: 15px;
+        border-radius: 30px;
         text-decoration: none;
         font-weight: 700;
-        font-size: 16px;
-        margin-top: 25px;
-        transition: background 0.3s, transform 0.2s;
-        box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        font-size: 1rem;
+        margin-top: 30px;
+        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
     }
 
     .btn-whatsapp:hover {
-        background: #128C7E;
-        transform: translateY(-2px);
+        background: #1eb956;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
     }
 
+    /* --- MAPA (Derecha) --- */
     .mapa-contacto {
-        background: #fff;
-        border-radius: 12px;
+        background: var(--blanco);
+        border-radius: 15px;
         overflow: hidden;
-        border: 1px solid #e6dac7;
-        box-shadow: 0 5px 15px rgba(92, 46, 14, 0.05);
+        border: 4px solid var(--blanco);
+        box-shadow: 0 10px 25px rgba(59, 29, 11, 0.08);
         display: flex;
         flex-direction: column;
+        min-height: 450px;
     }
 
     .mapa-contacto iframe {
         width: 100%;
         height: 100%;
-        min-height: 400px;
+        min-height: 450px;
         border: none;
+        display: block;
     }
 
-    @media (max-width: 800px) {
+    /* --- RESPONSIVO CELULAR --- */
+    @media (max-width: 850px) {
         .contacto-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr; /* Una sola columna */
+            gap: 25px;
         }
+        
+        .info-contacto {
+            padding: 25px 20px;
+        }
+
+        .info-contacto h3 {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .mapa-contacto {
+            min-height: 300px;
+        }
+        
         .mapa-contacto iframe {
             min-height: 300px;
         }
@@ -143,19 +144,24 @@
 
 {% block contenido %}
 
-<div class="contacto-wrapper">
-    <div class="contacto-header">
-        <h2>¡Ven y visítanos!</h2>
-        <p>¿Quieres hacer un pedido, o contactarnos? Aquí estamos para ti.</p>
-    </div>
+<!-- ENVOLVEMOS TODO EN EL CONTENEDOR GLOBAL PARA LA CAJA BLANCA -->
+<div class="contenedor-pagina">
+    
+    <!-- Cabecera de la página usando las clases globales -->
+    <h2 class="titulo-pagina"><i class="fa-solid fa-location-dot"></i> ¡Ven y visítanos!</h2>
+    <div class="linea-decorativa"></div>
+    <p class="subtitulo-pagina">¿Quieres hacer un pedido, o contactarnos? Aquí estamos para ti.</p>
 
+    <!-- Contenido: Datos y Mapa -->
     <div class="contacto-grid">
-      
+        
+        <!-- Columna Izquierda: Información -->
         <div class="info-contacto">
             <h3>Nuestros Datos</h3>
             
+            <!-- Dirección -->
             <div class="dato-contacto">
-                <div class="icono"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="icono"><i class="fa-solid fa-map-location-dot"></i></div>
                 <p>
                     <strong>Dirección</strong>
                     Carrera 8D Bis 159-27<br>
@@ -163,6 +169,7 @@
                 </p>
             </div>
 
+            <!-- Teléfono -->
             <div class="dato-contacto">
                 <div class="icono"><i class="fa-solid fa-phone"></i></div>
                 <p>
@@ -171,6 +178,7 @@
                 </p>
             </div>
 
+            <!-- Horarios -->
             <div class="dato-contacto">
                 <div class="icono"><i class="fa-regular fa-clock"></i></div>
                 <p>
@@ -180,11 +188,13 @@
                 </p>
             </div>
 
+            <!-- Botón de WhatsApp -->
             <a href="https://wa.me/573118299494?text=Hola,%20quisiera%20hacer%20un%20pedido" target="_blank" class="btn-whatsapp">
-                <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Pedir por WhatsApp
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> Pedir por WhatsApp
             </a>
         </div>
 
+        <!-- Columna Derecha: Mapa -->
         <div class="mapa-contacto">
             <iframe 
                 src="https://maps.google.com/maps?width=100%25&height=600&hl=es&q=Carrera%208D%20Bis%20159-27&t=&z=16&ie=UTF8&iwloc=B&output=embed" 
@@ -192,6 +202,7 @@
                 loading="lazy">
             </iframe>
         </div>
+
     </div>
 </div>
 
