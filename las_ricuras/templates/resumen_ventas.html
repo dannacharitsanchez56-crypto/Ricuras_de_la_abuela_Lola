@@ -2,112 +2,104 @@
 
 {% block titulo %}Resumen de ventas — Las Ricuras de la Abuela Lola{% endblock %}
 
-{% block extra_css %}
-<style>
-    .filtro-ventas {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        gap: 15px;
-        background: #fdf6ec;
-        padding: 20px 25px;
-        border-radius: 10px;
-        border-left: 5px solid #d4a24c;
-        margin: 15px 0 25px;
-    }
-
-    .filtro-ventas .campo {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .filtro-ventas label {
-        color: #8b4513;
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    .filtro-ventas input[type="date"] {
-        padding: 9px 12px;
-        border: 1px solid #d4a24c;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 15px;
-        color: #2e241c;
-        background: #fff;
-    }
-
-    .filtro-ventas .btn {
-        margin: 0;
-        cursor: pointer;
-        font-size: 15px;
-        font-family: inherit;
-    }
-
-    .tarjetas-resumen {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .tarjeta {
-        flex: 1;
-        min-width: 220px;
-        background: #fff;
-        border: 1px solid #d4a24c;
-        border-top: 5px solid #8b4513;
-        border-radius: 12px;
-        padding: 22px;
-        text-align: center;
-        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.12);
-    }
-
-    .tarjeta .etiqueta {
-        color: #8b4513;
-        font-weight: 700;
-        font-size: 15px;
-        margin-bottom: 8px;
-    }
-
-    .tarjeta .valor {
-        color: #5c2e0e;
-        font-size: 32px;
-        font-weight: 700;
-        margin: 0;
-    }
-</style>
-{% endblock %}
-
 {% block contenido %}
 
-<h2>Resumen de ventas</h2>
+<h2 class="text-3xl font-extrabold text-[#5c2e0e] border-b-4 border-[#d4a24c] pb-3 mb-3">
+    <i class="fa-solid fa-chart-line"></i> Resumen de ventas
+</h2>
 
-<p>Elige un período para ver cuánto se vendió. Si no eliges fechas, se muestran todas las ventas.</p>
+<p class="text-gray-700 mb-6">
+    Elige un período para ver cuánto se vendió. Si no eliges fechas, se muestran todas las ventas.
+</p>
 
-<form method="get" class="filtro-ventas">
-    <div class="campo">
-        <label for="fecha_inicio">Desde</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}">
+<!-- FILTRO POR PERÍODO -->
+<form method="get" class="flex flex-wrap items-end gap-4 bg-[#fdf6ec] p-5 rounded-xl border-l-8 border-[#d4a24c] shadow-sm mb-6">
+    <div class="flex flex-col gap-1">
+        <label for="fecha_inicio" class="text-sm font-bold text-[#8b4513]">Desde</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}"
+               class="px-3 py-2 border border-[#d4a24c] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a24c]">
     </div>
-    <div class="campo">
-        <label for="fecha_fin">Hasta</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}">
+    <div class="flex flex-col gap-1">
+        <label for="fecha_fin" class="text-sm font-bold text-[#8b4513]">Hasta</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}"
+               class="px-3 py-2 border border-[#d4a24c] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a24c]">
     </div>
-    <button type="submit" class="btn">
+    <button type="submit"
+            class="bg-[#8b4513] hover:bg-[#5c2e0e] text-white font-bold px-6 py-2.5 rounded-full shadow-md transition cursor-pointer">
         <i class="fa-solid fa-magnifying-glass"></i> Consultar
     </button>
+    {% if fecha_inicio or fecha_fin %}
+    <a href="{% url 'resumen_ventas' %}"
+       class="text-[#8b4513] font-bold px-4 py-2.5 rounded-full border border-[#8b4513] hover:bg-[#f7e4cd] transition">
+        <i class="fa-solid fa-xmark"></i> Limpiar
+    </a>
+    {% endif %}
 </form>
 
-<div class="tarjetas-resumen">
-    <div class="tarjeta">
-        <p class="etiqueta"><i class="fa-solid fa-sack-dollar"></i> Total vendido</p>
-        <p class="valor">${{ total_vendido }}</p>
+{% if fecha_inicio or fecha_fin %}
+<p class="mb-4 text-sm text-[#8b4513] bg-[#f7e4cd] inline-block px-4 py-1.5 rounded-full">
+    <i class="fa-solid fa-calendar-days"></i>
+    Período:
+    {% if fecha_inicio %}desde <strong>{{ fecha_inicio }}</strong>{% endif %}
+    {% if fecha_fin %}hasta <strong>{{ fecha_fin }}</strong>{% endif %}
+</p>
+{% endif %}
+
+<!-- TARJETAS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+    <a href="?mostrar_detalle=1{% if fecha_inicio %}&fecha_inicio={{ fecha_inicio }}{% endif %}{% if fecha_fin %}&fecha_fin={{ fecha_fin }}{% endif %}"
+       class="group block no-underline">
+        <div class="h-full bg-gradient-to-br from-[#8b4513] to-[#5c2e0e] text-white rounded-2xl p-6 text-center shadow-lg transition group-hover:-translate-y-1 group-hover:shadow-2xl">
+            <p class="font-bold text-[#f7e4cd] mb-2">
+                <i class="fa-solid fa-sack-dollar"></i> Total vendido
+            </p>
+            <p class="text-4xl font-extrabold">${{ total_vendido|floatformat:"0g" }}</p>
+            <small class="block mt-3 text-[#e8c49c]">
+                <i class="fa-solid fa-hand-pointer"></i> Haz clic para ver las ventas
+            </small>
+        </div>
+    </a>
+
+    <div class="bg-white border-2 border-[#d4a24c] rounded-2xl p-6 text-center shadow-lg">
+        <p class="font-bold text-[#8b4513] mb-2">
+            <i class="fa-solid fa-receipt"></i> Cantidad de ventas
+        </p>
+        <p class="text-4xl font-extrabold text-[#5c2e0e]">{{ cantidad_ventas }}</p>
     </div>
-    <div class="tarjeta">
-        <p class="etiqueta"><i class="fa-solid fa-receipt"></i> Cantidad de ventas</p>
-        <p class="valor">{{ cantidad_ventas }}</p>
-    </div>
+
 </div>
+
+<!-- DETALLE (aparece al hacer clic en Total vendido) -->
+{% if mostrar_detalle %}
+<div class="mt-8 bg-[#fffaf4] border border-[#e8c49c] rounded-2xl p-5 shadow-sm overflow-x-auto">
+    <h3 class="text-xl font-bold text-[#8b4513] mb-4">
+        <i class="fa-solid fa-list"></i> Detalle de las ventas
+    </h3>
+
+    {% if detalle_ventas %}
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-[#f7e4cd] text-[#5c2e0e]">
+                <th class="p-3 rounded-tl-lg">Fecha</th>
+                <th class="p-3">Número de venta</th>
+                <th class="p-3 rounded-tr-lg">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in detalle_ventas %}
+            <tr class="border-b border-[#ead8c5] odd:bg-white even:bg-[#fffaf4] hover:bg-[#f7e4cd]/50">
+                <td class="p-3">{{ venta.fecha|date:"d/m/Y" }}</td>
+                <td class="p-3">#{{ venta.id }}</td>
+                <td class="p-3 font-bold text-[#5c2e0e]">${{ venta.total|floatformat:"0g" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-600"><i class="fa-regular fa-face-meh"></i> No hay ventas para mostrar en este período.</p>
+    {% endif %}
+</div>
+{% endif %}
 
 {% endblock %}

@@ -43,7 +43,6 @@ def menu(request):
     return render(request, 'menu.html', {'platos': platos})
 
 
-# --- AQUÍ ESTÁ LA FUNCIÓN DE CONTACTO QUE FALTABA ---
 def contacto(request):
     contexto = {
         'metodos': [
@@ -255,6 +254,8 @@ def registro(request):
 
     return render(request, 'registro.html')
 
+from django.db.models import Sum, Count
+
 @permission_required('las_ricuras.view_venta', raise_exception=True)
 def resumen_ventas(request):
     ventas = Venta.objects.all()
@@ -264,6 +265,7 @@ def resumen_ventas(request):
 
     if fecha_inicio:
         ventas = ventas.filter(fecha__date__gte=fecha_inicio)
+
     if fecha_fin:
         ventas = ventas.filter(fecha__date__lte=fecha_fin)
 
@@ -273,16 +275,17 @@ def resumen_ventas(request):
     )
 
     detalle_ventas = ventas.order_by('-fecha')
-    
+
     contexto = {
         'total_vendido': resumen['total_vendido'] or 0,
-        'cantidad_ventas': resumen['cantidad_ventas'],
+        'cantidad_ventas': resumen['cantidad_ventas'] or 0,
         'fecha_inicio': fecha_inicio or '',
         'fecha_fin': fecha_fin or '',
-        'detalle_ventas': detalle_ventas, 
+        'detalle_ventas': detalle_ventas,
+        'mostrar_detalle': request.GET.get('mostrar_detalle') == '1',
     }
-    return render(request, 'resumen_ventas.html', contexto)
 
+    return render(request, 'resumen_ventas.html', contexto)
 
 def codigo_qr(request):
     """Genera un QR que abre el chat de WhatsApp del restaurante."""
