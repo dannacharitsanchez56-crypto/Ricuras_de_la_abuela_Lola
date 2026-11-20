@@ -3,26 +3,13 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    # 1. CAMBIO PRINCIPAL: La ruta raíz ahora carga directamente el inicio
     path('', views.inicio, name='inicio'),
-    
-    # 2. Mantenemos esta ruta por compatibilidad, pero le cambiamos el 'name' para evitar errores
     path('inicio/', views.inicio, name='inicio_alt'),
-
-    path('login/', auth_views.LoginView.as_view(
-        template_name='login.html',
-        redirect_authenticated_user=True
-    ), name='login'),
-
-    path('logout/', auth_views.LogoutView.as_view(
-        next_page='login'
-    ), name='logout'),
-
+    path('login/', auth_views.LoginView.as_view(template_name='login.html',redirect_authenticated_user=True), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('registro/', views.registro, name='registro'),
     path('perfil/', views.perfil, name='perfil'),
-
     path('menu/', views.menu, name='menu'),
-
     path('platos/', views.Platos, name='Platos'),
     path('platos/nuevo/', views.crear_plato, name='crear_plato'),
     path('platos/<int:id>/', views.plato_detalle, name='plato_detalle'),
@@ -32,4 +19,6 @@ urlpatterns = [
     path('resumen-ventas/', views.resumen_ventas, name='resumen_ventas'),
     path('resena/eliminar/<int:resena_id>/', views.eliminar_resena, name='eliminar_resena'),
     path('registrar-venta/', views.registrar_venta, name='registrar_venta'),
+    path('ventas/exportar-excel/',views.exportar_ventas_excel, name='exportar_ventas_excel'),
+    path('ventas/<int:venta_id>/excel/',views.descargar_venta_excel, name='descargar_venta_excel'),
 ]

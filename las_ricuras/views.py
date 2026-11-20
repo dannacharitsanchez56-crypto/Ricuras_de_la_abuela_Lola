@@ -1,10 +1,15 @@
-
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Count, Avg
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_GET
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from datetime import datetime
+from io import BytesIO
 from .models import Plato, Venta, RegistroVenta, Resena
 from .forms import PlatoForm, ResenaForm
 from .decorators import solo_staff
@@ -278,3 +283,87 @@ def registrar_venta(request):
             return redirect('registrar_venta')
 
     return render(request, 'registrar_venta.html')
+
+def _crear_excel_ventas(ventas, nombre_archivo):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Ventas"
+
+    encabezados = ["ID", "Fecha", "Hora", "Total (COP)"]
+    ws.append(encabezados)
+
+    for celda in ws[1]:
+        celda.font = Font(
+            bold=True,
+            color="FFFFFF"
+        )
+        celda.fill = PatternFill(
+            start_color="8B4513",
+            end_color="8B4513",
+            fill_type="solid"
+        )
+        celda.alignment = Alignment(
+            horizontal="center"
+        )
+
+    for venta in ventas:
+        fecha = timezone.localtime(venta.fecha) if timezone.is_aware(venta.fecha) else venta.fecha
+
+        ws.append([
+            venta.id,
+            fecha.strftime("%d/%m/%Y"),
+            fecha.strftime("%H:%M"),
+            float(venta.total)
+        ])
+
+    for fila in ws.iter_rows(min_row=2):
+        fila[3].number_format = '"$"#,##0.00'
+
+    ws.column_dimensions["A"].width = 12
+    ws.column_dimensions["B"].width = 20
+    ws.column_dimensions["C"].width = 15
+    ws.column_dimensions["D"].width = 22
+
+    archivo = BytesIO()
+    wb.save(archivo)
+    archivo.seek(0)
+
+    respuesta = HttpResponse(
+        archivo.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+    respuesta["Content-Disposition"] = (
+        f'attachment; filename="{nombre_archivo}"'
+    )
+
+    return respuesta
+
+@staff_member_required
+@require_GET
+def exportar_ventas_excel(request):
+    ventas = RegistroVenta.objects.all().order_by("-fecha")
+
+    fecha_inicio = request.GET.get("fecha_inicio")
+    fecha_fin = request.GET.get("fecha_fin")
+
+    if fecha_inicio:
+        ventas = ventas.filter(fecha__date__gte=fecha_inicio)
+
+    if fecha_fin:
+        ventas = ventas.filter(fecha__date__lte=fecha_fin)
+
+    return _crear_excel_ventas(
+        ventas,
+        "reporte_ventas.xlsx"
+    )
+    
+@staff_member_required
+@require_GET
+def descargar_venta_excel(request, venta_id):
+    ventas = RegistroVenta.objects.filter(id=venta_id)
+
+    return _crear_excel_ventas(
+        ventas,
+        f"venta_{venta_id}.xlsx"
+    )

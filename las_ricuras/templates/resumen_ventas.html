@@ -313,6 +313,14 @@
 </p>
         </div>
 
+    <div class="descargar-excel">
+    <a href="{% url 'exportar_ventas_excel' %}?fecha_inicio={{ fecha_inicio|urlencode }}&amp;fecha_fin={{ fecha_fin|urlencode }}"
+       class="btn">
+        <i class="fa-solid fa-file-excel"></i>
+        Descargar ventas en Excel
+    </a>
+        </div>
+
         <div class="tarjeta">
             <div class="icono-tarjeta">
                 <i class="fa-solid fa-receipt"></i>
