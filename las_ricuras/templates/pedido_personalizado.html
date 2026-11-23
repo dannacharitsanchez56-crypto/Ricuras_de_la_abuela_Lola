@@ -1,0 +1,455 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load currency_filters %}
+
+{% block titulo %}
+Pedido personalizado | Ricuras de la Abuela Lola
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    /* CONTENEDOR PRINCIPAL */
+
+    /* BOTÓN DE WHATSAPP */
+
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
+    border: 1px solid #25D366;
+}
+
+.btn-whatsapp:hover {
+    background: #1da851;
+    border-color: #1da851;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-whatsapp i {
+    font-size: 20px;
+    line-height: 1;
+}
+
+    .pedido-contenedor {
+        width: 90%;
+        max-width: 750px;
+        margin: 50px auto;
+        background: white;
+        border-radius: 18px;
+        border: 1px solid #ead8bd;
+        box-shadow: 0 10px 30px rgba(59, 29, 11, 0.10);
+        overflow: hidden;
+    }
+
+    /* ENCABEZADO */
+
+    .pedido-encabezado {
+        background: #fff8ea;
+        text-align: center;
+        padding: 35px 25px;
+        border-bottom: 1px solid #ead8bd;
+    }
+
+    .pedido-icono {
+        width: 75px;
+        height: 75px;
+        background: #f5e3bc;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+    }
+
+    .pedido-icono i {
+        color: #8b4513;
+        font-size: 35px;
+    }
+
+    .pedido-encabezado h2 {
+        font-family: 'Caveat', cursive;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--cafe-oscuro);
+        margin-bottom: 8px;
+    }
+
+    .pedido-encabezado p {
+        color: var(--cafe-medio);
+        font-size: 15px;
+    }
+
+    /* CONTENIDO */
+
+    .pedido-contenido {
+        padding: 35px;
+    }
+
+    .pedido-numero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #d8c3a5;
+    }
+
+    .pedido-numero strong {
+        color: var(--cafe-oscuro);
+    }
+
+    /* ESTADO */
+
+    .pedido-estado {
+        background: #fff1d1;
+        color: #885b13;
+        padding: 7px 15px;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .pedido-estado.confirmado {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .pedido-estado.cancelado {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* INFORMACION DEL PLATO */
+
+    .pedido-plato {
+        background: #fffaf3;
+        border: 1px solid #ead8bd;
+        border-radius: 12px;
+        padding: 23px;
+        margin-bottom: 25px;
+    }
+
+    .pedido-plato h3 {
+        color: var(--cafe-oscuro);
+        font-family: 'Lora', serif;
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .pedido-plato h3 i {
+        color: var(--dorado);
+        margin-right: 8px;
+    }
+
+    /* INGREDIENTES ELEGIDOS */
+
+    .pedido-detalle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 1px solid #eee0ce;
+        padding: 13px 0;
+    }
+
+    .pedido-detalle:last-child {
+        border-bottom: none;
+    }
+
+    .pedido-detalle span {
+        color: #766354;
+        font-size: 14px;
+    }
+
+    .pedido-detalle strong {
+        color: var(--cafe-oscuro);
+        font-size: 15px;
+        text-align: right;
+    }
+
+    /* PRECIO */
+
+    .pedido-total {
+        background: #f8edd7;
+        padding: 22px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .pedido-total span {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--cafe-oscuro);
+    }
+
+    .pedido-total strong {
+        color: #5c2e0e;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    /* MENSAJE INFORMATIVO */
+
+    .pedido-aviso {
+        background: #fdf8ef;
+        border-left: 4px solid var(--dorado);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 28px;
+        color: #6a5541;
+        font-size: 14px;
+    }
+
+    .pedido-aviso i {
+        color: #b47b32;
+        margin-right: 6px;
+    }
+
+    /* BOTONES */
+
+    .pedido-botones {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .btn-pedido {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 13px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-volver {
+        background: #f0e4d3;
+        color: var(--cafe-oscuro);
+        border: 1px solid #dac4a7;
+    }
+
+    .btn-volver:hover {
+        background: #e5d4bd;
+    }
+
+    .btn-menu {
+        background: var(--dorado);
+        color: var(--cafe-oscuro);
+        border: 1px solid var(--dorado);
+    }
+
+    .btn-menu:hover {
+        background: #e0a314;
+        transform: translateY(-2px);
+    }
+
+    /* RESPONSIVO */
+
+    @media (max-width: 600px) {
+
+        .pedido-contenedor {
+            width: 95%;
+            margin: 25px auto;
+        }
+
+        .pedido-contenido {
+            padding: 22px 17px;
+        }
+
+        .pedido-numero {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .pedido-detalle {
+            align-items: flex-start;
+        }
+
+        .pedido-total strong {
+            font-size: 21px;
+        }
+
+        .pedido-botones {
+            flex-direction: column;
+        }
+
+        .btn-pedido {
+            width: 100%;
+        }
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block contenido %}
+
+<div class="pedido-contenedor">
+
+    <!-- ENCABEZADO DEL PEDIDO -->
+
+    <div class="pedido-encabezado">
+
+        <div class="pedido-icono">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <h2>¡Pedido guardado!</h2>
+
+        <p>
+            Tu almuerzo personalizado ha sido registrado correctamente.
+        </p>
+
+    </div>
+
+
+    <!-- CONTENIDO DEL PEDIDO -->
+
+    <div class="pedido-contenido">
+
+        <!-- NUMERO Y ESTADO -->
+
+        <div class="pedido-numero">
+
+            <strong>
+                Pedido #{{ pedido.id }}
+            </strong>
+
+            <span class="pedido-estado {% if pedido.estado == 'confirmado' %}confirmado{% elif pedido.estado == 'cancelado' %}cancelado{% endif %}">
+                {{ pedido.get_estado_display }}
+            </span>
+
+        </div>
+
+
+        <!-- PLATO PERSONALIZADO -->
+
+        <div class="pedido-plato">
+
+            <h3>
+                <i class="fa-solid fa-utensils"></i>
+                {{ pedido.nombre_plato }}
+            </h3>
+
+
+            <div class="pedido-detalle">
+
+                <span>
+                    <i class="fa-solid fa-drumstick-bite"></i>
+                    Proteína
+                </span>
+
+                <strong>
+                    {{ pedido.proteina }}
+                </strong>
+
+            </div>
+
+
+            <div class="pedido-detalle">
+
+                <span>
+                    <i class="fa-solid fa-bowl-food"></i>
+                    Principio
+                </span>
+
+                <strong>
+                    {{ pedido.principio }}
+                </strong>
+
+            </div>
+
+
+            <div class="pedido-detalle">
+
+                <span>
+                    <i class="fa-solid fa-plate-wheat"></i>
+                    Acompañamiento
+                </span>
+
+                <strong>
+                    {{ pedido.acompanamiento }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRECIO TOTAL -->
+
+        <div class="pedido-total">
+
+            <span>
+                Total del almuerzo
+            </span>
+
+            <strong>
+                ${{ pedido.precio|cop }}
+            </strong>
+
+        </div>
+
+
+        <!-- AVISO -->
+
+        <div class="pedido-aviso">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            Tu pedido fue guardado y se encuentra
+            <strong>pendiente de confirmación</strong>.
+            El registro del pedido no significa que el pago
+            se haya realizado.
+
+        </div>
+
+
+        <!-- BOTONES -->
+
+
+<!-- BOTONES DEL PEDIDO -->
+
+<div class="pedido-botones">
+
+    <a href="{% url 'menu' %}"
+       class="btn-pedido btn-volver">
+
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver al menú
+
+    </a>
+
+    <a href="{{ whatsapp_url }}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="btn-pedido btn-whatsapp">
+
+        <i class="fa-brands fa-whatsapp"></i>
+        Enviar pedido por WhatsApp
+
+    </a>
+
+</div>
+
+
+       
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Plato(models.Model):
@@ -8,7 +9,12 @@ class Plato(models.Model):
         ('plato_fuerte', 'Plato fuerte'),
         ('postre', 'Postre'),
         ('bebida', 'Bebida'),
+        
     ]
+    
+    personalizable = models.BooleanField(
+        default=False, 
+        verbose_name="¿Permitir personalizar almuerzo?")
 
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
@@ -112,7 +118,7 @@ class Resena(models.Model):
 
     comentario = models.TextField()
     
-    # 👇 ESTA ES LA LÍNEA NUEVA QUE AGREGAMOS 👇
+    
     respuesta_admin = models.TextField(blank=True, null=True, verbose_name="Respuesta del Administrador")
 
     fecha = models.DateTimeField(auto_now_add=True)
@@ -123,3 +129,72 @@ class Resena(models.Model):
 
     def __str__(self):
         return f"Reseña de {self.usuario.username} - {self.plato.nombre}"
+    
+class OpcionesAlmuerzo(models.Model):
+    plato = models.OneToOneField(
+        'Plato',
+        on_delete=models.CASCADE,
+        related_name='configuracion_cuadros'
+    )
+
+    proteinas = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    principios = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    acompanamientos = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    def __str__(self):
+        return f'Opciones de {self.plato.nombre}'
+
+
+class PedidoConEleccion(models.Model):
+
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('confirmado', 'Confirmado'),
+        ('cancelado', 'Cancelado'),
+    ]
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    plato = models.ForeignKey(
+        'Plato',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    nombre_plato = models.CharField(max_length=200)
+    proteina = models.CharField(max_length=80)
+    principio = models.CharField(max_length=80)
+    acompanamiento = models.CharField(max_length=80)
+
+    precio = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    estado = models.CharField(
+        max_length=12,
+        choices=ESTADOS,
+        default='pendiente'
+    )
+
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Pedido #{self.pk} - {self.nombre_plato}'

@@ -1,160 +1,757 @@
+
 {% extends 'base.html' %}
+{% load currency_filters %}
 {% load static %}
 
-{% block titulo %}Platos | Las Ricuras de la Abuela Lola{% endblock %}
+{% block titulo %}Menú | Ricuras de la Abuela Lola{% endblock %}
 
-{% block contenido %}
-<div class="contenedor-platos">
-    <style>
-        .contenedor-platos { width: 100%; }
-        .contenedor-platos .titulo { text-align: center; margin-bottom: 35px; margin-top: 20px; }
-        .contenedor-platos .titulo h2 { color: #5c2e0e; font-size: 36px; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 12px; border-bottom: none; }
-        .contenedor-platos .titulo h2 i { color: #d4a24c; font-size: 32px; }
-        .contenedor-platos .titulo p { color: #8b4513; font-size: 16px; font-style: italic; }
-        .contenedor-platos .linea { width: 100px; height: 4px; background: #d4a24c; margin: 15px auto 0; border-radius: 10px; }
-        
-        .contenedor-platos .acciones { display: flex; justify-content: flex-end; margin-bottom: 30px; }
-        .contenedor-platos .btn-agregar {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, #8b4513, #5c2e0e);
-            color: white !important; padding: 12px 24px; border-radius: 25px;
-            text-decoration: none; font-weight: 700;
-            box-shadow: 0 4px 12px rgba(92, 46, 14, 0.35); transition: 0.3s;
+{% block extra_css %}
+<style>
+
+    /* BOTONES EDITAR Y ELIMINAR */
+
+    .acciones-admin {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #f0e6d6;
+    }
+
+    .acciones-admin a {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-editar-plato {
+        background: #f8ecd4;
+        border: 1px solid #d4a24c;
+        color: var(--cafe-oscuro);
+    }
+
+    .btn-editar-plato:hover {
+        background: #eddbb5;
+    }
+
+    .btn-eliminar-plato {
+        background: #fff1f0;
+        border: 1px solid #dca5a0;
+        color: #a22b21;
+    }
+
+    .btn-eliminar-plato:hover {
+        background: #f9dcda;
+    }
+
+
+    /* --- CABECERA DEL MENÚ --- */
+
+    .titulo-menu {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .titulo-menu h2 {
+        font-family: 'Caveat', cursive;
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        color: var(--cafe-oscuro);
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .titulo-menu h2 i {
+        color: var(--dorado);
+        font-size: 0.8em;
+    }
+
+    .titulo-menu p {
+        color: var(--cafe-medio);
+        max-width: 600px;
+        margin: 10px auto;
+        font-size: 1.1rem;
+    }
+
+    .linea {
+        width: 80px;
+        height: 3px;
+        background: var(--dorado);
+        margin: 15px auto;
+        border-radius: 3px;
+    }
+
+
+    /* --- FILTROS (BOTONES) --- */
+
+    .filtros-categoria {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+    }
+
+    .filtros-categoria .btn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+        border-radius: 30px;
+        border: 1.5px solid #e8d5b5;
+        background: var(--blanco);
+        color: var(--cafe-medio);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0;
+    }
+
+    .filtros-categoria .btn.activo {
+        background: var(--dorado);
+        border-color: var(--dorado);
+        color: var(--cafe-oscuro) !important;
+        box-shadow: 0 4px 10px rgba(244, 180, 26, 0.3);
+        transform: translateY(-2px);
+    }
+
+
+    /* BOTÓN AGREGAR PLATO */
+
+    .contenedor-agregar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin: 25px 0;
+    }
+
+    .btn-agregar-plato {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: var(--dorado);
+        color: var(--cafe-oscuro);
+        padding: 12px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 1.4;
+        transition: 0.3s;
+    }
+
+    .btn-agregar-plato i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        line-height: 1;
+        position: relative;
+        top: 1px;
+    }
+
+    .btn-agregar-plato:hover {
+        background: #e0a314;
+        transform: translateY(-2px);
+    }
+
+
+    /* --- CUADRÍCULA DE PLATOS (GRID) --- */
+
+    .platos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        padding-bottom: 40px;
+    }
+
+
+    /* --- TARJETA DEL PLATO --- */
+
+    .plato-card {
+        background: var(--blanco);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(59, 29, 11, 0.06);
+        border: 1px solid #f0e6d6;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .plato-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(59, 29, 11, 0.12);
+    }
+
+    .plato-card.no-disponible-card {
+        opacity: 0.7;
+        filter: grayscale(80%);
+    }
+
+
+    /* Imagen del plato */
+
+    .imagen-plato {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        background: #f0e6d6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .imagen-plato img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .plato-card:hover .imagen-plato img {
+        transform: scale(1.08);
+    }
+
+    .etiqueta-agotado {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #c62828;
+        color: white;
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+
+    /* Información del plato */
+
+    .plato-info {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .plato-header-lista {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+        gap: 10px;
+    }
+
+    .plato-info h3 {
+        color: var(--cafe-oscuro);
+        font-family: 'Lora', serif;
+        font-size: 1.4rem;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .categoria-tag {
+        font-size: 0.7rem;
+        color: var(--cafe-medio);
+        background: #f5e6d3;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .precio {
+        color: var(--cafe-oscuro);
+        font-size: 1.4rem;
+        font-weight: 700;
+        white-space: nowrap;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .descripcion {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex: 1;
+    }
+
+
+    /* Footer de la tarjeta */
+
+    .plato-footer-lista {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 15px;
+        border-top: 1px dashed #e8d5b5;
+        gap: 10px;
+    }
+
+    .disponible, .no-disponible {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+    }
+
+    .disponible {
+        color: #166534;
+        background: #dcfce7;
+    }
+
+    .no-disponible {
+        color: #991b1b;
+        background: #fee2e2;
+    }
+
+    .acciones-plato {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .acciones-plato .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        margin: 0;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+    }
+
+
+    /* Botones específicos */
+
+    .btn-ver {
+        background: transparent;
+        border: 1.5px solid var(--cafe-medio);
+        color: var(--cafe-medio);
+    }
+
+    .btn-ver:hover {
+        background: var(--crema);
+    }
+
+    .btn-pedir {
+        background: var(--cafe-oscuro);
+        color: white !important;
+        border: 1.5px solid var(--cafe-oscuro);
+    }
+
+    .btn-pedir:hover {
+        background: var(--cafe-medio);
+        border-color: var(--cafe-medio);
+        transform: translateY(-2px);
+    }
+
+
+    /* Estado vacío */
+
+    .sin-platos {
+        text-align: center;
+        padding: 50px 20px;
+        background: var(--blanco);
+        border: 1px dashed var(--dorado);
+        border-radius: 15px;
+        grid-column: 1 / -1;
+    }
+
+    .icono-vacio {
+        font-size: 50px;
+        color: var(--dorado);
+        margin-bottom: 15px;
+    }
+
+
+    /* --- RESPONSIVO CELULAR --- */
+
+    @media (max-width: 768px) {
+        .platos-grid {
+            grid-template-columns: 1fr;
         }
-        .contenedor-platos .btn-agregar:hover { background: linear-gradient(135deg, #d4a24c, #b8860b); color: #5c2e0e !important; transform: translateY(-2px); }
-        
-        .contenedor-platos .platos-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 30px; 
+
+        .imagen-plato {
+            height: 200px;
+        }
+
+        .plato-footer-lista {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .acciones-plato {
             width: 100%;
         }
-        .contenedor-platos .plato-card {
-            background: #fffaf3; border-radius: 16px; overflow: hidden; border: 1px solid #ead8bd;
-            box-shadow: 0 6px 18px rgba(92, 46, 14, 0.15); transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex; flex-direction: column; text-align: left; height: 100%;
+
+        .acciones-plato .btn {
+            flex: 1;
+            justify-content: center;
         }
-        .contenedor-platos .plato-card:hover { transform: translateY(-7px); box-shadow: 0 12px 25px rgba(92, 46, 14, 0.25); }
-        
-        .contenedor-platos .imagen-container { width: 100%; height: 220px; background: #f0e6d6; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .contenedor-platos .plato-imagen { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-        .contenedor-platos .sin-imagen { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-size: 65px; color: #8b4513; background: linear-gradient(135deg, #ead8bd, #f5efe6); }
-        
-        .contenedor-platos .plato-info { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-        .contenedor-platos .plato-info h3 { color: #5c2e0e; font-size: 22px; margin-bottom: 8px; margin-top: 0; font-weight: 700; }
-        
-        .contenedor-platos .descripcion { 
-            color: #5f5146; font-size: 14px; margin-bottom: 15px; flex: 1; line-height: 1.6; text-align: left; 
-            display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; 
-        }
-        
-        .contenedor-platos .precio { color: #8b4513; font-size: 22px; font-weight: 700; margin-bottom: 12px; }
-        
-        .contenedor-platos .disponible, .contenedor-platos .no-disponible { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 18px; text-transform: uppercase; }
-        .contenedor-platos .disponible { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-        .contenedor-platos .no-disponible { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
-        
-        .contenedor-platos .botones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
-        
-        .contenedor-platos .btn { 
-            display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 25px; 
-            text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.3s; border: none; 
-        }
-        
-        .contenedor-platos .btn-ver { background: #8b4513; color: white !important; }
-        .contenedor-platos .btn-ver:hover { background: #d4a24c; color: #5c2e0e !important; transform: translateY(-2px); }
-        
-        .contenedor-platos .btn-editar { background: transparent; border: 2px solid #ead8bd; color: #5c2e0e !important; }
-        .contenedor-platos .btn-editar:hover { background: #ead8bd; border-color: #d4a24c; transform: translateY(-2px); }
-        
-        .contenedor-platos .btn-eliminar { background: transparent; border: 2px solid #f1d5d0; color: #8b2d23 !important; }
-        .contenedor-platos .btn-eliminar:hover { background: #c85c4d; border-color: #c85c4d; color: white !important; transform: translateY(-2px); }
-        
-        .contenedor-platos .sin-platos { text-align: center; padding: 70px 20px; color: #8b4513; }
-        .contenedor-platos .sin-platos .icono { font-size: 60px; margin-bottom: 15px; color: #d4a24c; }
-        .contenedor-platos .sin-platos h3 { color: #5c2e0e; font-size: 25px; margin-bottom: 10px; border-bottom: none; }
-    </style>
+    }
 
-    <div class="titulo">
-        <h2>
-            <i class="fa-solid fa-utensils"></i>
-            Nuestros Platos
-        </h2>
-        <p>Descubre los sabores caseros de la Abuela Lola</p>
-        <div class="linea"></div>
-    </div>
+</style>
+{% endblock %}
 
-    {% if user.is_staff %}
-    <div class="acciones">
-        <a href="{% url 'crear_plato' %}" class="btn-agregar">
-            <i class="fa-solid fa-plus"></i>
-            Agregar plato
-        </a>
-    </div>
-    {% endif %}
 
-    {% if platos %}
-        <div class="platos-container">
-            {% for plato in platos %}
-                <div class="plato-card">
-                    <div class="imagen-container">
-                        {% if plato.imagen %}
-                            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
-                        {% else %}
-                            <div class="sin-imagen">
-                                <i class="fa-solid fa-utensils"></i>
-                            </div>
-                        {% endif %}
-                    </div>
+{% block contenido %}
 
-                    <div class="plato-info">
-                        <h3>{{ plato.nombre }}</h3>
-                        <p class="descripcion">{{ plato.descripcion|linebreaksbr }}</p>
-                        <p class="precio">${{ plato.precio|floatformat:0 }}</p>
+<section class="titulo-menu">
 
-                        {% if plato.disponible %}
-                            <span class="disponible">
-                                <i class="fa-solid fa-circle-check"></i> Disponible
-                            </span>
-                        {% else %}
-                            <span class="no-disponible">
-                                <i class="fa-solid fa-circle-xmark"></i> Agotado
-                            </span>
-                        {% endif %}
+    <h2>
+        <i class="fa-solid fa-utensils"></i>
+        Nuestro Menú
+    </h2>
 
-                        <div class="botones">
-                            <a href="{% url 'plato_detalle' plato.id %}" class="btn btn-ver">
-                                <i class="fa-solid fa-eye"></i> Ver
-                            </a>
-                            
-                            {% if user.is_staff %}
-                            <a href="{% url 'editar_plato' plato.id %}" class="btn btn-editar">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </a>
-                            <a href="{% url 'eliminar_plato' plato.id %}" class="btn btn-eliminar">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="sin-platos">
-            <div class="icono">
-                <i class="fa-solid fa-utensils"></i>
-            </div>
-            <h3>Todavía no hay platos registrados</h3>
-            <p>Agrega el primer plato de Ricuras de la Abuela Lola.</p>
-            
-            {% if user.is_staff %}
-            <a href="{% url 'crear_plato' %}" class="btn-agregar" style="margin: 0 auto;">
-                <i class="fa-solid fa-plus"></i> Agregar primer plato
-            </a>
-            {% endif %}
-        </div>
-    {% endif %}
-    
+    <div class="linea"></div>
+
+    <p>
+        Descubre los sabores tradicionales de nuestra cocina,
+        preparados con cariño y ese toque especial de la Abuela Lola.
+    </p>
+
+</section>
+
+
+<!-- FILTROS DE CATEGORÍAS -->
+
+<div class="filtros-categoria">
+
+    <button class="btn activo"
+            onclick="filtrarPlatos('todos', this)">
+        Todos
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('plato_fuerte', this)">
+        Platos Fuertes
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('entrada', this)">
+        Entradas
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('bebida', this)">
+        Bebidas
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('postre', this)">
+        Postres
+    </button>
+
 </div>
+
+
+<!-- BOTÓN AGREGAR PLATO -->
+
+{% if user.is_authenticated and user.is_staff %}
+
+<div class="contenedor-agregar">
+
+    <a href="{% url 'crear_plato' %}"
+       class="btn-agregar-plato">
+
+        <i class="fa-solid fa-plus"></i>
+        Agregar plato
+
+    </a>
+
+</div>
+
+{% endif %}
+
+
+<!-- LISTADO DE PLATOS -->
+
+{% if platos %}
+
+<div class="platos-grid">
+
+    {% for plato in platos %}
+
+    <article
+        class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}"
+        data-categoria="{{ plato.categoria }}"
+    >
+
+        <!-- IMAGEN -->
+
+        <div class="imagen-plato">
+
+            {% if plato.imagen %}
+
+                <img
+                    src="{{ plato.imagen.url }}"
+                    alt="{{ plato.nombre }}"
+                    loading="lazy"
+                >
+
+            {% else %}
+
+                <i class="fa-solid fa-utensils"
+                   style="font-size: 40px; color: #d4a24c;">
+                </i>
+
+            {% endif %}
+
+
+            {% if not plato.disponible %}
+
+                <div class="etiqueta-agotado">
+                    Agotado
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- INFORMACIÓN DEL PLATO -->
+
+        <div class="plato-info">
+
+            <div>
+
+                <span class="categoria-tag">
+                    {{ plato.get_categoria_display }}
+                </span>
+
+                <div class="plato-header-lista">
+
+                    <h3>
+                        {{ plato.nombre }}
+                    </h3>
+
+                    <span class="precio">
+                        ${{ plato.precio|cop }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPCIÓN -->
+
+            <p class="descripcion">
+                {{ plato.descripcion|default:"Delicioso plato preparado con el sabor tradicional de nuestra casa." }}
+            </p>
+
+
+            <!-- ESTADO Y BOTONES -->
+
+            <div class="plato-footer-lista">
+
+                {% if plato.disponible %}
+
+                    <span class="disponible">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Disponible
+                    </span>
+
+                {% else %}
+
+                    <span class="no-disponible">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Agotado
+                    </span>
+
+                {% endif %}
+
+
+                
+<div class="acciones-plato">
+
+    {% if request.user.is_authenticated and request.user.is_staff %}
+
+        <!-- ADMINISTRADOR: SOLO VER -->
+
+        <a href="{% url 'plato_detalle' plato.id %}"
+           class="btn btn-ver">
+
+            <i class="fa-solid fa-eye"></i>
+            Ver
+
+        </a>
+
+    {% else %}
+
+        <!-- CLIENTES -->
+
+        {% if plato.disponible %}
+
+            <a href="{% url 'plato_detalle' plato.id %}"
+               class="btn btn-ver">
+
+                <i class="fa-solid fa-eye"></i>
+                Ver
+
+            </a>
+
+            {% if plato.personalizable %}
+
+                <a href="{% url 'personalizar_almuerzo' plato.id %}"
+                   class="btn btn-pedir">
+
+                    <i class="fa-solid fa-sliders"></i>
+                    Personalizar
+
+                </a>
+
+            {% else %}
+
+                <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre|urlencode }}%20a%20domicilio"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-pedir">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+                    Pedir
+
+                </a>
+
+            {% endif %}
+
+        {% else %}
+
+            <span class="btn"
+                  style="opacity: 0.5; cursor: not-allowed; width: 100%; justify-content: center; background: #eee; color: #999 !important; border-color: #ddd;">
+
+                No disponible
+
+            </span>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+
+            </div>
+
+
+            <!-- BOTONES DE ADMINISTRACIÓN -->
+
+            {% if request.user.is_authenticated and request.user.is_staff %}
+
+            <div class="acciones-admin">
+
+                <a href="{% url 'editar_plato' plato.id %}"
+                   class="btn-editar-plato">
+
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Editar
+
+                </a>
+
+                <a href="{% url 'eliminar_plato' plato.id %}"
+                   class="btn-eliminar-plato">
+
+                    <i class="fa-solid fa-trash-can"></i>
+                    Eliminar
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </article>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="sin-platos">
+
+    <div class="icono-vacio">
+        <i class="fa-solid fa-utensils"></i>
+    </div>
+
+    <h3>No hay platos disponibles</h3>
+
+    <p>
+        En este momento no hay platos registrados en el menú.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+function filtrarPlatos(categoria, boton) {
+
+    // Cambiar el estado visual de los botones
+
+    document.querySelectorAll('.filtros-categoria .btn').forEach(btn => {
+        btn.classList.remove('activo');
+    });
+
+    boton.classList.add('activo');
+
+
+    // Filtrar las tarjetas
+
+    const platos = document.querySelectorAll('.plato-card');
+
+    platos.forEach(plato => {
+
+        const catPlato = plato.getAttribute('data-categoria');
+
+        if (categoria === 'todos' || catPlato === categoria) {
+
+            plato.style.display = 'flex';
+
+        } else {
+
+            plato.style.display = 'none';
+
+        }
+
+    });
+
+}
+
+</script>
+
 {% endblock %}

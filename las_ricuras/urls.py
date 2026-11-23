@@ -21,4 +21,6 @@ urlpatterns = [
     path('registrar-venta/', views.registrar_venta, name='registrar_venta'),
     path('ventas/exportar-excel/',views.exportar_ventas_excel, name='exportar_ventas_excel'),
     path('ventas/<int:venta_id>/excel/',views.descargar_venta_excel, name='descargar_venta_excel'),
+    path('platos/<int:id>/personalizar/',views.personalizar_almuerzo,name='personalizar_almuerzo'),
+    path('pedidos-personalizados/<int:id>/',views.pedido_personalizado,name='pedido_personalizado'),
 ]

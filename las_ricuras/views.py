@@ -1,3 +1,8 @@
+
+from django.core.signing import TimestampSigner, BadSignature
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from urllib.parse import urlencode
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -5,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Count, Avg
 from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 from datetime import datetime
@@ -15,6 +20,10 @@ from .forms import PlatoForm, ResenaForm
 from .decorators import solo_staff
 from decimal import Decimal, InvalidOperation
 from django.utils import timezone
+from .models import OpcionesAlmuerzo, PedidoConEleccion
+from .personalizacion_forms import (OpcionesAlmuerzoForm,ElegirAlmuerzoForm)
+from django.http import Http404
+from urllib.parse import quote
 
 
 def portada(request):
@@ -104,57 +113,128 @@ def plato_detalle(request, id):
 
 @solo_staff
 def crear_plato(request):
+
+    form = PlatoForm(
+        request.POST or None,
+        request.FILES or None
+    )
+
+    opciones_form = OpcionesAlmuerzoForm(
+        request.POST or None,
+        prefix='opciones'
+    )
+
     if request.method == 'POST':
-        form = PlatoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Plato creado correctamente.')
-            return redirect('Platos')
-    else:
-        form = PlatoForm()
-    return render(request, 'plato_form.html', {'form': form})
+
+        if form.is_valid() and opciones_form.is_valid():
+
+            if form.cleaned_data.get('personalizable'):
+
+                for campo in [
+                    'proteinas',
+                    'principios',
+                    'acompanamientos'
+                ]:
+                    if not opciones_form.cleaned_data[campo]:
+                        opciones_form.add_error(
+                            campo,
+                            'Selecciona al menos una opción.'
+                        )
+
+            if not opciones_form.errors:
+
+                plato = form.save()
+
+                opciones = opciones_form.save(commit=False)
+                opciones.plato = plato
+                opciones.save()
+
+                messages.success(
+                    request,
+                    'Plato creado correctamente.'
+                )
+
+                return redirect('Platos')
+
+        messages.error(
+            request,
+            'Revisa los campos del formulario.'
+        )
+
+    return render(request, 'plato_form.html', {
+        'form': form,
+        'opciones_form': opciones_form,
+        'titulo': 'Agregar plato',
+        'boton_texto': 'Guardar plato',
+    })
 
 
 
 @solo_staff
 def editar_plato(request, id):
+
     plato = get_object_or_404(Plato, id=id)
 
+    configuracion = OpcionesAlmuerzo.objects.filter(
+        plato=plato
+    ).first()
+
+    form = PlatoForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=plato
+    )
+
+    opciones_form = OpcionesAlmuerzoForm(
+        request.POST or None,
+        instance=configuracion,
+        prefix='opciones'
+    )
+
     if request.method == 'POST':
-        form = PlatoForm(
-            request.POST,
-            request.FILES,
-            instance=plato
-        )
 
-        if form.is_valid():
-            form.save()
+        if form.is_valid() and opciones_form.is_valid():
 
-            messages.success(
-                request,
-                f'El plato "{plato.nombre}" '
-                'se actualizó correctamente.'
-            )
+            if form.cleaned_data.get('personalizable'):
 
-            return redirect('Platos')
+                for campo in [
+                    'proteinas',
+                    'principios',
+                    'acompanamientos'
+                ]:
+                    if not opciones_form.cleaned_data[campo]:
+                        opciones_form.add_error(
+                            campo,
+                            'Selecciona al menos una opción.'
+                        )
+
+            if not opciones_form.errors:
+
+                form.save()
+
+                opciones = opciones_form.save(commit=False)
+                opciones.plato = plato
+                opciones.save()
+
+                messages.success(
+                    request,
+                    'Plato actualizado correctamente.'
+                )
+
+                return redirect('Platos')
 
         messages.error(
             request,
-            'No se pudo actualizar el plato. '
-            'Revisa los campos marcados.'
+            'Revisa los campos del formulario.'
         )
 
-    else:
-        form = PlatoForm(instance=plato)
-
-    contexto = {
+    return render(request, 'plato_form.html', {
         'form': form,
+        'opciones_form': opciones_form,
         'plato': plato,
-        'titulo': 'Editar producto',
+        'titulo': 'Editar plato',
         'boton_texto': 'Guardar cambios',
-    }
-
-    return render(request, 'plato_form.html', contexto)
+    })
 
 
 
@@ -357,7 +437,7 @@ def exportar_ventas_excel(request):
         ventas,
         "reporte_ventas.xlsx"
     )
-    
+
 @staff_member_required
 @require_GET
 def descargar_venta_excel(request, venta_id):
@@ -367,3 +447,187 @@ def descargar_venta_excel(request, venta_id):
         ventas,
         f"venta_{venta_id}.xlsx"
     )
+
+
+# PERSONALIZACIÓN DEL ALMUERZO
+# Esta vista permite pedidos sin iniciar sesión.
+
+def personalizar_almuerzo(request, id):
+
+    plato = get_object_or_404(
+        Plato,
+        id=id,
+        personalizable=True,
+        disponible=True
+    )
+
+    configuracion = OpcionesAlmuerzo.objects.filter(
+        plato=plato
+    ).first()
+
+    if not configuracion or not all([
+        configuracion.proteinas,
+        configuracion.principios,
+        configuracion.acompanamientos
+    ]):
+        messages.error(
+            request,
+            'Este almuerzo todavía no tiene opciones configuradas.'
+        )
+        return redirect('menu')
+
+    form = ElegirAlmuerzoForm(
+        request.POST or None,
+        configuracion=configuracion
+    )
+
+    if request.method == 'POST' and form.is_valid():
+        pedido = PedidoConEleccion.objects.create(
+            usuario=request.user if request.user.is_authenticated else None,
+            plato=plato,
+            nombre_plato=plato.nombre,
+            proteina=form.cleaned_data['proteina'],
+            principio=form.cleaned_data['principio'],
+            acompanamiento=form.cleaned_data['acompanamiento'],
+            precio=plato.precio
+        )
+
+        # Enlace seguro que permite consultar el pedido sin iniciar sesión
+        firmador = TimestampSigner(
+            salt='ricuras-pedido-personalizado'
+        )
+        token = firmador.sign(str(pedido.id))
+        url = reverse('pedido_personalizado', args=[pedido.id])
+        enlace = f"{url}?{urlencode({'token': token})}"
+
+        return HttpResponseRedirect(enlace)
+
+    return render(
+        request,
+        'personalizar_almuerzo.html',
+        {
+            'plato': plato,
+            'form': form
+        }
+    )
+
+
+# RESUMEN DEL PEDIDO PERSONALIZADO
+# El cliente puede entrar mediante su enlace seguro.
+
+def pedido_personalizado(request, id):
+
+    pedido = get_object_or_404(
+        PedidoConEleccion,
+        id=id
+    )
+
+    es_propietario = (
+        request.user.is_authenticated
+        and pedido.usuario_id == request.user.id
+    )
+
+    # Un visitante accede mediante el token firmado del enlace.
+    token = request.GET.get('token', '')
+    token_valido = False
+
+    if token:
+        firmador = TimestampSigner(
+            salt='ricuras-pedido-personalizado'
+        )
+        try:
+            id_firmado = firmador.unsign(
+                token,
+                max_age=7 * 24 * 60 * 60
+            )
+            token_valido = (id_firmado == str(pedido.id))
+        except BadSignature:
+            token_valido = False
+
+    if not es_propietario and not token_valido:
+        raise Http404('Pedido no encontrado')
+
+    precio_formateado = f"{pedido.precio:,.0f}".replace(',', '.')
+    cliente = (
+        pedido.usuario.username
+        if pedido.usuario_id
+        else 'Cliente invitado'
+    )
+
+    mensaje = (
+        "Hola, quiero realizar un pedido en "
+        "Ricuras de la Abuela Lola.\n\n"
+        f"Pedido #{pedido.id}\n"
+        f"Plato: {pedido.nombre_plato}\n\n"
+        "Mi almuerzo personalizado:\n"
+        f"Proteína: {pedido.proteina}\n"
+        f"Principio: {pedido.principio}\n"
+        f"Acompañamiento: {pedido.acompanamiento}\n\n"
+        f"Total: ${precio_formateado} COP\n"
+        f"Cliente: {cliente}\n\n"
+        "Quisiera confirmar mi pedido. ¡Gracias!"
+    )
+
+    numero_whatsapp = '573118299494'
+    whatsapp_url = (
+        f'https://wa.me/{numero_whatsapp}'
+        f'?text={quote(mensaje)}'
+    )
+
+    return render(
+        request,
+        'pedido_personalizado.html',
+        {
+            'pedido': pedido,
+            'whatsapp_url': whatsapp_url
+        }
+    )
+
+
+# PANEL ADMINISTRATIVO DE PEDIDOS PERSONALIZADOS
+
+@staff_member_required(login_url='login')
+def pedidos_recibidos(request):
+    pedidos = PedidoConEleccion.objects.select_related(
+        'usuario'
+    ).order_by('-fecha')
+
+    estados = PedidoConEleccion.ESTADOS
+    estado_actual = request.GET.get('estado', '')
+    estados_validos = [valor for valor, nombre in estados]
+
+    if estado_actual in estados_validos:
+        pedidos = pedidos.filter(estado=estado_actual)
+
+    return render(
+        request,
+        'pedidos_recibidos.html',
+        {
+            'pedidos': pedidos,
+            'estados': estados,
+            'estado_actual': estado_actual
+        }
+    )
+
+
+@staff_member_required(login_url='login')
+@require_POST
+def cambiar_estado_pedido(request, id):
+    pedido = get_object_or_404(PedidoConEleccion, id=id)
+    nuevo_estado = request.POST.get('estado', '')
+    estados_validos = [
+        valor for valor, nombre in PedidoConEleccion.ESTADOS
+    ]
+
+    if nuevo_estado not in estados_validos:
+        messages.error(request, 'El estado seleccionado no es válido.')
+        return redirect('pedidos_recibidos')
+
+    pedido.estado = nuevo_estado
+    pedido.save(update_fields=['estado'])
+
+    messages.success(
+        request,
+        f'Pedido #{pedido.id} actualizado a {pedido.get_estado_display()}.'
+    )
+    return redirect('pedidos_recibidos')

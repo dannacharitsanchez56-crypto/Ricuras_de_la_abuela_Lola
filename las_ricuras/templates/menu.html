@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load currency_filters %}
 {% load static %}
@@ -252,6 +253,7 @@
         border: 1.5px solid var(--cafe-medio);
         color: var(--cafe-medio);
     }
+
     .btn-ver:hover {
         background: var(--crema);
     }
@@ -261,6 +263,7 @@
         color: white !important;
         border: 1.5px solid var(--cafe-oscuro);
     }
+
     .btn-pedir:hover {
         background: var(--cafe-medio);
         border-color: var(--cafe-medio);
@@ -288,7 +291,7 @@
         .platos-grid {
             grid-template-columns: 1fr; /* Una columna en celular */
         }
-        
+
         .imagen-plato {
             height: 200px;
         }
@@ -310,120 +313,265 @@
 </style>
 {% endblock %}
 
+
 {% block contenido %}
 
 <section class="titulo-menu">
-    <h2><i class="fa-solid fa-utensils"></i> Nuestro Menú</h2>
+    <h2>
+        <i class="fa-solid fa-utensils"></i> Nuestro Menú
+    </h2>
+
     <div class="linea"></div>
-    <p>Descubre los sabores tradicionales de nuestra cocina, preparados con cariño y ese toque especial de la Abuela Lola.</p>
+
+    <p>
+        Descubre los sabores tradicionales de nuestra cocina,
+        preparados con cariño y ese toque especial de la Abuela Lola.
+    </p>
 </section>
 
+
+<!-- FILTROS DE CATEGORÍAS -->
+
 <div class="filtros-categoria">
-    <button class="btn activo" onclick="filtrarPlatos('todos', this)">Todos</button>
-    <button class="btn" onclick="filtrarPlatos('plato_fuerte', this)">Platos Fuertes</button>
-    <button class="btn" onclick="filtrarPlatos('entrada', this)">Entradas</button>
-    <button class="btn" onclick="filtrarPlatos('bebida', this)">Bebidas</button>
-    <button class="btn" onclick="filtrarPlatos('postre', this)">Postres</button>
+
+    <button class="btn activo"
+            onclick="filtrarPlatos('todos', this)">
+        Todos
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('plato_fuerte', this)">
+        Platos Fuertes
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('entrada', this)">
+        Entradas
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('bebida', this)">
+        Bebidas
+    </button>
+
+    <button class="btn"
+            onclick="filtrarPlatos('postre', this)">
+        Postres
+    </button>
+
 </div>
 
+
+<!-- LISTADO DE PLATOS -->
+
 {% if platos %}
+
     <div class="platos-grid">
+
         {% for plato in platos %}
+
             <!-- TARJETA VERTICAL -->
-            <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}" data-categoria="{{ plato.categoria }}">
-                
-                <!-- Imagen -->
+
+            <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}"
+                     data-categoria="{{ plato.categoria }}">
+
+                <!-- IMAGEN -->
+
                 <div class="imagen-plato">
+
                     {% if plato.imagen %}
-                        <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" loading="lazy">
+
+                        <img src="{{ plato.imagen.url }}"
+                             alt="{{ plato.nombre }}"
+                             loading="lazy">
+
                     {% else %}
-                        <i class="fa-solid fa-utensils" style="font-size: 40px; color: #d4a24c;"></i>
+
+                        <i class="fa-solid fa-utensils"
+                           style="font-size: 40px; color: #d4a24c;"></i>
+
                     {% endif %}
 
                     {% if not plato.disponible %}
                         <div class="etiqueta-agotado">Agotado</div>
                     {% endif %}
+
                 </div>
 
-                <!-- Información -->
+
+                <!-- INFORMACIÓN DEL PLATO -->
+
                 <div class="plato-info">
-                    
+
                     <div>
-                        <span class="categoria-tag">{{ plato.get_categoria_display }}</span>
-                        
+
+                        <span class="categoria-tag">
+                            {{ plato.get_categoria_display }}
+                        </span>
+
                         <div class="plato-header-lista">
+
                             <h3>{{ plato.nombre }}</h3>
-                            <span class="precio">${{ plato.precio|cop }}</span>
+
+                            <span class="precio">
+                                ${{ plato.precio|cop }}
+                            </span>
+
                         </div>
+
                     </div>
+
+
+                    <!-- DESCRIPCIÓN -->
 
                     <p class="descripcion">
                         {{ plato.descripcion|default:"Delicioso plato preparado con el sabor tradicional de nuestra casa." }}
                     </p>
 
-                    <!-- Botones y estado -->
+
+                    <!-- ESTADO Y BOTONES -->
+
                     <div class="plato-footer-lista">
-                        
+
                         {% if plato.disponible %}
-                            <span class="disponible"><i class="fa-solid fa-circle-check"></i> Disponible</span>
+
+                            <span class="disponible">
+                                <i class="fa-solid fa-circle-check"></i>
+                                Disponible
+                            </span>
+
                         {% else %}
-                            <span class="no-disponible"><i class="fa-solid fa-circle-xmark"></i> Agotado</span>
+
+                            <span class="no-disponible">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                Agotado
+                            </span>
+
                         {% endif %}
 
+
                         <div class="acciones-plato">
+
                             {% if plato.disponible %}
-                                <a href="{% url 'plato_detalle' plato.id %}" class="btn btn-ver">
-                                    <i class="fa-solid fa-eye"></i> Ver
+
+                                <!-- BOTÓN VER -->
+
+                                <a href="{% url 'plato_detalle' plato.id %}"
+                                   class="btn btn-ver">
+
+                                    <i class="fa-solid fa-eye"></i>
+                                    Ver
+
                                 </a>
-                                <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre }}%20a%20domicilio" target="_blank" class="btn btn-pedir">
-                                    <i class="fa-brands fa-whatsapp"></i> Pedir
-                                </a>
+
+
+                                <!-- ALMUERZO PERSONALIZABLE -->
+
+                                {% if plato.personalizable %}
+
+                                    <a href="{% url 'personalizar_almuerzo' plato.id %}"
+                                       class="btn btn-pedir">
+
+                                        <i class="fa-solid fa-sliders"></i>
+                                        Personalizar
+
+                                    </a>
+
+                                {% else %}
+
+                                    <!-- PLATOS FIJOS POR WHATSAPP -->
+
+                                    <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre|urlencode }}%20a%20domicilio"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="btn btn-pedir">
+
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                        Pedir
+
+                                    </a>
+
+                                {% endif %}
+
                             {% else %}
-                                <span class="btn" style="opacity: 0.5; cursor: not-allowed; width: 100%; justify-content: center; background: #eee; color: #999 !important; border-color: #ddd;">
+
+                                <span class="btn"
+                                      style="opacity: 0.5; cursor: not-allowed; width: 100%; justify-content: center; background: #eee; color: #999 !important; border-color: #ddd;">
+
                                     No disponible
+
                                 </span>
+
                             {% endif %}
+
                         </div>
+
                     </div>
 
                 </div>
+
             </article>
+
         {% endfor %}
+
     </div>
+
 {% else %}
+
     <div class="sin-platos">
+
         <div class="icono-vacio">
             <i class="fa-solid fa-utensils"></i>
         </div>
+
         <h3>No hay platos disponibles</h3>
-        <p>En este momento no hay platos registrados en el menú.</p>
+
+        <p>
+            En este momento no hay platos registrados en el menú.
+        </p>
+
     </div>
+
 {% endif %}
 
 {% endblock %}
 
+
 {% block extra_js %}
 <script>
+
 function filtrarPlatos(categoria, boton) {
+
     // 1. Cambiar el estado visual de los botones
+
     document.querySelectorAll('.filtros-categoria .btn').forEach(btn => {
         btn.classList.remove('activo');
     });
+
     boton.classList.add('activo');
 
+
     // 2. Filtrar las tarjetas
+
     const platos = document.querySelectorAll('.plato-card');
 
     platos.forEach(plato => {
+
         const catPlato = plato.getAttribute('data-categoria');
 
         if (categoria === 'todos' || catPlato === categoria) {
-            // Usamos 'flex' porque nuestras tarjetas son contenedores flex-column
-            plato.style.display = 'flex'; 
+
+            plato.style.display = 'flex';
+
         } else {
+
             plato.style.display = 'none';
+
         }
+
     });
+
 }
+
 </script>
 {% endblock %}

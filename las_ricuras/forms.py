@@ -1,3 +1,4 @@
+
 from django import forms
 from .models import Plato, Resena
 
@@ -14,6 +15,7 @@ class PlatoForm(forms.ModelForm):
             'categoria',
             'imagen',
             'disponible',
+            'personalizable',
         ]
 
         labels = {
@@ -23,6 +25,7 @@ class PlatoForm(forms.ModelForm):
             'categoria': 'Categoría',
             'imagen': 'Imagen del plato',
             'disponible': 'Disponible',
+            'personalizable': 'Permitir personalizar almuerzo',
         }
 
         widgets = {
@@ -39,8 +42,11 @@ class PlatoForm(forms.ModelForm):
             'categoria': forms.Select(attrs={
                 'class': 'form-control'
             }),
-        }
 
+            'personalizable': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
 
 
 class ResenaForm(forms.ModelForm):

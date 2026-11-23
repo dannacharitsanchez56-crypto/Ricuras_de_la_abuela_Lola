@@ -1,0 +1,404 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load currency_filters %}
+
+{% block titulo %}
+Personalizar almuerzo | Ricuras de la Abuela Lola
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    /* CONTENEDOR GENERAL */
+
+    .personalizar-contenedor {
+        width: 90%;
+        max-width: 950px;
+        margin: 40px auto;
+        padding: 35px;
+        background: white;
+        border-radius: 18px;
+        border: 1px solid #ead8bd;
+        box-shadow: 0 8px 25px rgba(59, 29, 11, 0.08);
+    }
+
+    /* ENCABEZADO */
+
+    .personalizar-titulo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .personalizar-titulo h2 {
+        font-family: 'Caveat', cursive;
+        font-size: clamp(2.5rem, 5vw, 3.8rem);
+        color: var(--cafe-oscuro);
+    }
+
+    .personalizar-titulo h2 i {
+        color: var(--dorado);
+        margin-right: 10px;
+    }
+
+    .personalizar-titulo p {
+        color: var(--cafe-medio);
+        margin-top: 5px;
+    }
+
+    .linea-personalizar {
+        width: 85px;
+        height: 3px;
+        background: var(--dorado);
+        border-radius: 5px;
+        margin: 15px auto;
+    }
+
+    /* INFORMACION DEL PLATO */
+
+    .informacion-almuerzo {
+        background: #fff9ee;
+        border: 1px solid #ead8bd;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .informacion-almuerzo h3 {
+        color: var(--cafe-oscuro);
+        font-family: 'Lora', serif;
+        font-size: 23px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion-almuerzo {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .precio-almuerzo {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--cafe-oscuro);
+    }
+
+    .precio-almuerzo small {
+        display: block;
+        color: #888;
+        font-size: 13px;
+        font-weight: normal;
+        margin-top: 5px;
+    }
+
+    /* GRUPOS DE OPCIONES */
+
+    .grupo-personalizar {
+        margin-bottom: 30px;
+    }
+
+    .grupo-personalizar h3 {
+        color: var(--cafe-oscuro);
+        font-size: 19px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ead8bd;
+    }
+
+    .grupo-personalizar h3 i {
+        color: #b47b32;
+        margin-right: 8px;
+    }
+
+    /* CUADRITOS */
+
+    .opciones-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .opcion-cuadro {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .opcion-cuadro input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+    .opcion-cuadro span {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 55px;
+        background: #fffaf3;
+        border: 2px solid #e5d4bb;
+        border-radius: 10px;
+        padding: 14px;
+        color: var(--cafe-medio);
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    .opcion-cuadro span::before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        border: 2px solid #b7a48c;
+        border-radius: 50%;
+        background: white;
+    }
+
+    .opcion-cuadro:hover span {
+        background: #fff1d8;
+        border-color: var(--dorado);
+    }
+
+    .opcion-cuadro input:checked + span {
+        background: #f8e9ca;
+        border-color: #8b4513;
+        color: #5c2e0e;
+        font-weight: 700;
+    }
+
+    .opcion-cuadro input:checked + span::before {
+        background: #8b4513;
+        border-color: #8b4513;
+        box-shadow: inset 0 0 0 4px white;
+    }
+
+    .opcion-cuadro input:focus-visible + span {
+        outline: 3px solid var(--dorado);
+        outline-offset: 2px;
+    }
+
+    /* MENSAJES */
+
+    .error-personalizar {
+        color: #b42318;
+        background: #fff1f0;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    /* BOTONES */
+
+    .acciones-personalizar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-top: 35px;
+        padding-top: 25px;
+        border-top: 1px solid #ead8bd;
+    }
+
+    .btn-volver-almuerzo,
+    .btn-confirmar-almuerzo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 13px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 15px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-family: inherit;
+    }
+
+    .btn-volver-almuerzo {
+        background: #f2e8d8;
+        color: var(--cafe-oscuro);
+        border: 1px solid #d6c1a4;
+    }
+
+    .btn-confirmar-almuerzo {
+        background: var(--dorado);
+        color: var(--cafe-oscuro);
+        border: 1px solid var(--dorado);
+    }
+
+    .btn-volver-almuerzo:hover {
+        background: #e5d5bd;
+    }
+
+    .btn-confirmar-almuerzo:hover {
+        background: #e0a314;
+        transform: translateY(-2px);
+    }
+
+    /* RESPONSIVO */
+
+    @media (max-width: 600px) {
+
+        .personalizar-contenedor {
+            width: 95%;
+            padding: 20px 15px;
+            margin: 20px auto;
+        }
+
+        .opciones-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .acciones-personalizar {
+            flex-direction: column;
+        }
+
+        .btn-volver-almuerzo,
+        .btn-confirmar-almuerzo {
+            width: 100%;
+        }
+    }
+
+</style>
+{% endblock %}
+
+
+{% block contenido %}
+
+<div class="personalizar-contenedor">
+
+    <!-- TITULO -->
+
+    <div class="personalizar-titulo">
+
+        <h2>
+            <i class="fa-solid fa-utensils"></i>
+            Personaliza tu almuerzo
+        </h2>
+
+        <div class="linea-personalizar"></div>
+
+        <p>
+            Escoge tus ingredientes favoritos
+            y disfruta del sabor de la Abuela Lola.
+        </p>
+
+    </div>
+
+
+    <!-- INFORMACION DEL ALMUERZO -->
+
+    <div class="informacion-almuerzo">
+
+        <h3>{{ plato.nombre }}</h3>
+
+        <p class="descripcion-almuerzo">
+            {{ plato.descripcion }}
+        </p>
+
+        <div class="precio-almuerzo">
+            ${{ plato.precio|cop }}
+
+            <small>
+                Precio fijo del almuerzo
+            </small>
+        </div>
+
+    </div>
+
+
+    <!-- FORMULARIO DE PERSONALIZACION -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error-personalizar">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for campo in form %}
+
+            <div class="grupo-personalizar">
+
+                <h3>
+                    {% if campo.name == 'proteina' %}
+                        <i class="fa-solid fa-drumstick-bite"></i>
+                        Escoge tu proteína
+
+                    {% elif campo.name == 'principio' %}
+                        <i class="fa-solid fa-bowl-food"></i>
+                        Escoge tu principio
+
+                    {% elif campo.name == 'acompanamiento' %}
+                        <i class="fa-solid fa-plate-wheat"></i>
+                        Escoge tu acompañamiento
+
+                    {% else %}
+                        {{ campo.label }}
+                    {% endif %}
+                </h3>
+
+                <div class="opciones-grid">
+
+                    {% for opcion in campo %}
+
+                        <label class="opcion-cuadro">
+
+                            {{ opcion.tag }}
+
+                            <span>
+                                {{ opcion.choice_label }}
+                            </span>
+
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+
+                {% for error in campo.errors %}
+                    <div class="error-personalizar">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+
+        <!-- BOTONES -->
+
+        <div class="acciones-personalizar">
+
+            <a href="{% url 'menu' %}"
+               class="btn-volver-almuerzo">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver al menú
+
+            </a>
+
+            <button type="submit"
+                    class="btn-confirmar-almuerzo">
+
+                <i class="fa-solid fa-circle-check"></i>
+                Guardar mi pedido
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
