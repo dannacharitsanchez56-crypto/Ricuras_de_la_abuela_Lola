@@ -1,86 +1,133 @@
+
 {% extends 'base.html' %}
 {% load static %}
+
 {% block titulo %}{{ plato.nombre }} | Ricuras de la Abuela Lola{% endblock %}
 
 {% block extra_css %}
 <style>
+    .detalle-contenedor {
+        max-width: 790px;
+        margin: 22px auto;
+        padding: 0 15px;
+    }
+
     .detalle-card {
         background: #fffdf9;
-        border: 1px solid #e6dac7;
-        border-radius: 12px;
+        border: 1px solid #e8ddce;
+        border-radius: 14px;
         overflow: hidden;
+        box-shadow: 0 5px 20px rgba(70, 39, 18, .07);
+    }
+
+    /* INFORMACIÓN PRINCIPAL */
+
+    .detalle-superior {
+        display: grid;
+        grid-template-columns: 175px 1fr;
+        gap: 24px;
+        padding: 20px;
+        align-items: start;
     }
 
     .imagen-container {
-        width: 100%;
-        height: 350px;
-        background: #ead8bd;
+        width: 155px;
+        height: 145px;
         position: relative;
+        background: #ead8bd;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 0 auto;
     }
 
     .plato-imagen {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
     }
 
     .sin-imagen {
         width: 100%;
         height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-size: 60px;
-        color: #8b4513;
-        opacity: 0.5;
+        gap: 8px;
+        color: #a77b53;
+        font-size: 35px;
+    }
+
+    .sin-imagen span {
+        font-size: 11px;
     }
 
     .etiqueta-destacada {
         position: absolute;
-        bottom: 15px;
-        left: 15px;
+        bottom: 7px;
+        left: 7px;
         background: #d4a24c;
-        color: #5c2e0e;
-        padding: 8px 20px;
-        font-size: 12px;
-        font-weight: 700;
-        border-radius: 25px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        color: #48250f;
+        padding: 6px 10px;
+        font-size: 9px;
+        font-weight: 800;
+        border-radius: 20px;
     }
 
     .informacion {
-        padding: 30px;
+        min-width: 0;
+    }
+
+    .subtitulo-detalle {
+        color: #b1844d;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 6px;
     }
 
     .titulo-plato {
-        color: #5c2e0e;
-        font-size: 32px;
-        margin-bottom: 5px;
+        color: #542b13;
+        font-size: 25px;
         line-height: 1.2;
-        border: none;
+        margin: 0 0 7px;
         padding: 0;
+        border: none;
+    }
+
+    .calificacion {
+        color: #d4a24c;
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    .calificacion span {
+        color: #888;
+        font-size: 11px;
     }
 
     .precio-disponibilidad {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
     }
 
     .precio {
         color: #8b4513;
-        font-size: 28px;
-        font-weight: 700;
+        font-size: 24px;
+        font-weight: 800;
     }
 
-    .disponible, .no-disponible {
-        font-size: 12px;
+    .disponible,
+    .no-disponible {
+        font-size: 10px;
         font-weight: 700;
-        padding: 8px 20px;
-        border-radius: 25px;
+        padding: 7px 11px;
+        border-radius: 20px;
         display: inline-flex;
         align-items: center;
         gap: 5px;
@@ -98,11 +145,16 @@
         border: 1px solid #ffcdd2;
     }
 
+    .separador {
+        border-bottom: 1px solid #eadfce;
+        margin: 10px 0;
+    }
+
     .descripcion {
-        color: #5f5146;
-        font-size: 16px;
+        color: #655548;
+        font-size: 13px;
         line-height: 1.6;
-        margin-bottom: 20px;
+        margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
@@ -117,58 +169,58 @@
         background: none;
         border: none;
         color: #8b4513;
-        font-weight: bold;
+        font-weight: 700;
         cursor: pointer;
-        font-size: 14px;
-        margin-bottom: 25px;
-        display: block;
-        font-family: inherit;
+        font-size: 11px;
+        padding: 5px 0;
         text-decoration: underline;
     }
 
-    .separador {
-        border-bottom: 2px dashed #e6dac7;
-        margin: 15px 0 25px;
-    }
+    /* CANTIDAD Y TOTAL */
 
     .caja-pedido {
-        background: #f8f4ec;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #e6dac7;
-        margin-bottom: 20px;
+        background: #f8f3eb;
+        padding: 10px 12px;
+        border-radius: 9px;
+        border: 1px solid #e8ddce;
+        margin: 10px 0;
     }
 
     .fila-cantidad {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        gap: 10px;
+        margin-bottom: 7px;
     }
 
     .fila-cantidad:last-child {
         margin-bottom: 0;
     }
 
+    .total-label {
+        color: #655548;
+        font-size: 12px;
+    }
+
     .selector-cantidad {
         display: flex;
         align-items: center;
         background: white;
-        border: 1px solid #ccc;
+        border: 1px solid #dfd2c0;
         border-radius: 6px;
         overflow: hidden;
     }
 
     .btn-cantidad {
-        background: #fffdf9;
+        background: white;
         border: none;
         color: #5c2e0e;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: bold;
-        width: 35px;
-        height: 35px;
+        width: 29px;
+        height: 28px;
         cursor: pointer;
-        transition: 0.2s;
     }
 
     .btn-cantidad:hover {
@@ -176,60 +228,195 @@
     }
 
     #cantidad-numero {
-        width: 40px;
+        min-width: 28px;
         text-align: center;
         font-weight: bold;
-        font-size: 16px;
-        border-left: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-        line-height: 35px;
-    }
-
-    .total-label {
-        font-size: 16px;
-        color: #5f5146;
+        font-size: 12px;
+        border-left: 1px solid #dfd2c0;
+        border-right: 1px solid #dfd2c0;
+        line-height: 28px;
     }
 
     .total-precio {
-        font-size: 20px;
-        font-weight: bold;
         color: #8b4513;
+        font-size: 17px;
+        font-weight: 800;
     }
+
+    /* BOTONES */
 
     .acciones {
         display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
     }
 
     .acciones .btn {
         flex: 1;
         margin: 0;
-        padding: 14px 20px;
-        font-size: 16px;
+        padding: 10px 12px;
+        text-align: center;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
     }
 
     .acciones .btn-whatsapp {
-        background-color: #25D366;
+        background: #25D366;
         color: white;
         border: none;
     }
 
     .acciones .btn-whatsapp:hover {
-        background-color: #128C7E;
+        background: #128C7E;
+        color: white;
+    }
+
+    .btn-volver {
+        background: #f3eadc;
+        color: #5c2e0e;
+        border: 1px solid #e5d4bd;
+    }
+
+    .btn-volver:hover {
+        background: #ead8bd;
+    }
+
+    /* RESEÑAS */
+
+    .seccion-resenas {
+        padding: 18px 20px;
+        border-top: 1px solid #eadfce;
+    }
+
+    .titulo-resenas {
+        color: #542b13;
+        font-size: 19px;
+        margin: 0 0 5px;
+    }
+
+    .texto-resenas {
+        color: #897969;
+        font-size: 11px;
+        margin: 0 0 15px;
+    }
+
+    .resena-card {
+        background: #fffaf2;
+        border: 1px solid #ead8bd;
+        border-left: 4px solid #d4a24c;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .resena-cabecera {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 7px;
+    }
+
+    .usuario-resena {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .avatar-resena {
+        width: 32px;
+        height: 32px;
+        background: #ead8bd;
+        color: #5c2e0e;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .nombre-resena {
+        color: #5c2e0e;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .estrellas-resena {
+        color: #d4a24c;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .comentario-resena {
+        margin: 0 0 6px 41px;
+        font-size: 12px;
+        color: #51473f;
+        line-height: 1.5;
+    }
+
+    .fecha-resena {
+        color: #999;
+        font-size: 10px;
+        margin-left: 41px;
+    }
+
+    .btn-borrar-resena {
+        color: #c62828;
+        background: #ffebee;
+        padding: 6px 9px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .sin-resenas {
+        text-align: center;
+        padding: 16px;
+        background: #f8f4ec;
+        border-radius: 8px;
+        border: 1px dashed #d4a24c;
+        color: #777;
+        font-size: 12px;
+    }
+
+    /* FORMULARIO */
+
+    .form-resena {
+        margin-top: 15px;
+        background: #f8f4ec;
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e6dac7;
+    }
+
+    .form-resena h4 {
+        color: #5c2e0e;
+        margin: 0 0 12px;
+        font-size: 16px;
     }
 
     .resena-form textarea {
         width: 100%;
+        min-height: 75px;
         padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+        border: 1px solid #d9cbb8;
+        border-radius: 7px;
         font-family: inherit;
-        margin-top: 5px;
+        margin-top: 6px;
         margin-bottom: 10px;
+        resize: vertical;
+        box-sizing: border-box;
     }
 
-    /* Estrellas CSS */
+    .resena-form textarea:focus {
+        outline: none;
+        border-color: #b1844d;
+    }
+
     .stars {
         display: flex;
         flex-direction: row-reverse;
@@ -243,9 +430,9 @@
 
     .stars label {
         color: #ccc;
-        font-size: 26px;
+        font-size: 23px;
         cursor: pointer;
-        transition: color 0.2s;
+        transition: color .2s;
     }
 
     .stars input:checked ~ label,
@@ -254,218 +441,456 @@
         color: #d4a24c;
     }
 
-    @media (max-width: 600px) {
-        .imagen-container { height: 250px; }
-        .informacion { padding: 20px; }
-        .titulo-plato { font-size: 26px; }
+    .btn-publicar {
+        background: #5c2e0e;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
-        .precio-disponibilidad {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
+    .btn-publicar:hover {
+        background: #8b4513;
+    }
+
+    .login-resena {
+        text-align: center;
+        font-size: 12px;
+        color: #655548;
+        margin: 0;
+    }
+
+    .login-resena a {
+        color: #8b4513;
+        font-weight: bold;
+    }
+
+    /* CELULARES */
+
+    @media (max-width: 600px) {
+        .detalle-contenedor {
+            margin: 15px auto;
+            padding: 0 10px;
         }
 
-        .acciones { flex-direction: column; }
+        .detalle-superior {
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .imagen-container {
+            width: 100%;
+            max-width: 230px;
+            height: 170px;
+        }
+
+        .informacion {
+            width: 100%;
+        }
+
+        .titulo-plato {
+            font-size: 23px;
+        }
+
+        .seccion-resenas {
+            padding: 15px;
+        }
+
+        .acciones {
+            flex-direction: column;
+        }
     }
 </style>
 {% endblock %}
 
 
 {% block contenido %}
-<div class="detalle-card">
 
-    <div class="imagen-container">
-        {% if plato.imagen %}
-            <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="plato-imagen">
-        {% else %}
-            <div class="sin-imagen"><i class="fa-solid fa-utensils"></i></div>
-        {% endif %}
+<div class="detalle-contenedor">
 
-        {% if plato.disponible %}
-            <div class="etiqueta-destacada">Hecho en casa</div>
-        {% endif %}
-    </div>
+    <div class="detalle-card">
 
-    <div class="informacion">
-        <h1 class="titulo-plato">{{ plato.nombre }}</h1>
+        <div class="detalle-superior">
 
-        <div style="margin-bottom: 15px; color: #d4a24c; font-size: 18px;">
-            {% if promedio %}
-                {% for i in "12345" %}
-                    {% if forloop.counter <= promedio %}★{% else %}☆{% endif %}
-                {% endfor %}
-                <span style="font-size: 14px; color: #666; margin-left: 5px;">
-                    ({{ promedio|floatformat:1 }} / 5)
-                </span>
-            {% else %}
-                <span style="font-size: 14px; color: #666;">Sin reseñas todavía</span>
-            {% endif %}
-        </div>
+            <!-- IMAGEN DEL PLATO -->
 
-        <div class="precio-disponibilidad">
-            <div class="precio" id="precio-base" data-precio="{{ plato.precio|floatformat:0 }}">
-                ${{ plato.precio|floatformat:0 }}
+            <div class="imagen-container">
+
+                {% if plato.imagen %}
+
+                    <img src="{{ plato.imagen.url }}"
+                         alt="{{ plato.nombre }}"
+                         class="plato-imagen">
+
+                {% else %}
+
+                    <div class="sin-imagen">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Imagen no disponible</span>
+                    </div>
+
+                {% endif %}
+
+                {% if plato.disponible %}
+                    <div class="etiqueta-destacada">
+                        Hecho en casa
+                    </div>
+                {% endif %}
+
             </div>
 
-            {% if plato.disponible %}
-                <span class="disponible">
-                    <i class="fa-solid fa-circle-check"></i> Disponible hoy
-                </span>
-            {% else %}
-                <span class="no-disponible">
-                    <i class="fa-solid fa-circle-xmark"></i> Agotado
-                </span>
-            {% endif %}
-        </div>
 
-        <div class="separador"></div>
+            <!-- INFORMACIÓN DEL PLATO -->
 
-        <p class="descripcion" id="texto-descripcion">
-            {{ plato.descripcion|linebreaksbr }}
-        </p>
+            <div class="informacion">
 
-        <button class="btn-leer-mas" onclick="toggleDescripcion()" id="btn-leer-mas">
-            Leer descripción completa
-        </button>
-
-        {% if plato.disponible %}
-        <div class="caja-pedido">
-            <div class="fila-cantidad">
-                <span class="total-label">Cantidad:</span>
-                <div class="selector-cantidad">
-                    <button type="button" class="btn-cantidad" onclick="cambiarCantidad(-1)">-</button>
-                    <span id="cantidad-numero">1</span>
-                    <button type="button" class="btn-cantidad" onclick="cambiarCantidad(1)">+</button>
+                <div class="subtitulo-detalle">
+                    Las Ricuras de la Abuela Lola
                 </div>
+
+                <h1 class="titulo-plato">
+                    {{ plato.nombre }}
+                </h1>
+
+                <div class="calificacion">
+
+                    {% if promedio %}
+
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= promedio %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+
+                        <span>
+                            ({{ promedio|floatformat:1 }} / 5)
+                        </span>
+
+                    {% else %}
+
+                        <span>Sin reseñas todavía</span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="precio-disponibilidad">
+
+                    <div class="precio"
+                         id="precio-base"
+                         data-precio="{{ plato.precio|floatformat:0 }}">
+                        ${{ plato.precio|floatformat:0 }}
+                    </div>
+
+                    {% if plato.disponible %}
+
+                        <span class="disponible">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Disponible hoy
+                        </span>
+
+                    {% else %}
+
+                        <span class="no-disponible">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            Agotado
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="separador"></div>
+
+
+                <p class="descripcion" id="texto-descripcion">
+                    {{ plato.descripcion|linebreaksbr }}
+                </p>
+
+                <button type="button"
+                        class="btn-leer-mas"
+                        onclick="toggleDescripcion()"
+                        id="btn-leer-mas">
+                    Leer descripción completa
+                </button>
+
+
+                {% if plato.disponible %}
+
+                    <div class="caja-pedido">
+
+                        <div class="fila-cantidad">
+
+                            <span class="total-label">Cantidad:</span>
+
+                            <div class="selector-cantidad">
+
+                                <button type="button"
+                                        class="btn-cantidad"
+                                        onclick="cambiarCantidad(-1)">
+                                    -
+                                </button>
+
+                                <span id="cantidad-numero">1</span>
+
+                                <button type="button"
+                                        class="btn-cantidad"
+                                        onclick="cambiarCantidad(1)">
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="fila-cantidad">
+
+                            <span class="total-label">Total a pagar:</span>
+
+                            <span class="total-precio" id="total-pagar">
+                                ${{ plato.precio|floatformat:0 }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="acciones">
+
+                    {% if plato.disponible %}
+
+                        <a href="#"
+                           id="btn-whatsapp"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            Pedir por WhatsApp
+                        </a>
+
+                    {% endif %}
+
+                    <a href="{% url 'Platos' %}" class="btn btn-volver">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Volver
+                    </a>
+
+                </div>
+
             </div>
 
-            <div class="fila-cantidad">
-                <span class="total-label">Total a pagar:</span>
-                <span class="total-precio" id="total-pagar">${{ plato.precio|floatformat:0 }}</span>
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="acciones">
-            {% if plato.disponible %}
-                <a href="#" id="btn-whatsapp" target="_blank" class="btn btn-whatsapp">
-                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
-                </a>
-            {% endif %}
-
-            <a href="{% url 'Platos' %}" class="btn">
-                <i class="fa-solid fa-arrow-left"></i> Volver
-            </a>
         </div>
 
-        <div style="margin-top: 40px; border-top: 2px dashed #e6dac7; padding-top: 20px;">
-            <h3 style="color: #5c2e0e; margin-bottom: 20px; font-size: 22px;">
+
+        <!-- OPINIONES DE LOS CLIENTES -->
+
+        <div class="seccion-resenas">
+
+            <h2 class="titulo-resenas">
                 Opiniones de los clientes
-            </h3>
+            </h2>
+
+            <p class="texto-resenas">
+                Conoce lo que opinan quienes han probado nuestros platos.
+            </p>
+
 
             {% for r in resenas %}
-                <div style="background: #fffdf9; border: 1px solid #ead8bd; border-left: 4px solid #d4a24c; padding: 15px 20px; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="width: 35px; height: 35px; background: #ead8bd; color: #5c2e0e; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">
+
+                <div class="resena-card">
+
+                    <div class="resena-cabecera">
+
+                        <div class="usuario-resena">
+
+                            <div class="avatar-resena">
                                 {{ r.usuario.username|first|upper }}
                             </div>
 
                             <div>
-                                <strong style="color: #5c2e0e; font-size: 15px;">
-                                    {{ r.usuario.username }}
-                                </strong>
 
-                                <div style="color: #d4a24c; font-size: 12px; letter-spacing: 1px; margin-top: 2px;">
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= r.estrellas %}★{% else %}☆{% endif %}
-                                    {% endfor %}
+                                <div class="nombre-resena">
+                                    {{ r.usuario.username }}
                                 </div>
+
+                                <div class="estrellas-resena">
+
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= r.estrellas %}
+                                            ★
+                                        {% else %}
+                                            ☆
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </div>
+
                             </div>
+
                         </div>
 
+
                         {% if user.is_staff %}
+
                             <a href="{% url 'eliminar_resena' r.id %}"
                                onclick="return confirm('¿Estás seguro de que quieres borrar esta reseña?');"
-                               style="color: #c62828; background: #ffebee; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 5px;">
-                                <i class="fa-solid fa-trash"></i> Borrar
+                               class="btn-borrar-resena">
+
+                                <i class="fa-solid fa-trash"></i>
+                                Borrar
+
                             </a>
+
                         {% endif %}
+
                     </div>
 
-                    <p style="margin: 0 0 10px 45px; font-size: 14px; color: #444;">
+
+                    <p class="comentario-resena">
                         {{ r.comentario }}
                     </p>
 
-                    <small style="color: #999; font-size: 11px; margin-left: 45px;">
+                    <small class="fecha-resena">
                         {{ r.fecha|date:"d \d\e F, Y" }}
                     </small>
+
                 </div>
+
             {% empty %}
-                <div style="text-align: center; padding: 20px; background: #f8f4ec; border-radius: 8px; border: 1px dashed #d4a24c;">
-                    <p style="color: #777; font-size: 14px; margin: 0;">
-                        Aún no hay opiniones. ¡Sé el primero en dejar la tuya!
-                    </p>
+
+                <div class="sin-resenas">
+                    Aún no hay opiniones. ¡Sé el primero en dejar la tuya!
                 </div>
+
             {% endfor %}
 
-            <div style="margin-top: 30px; background: #f8f4ec; padding: 25px; border-radius: 12px; border: 1px solid #e6dac7;">
+
+            <!-- FORMULARIO DE RESEÑAS -->
+
+            <div class="form-resena">
+
                 {% if user.is_authenticated %}
+
                     {% if mi_resena %}
-                        <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;">
-                            <i class="fa-solid fa-pen"></i> Edita tu opinión
+
+                        <h4>
+                            <i class="fa-solid fa-pen"></i>
+                            Edita tu opinión
                         </h4>
+
                     {% else %}
-                        <h4 style="color: #5c2e0e; margin-bottom: 15px; font-size: 18px;">
-                            <i class="fa-solid fa-comment-dots"></i> Deja tu opinión
+
+                        <h4>
+                            <i class="fa-solid fa-comment-dots"></i>
+                            Deja tu opinión
                         </h4>
+
                     {% endif %}
 
-                    <form method="POST" class="resena-form" style="display: flex; flex-direction: column; gap: 15px;">
+
+                    <form method="POST" class="resena-form">
+
                         {% csrf_token %}
 
                         <div>
-                            <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">
+
+                            <label style="font-weight:bold; color:#5c2e0e; display:block; margin-bottom:7px;">
                                 Calificación:
                             </label>
-                            
+
                             <div class="stars">
+
                                 {% for i in "54321" %}
-                                    <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}" {% if mi_resena.estrellas|stringformat:"s" == i %}checked{% endif %} required>
-                                    <label for="star{{ i }}"><i class="fa-solid fa-star"></i></label>
+
+                                    <input type="radio"
+                                           id="star{{ i }}"
+                                           name="estrellas"
+                                           value="{{ i }}"
+                                           {% if mi_resena.estrellas|stringformat:"s" == i %}checked{% endif %}
+                                           required>
+
+                                    <label for="star{{ i }}">
+                                        <i class="fa-solid fa-star"></i>
+                                    </label>
+
                                 {% endfor %}
+
                             </div>
+
                         </div>
 
-                        <div>
-                            <label style="font-weight: bold; font-size: 14px; color: #5c2e0e; margin-bottom: 5px; display: block;">
+
+                        <div style="margin-top:12px;">
+
+                            <label style="font-weight:bold; color:#5c2e0e;">
                                 Tu opinión:
                             </label>
+
                             {{ form.comentario }}
+
                         </div>
 
-                        <button type="submit" class="btn" style="padding: 12px; font-size: 15px; align-self: flex-start; border-radius: 8px; cursor: pointer;">
-                            {% if mi_resena %}Actualizar Reseña{% else %}Publicar Reseña{% endif %}
+
+                        <button type="submit" class="btn-publicar">
+
+                            {% if mi_resena %}
+                                Actualizar reseña
+                            {% else %}
+                                Publicar reseña
+                            {% endif %}
+
                         </button>
+
                     </form>
+
+
                 {% else %}
-                    <p style="margin: 0; font-size: 15px; text-align: center;">
+
+                    <p class="login-resena">
+
                         Para dejar un comentario necesitas
-                        <a href="{% url 'login' %}" style="color: #8b4513; font-weight: bold; text-decoration: underline;">iniciar sesión</a>.
+
+                        <a href="{% url 'login' %}">
+                            iniciar sesión
+                        </a>.
+
                     </p>
+
                 {% endif %}
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
 {% endblock %}
 
 
 {% block extra_js %}
+
 <script>
     function toggleDescripcion() {
+
         var texto = document.getElementById('texto-descripcion');
         var boton = document.getElementById('btn-leer-mas');
+
+        if (!texto || !boton) {
+            return;
+        }
 
         texto.classList.toggle('expandida');
 
@@ -476,36 +901,67 @@
         }
     }
 
+
     var numeroWsp = "573118299494";
     var cantidad = 1;
     var cajaPrecio = document.getElementById('precio-base');
 
     if (cajaPrecio) {
-        var precioUnitario = parseInt(cajaPrecio.getAttribute('data-precio'));
-        var nombrePlato = "{{ plato.nombre }}";
+
+        var precioUnitario = parseInt(
+            cajaPrecio.getAttribute('data-precio'),
+            10
+        );
+
+        var nombrePlato = "{{ plato.nombre|escapejs }}";
+
 
         function cambiarCantidad(valor) {
+
             cantidad += valor;
-            if (cantidad < 1) cantidad = 1;
+
+            if (cantidad < 1) {
+                cantidad = 1;
+            }
 
             document.getElementById('cantidad-numero').innerText = cantidad;
-            
+
             var total = cantidad * precioUnitario;
-            document.getElementById('total-pagar').innerText = '$' + total.toLocaleString('es-CO');
+
+            document.getElementById('total-pagar').innerText =
+                '$' + total.toLocaleString('es-CO');
+
             armarLinkWsp(total);
         }
 
+
         function armarLinkWsp(total) {
+
             var btn = document.getElementById('btn-whatsapp');
+
+            if (!btn) {
+                return;
+            }
+
             var mensaje = "Hola, quiero pedir:\n";
+
             mensaje += "*" + cantidad + "x " + nombrePlato + "*\n";
-            mensaje += "Total a pagar: $" + total.toLocaleString('es-CO') + "\n\n";
+
+            mensaje += "Total a pagar: $" +
+                total.toLocaleString('es-CO') + "\n\n";
+
             mensaje += "¿Me confirman disponibilidad y tiempo de entrega?";
 
-            btn.href = "https://wa.me/" + numeroWsp + "?text=" + encodeURIComponent(mensaje);
+            btn.href = "https://wa.me/" + numeroWsp +
+                "?text=" + encodeURIComponent(mensaje);
         }
 
-        armarLinkWsp(precioUnitario);
+
+        if (!isNaN(precioUnitario)) {
+            armarLinkWsp(precioUnitario);
+        }
+
     }
 </script>
+
 {% endblock %}

@@ -1,497 +1,319 @@
 
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        {% if plato %}
-            Editar plato
-        {% else %}
-            Nuevo plato
-        {% endif %}
-        | Ricuras de la Abuela Lola
-    </title>
+{% block titulo %}
+    {% if plato %}Editar plato{% else %}Nuevo plato{% endif %} | Las Ricuras de la Abuela Lola
+{% endblock %}
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% block extra_css %}
+<style>
+    .form-plato-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 35px;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+    .form-plato-titulo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-plato-titulo h2 {
+        color: #3b1d0b;
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .form-plato-titulo h2 i {
+        color: #f4b41a;
+        margin-right: 8px;
+    }
+
+    .form-plato-titulo p {
+        color: #8b4513;
+        font-style: italic;
+    }
+
+    .formulario-plato {
+        background: #fffaf3;
+        padding: 28px;
+        border: 1px solid #ead8bd;
+        border-radius: 15px;
+    }
+
+    .formulario-plato form p {
+        margin-bottom: 20px;
+    }
+
+    .formulario-plato form label {
+        display: block;
+        color: #3b1d0b;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .formulario-plato form input[type="text"],
+    .formulario-plato form input[type="number"],
+    .formulario-plato form input[type="file"],
+    .formulario-plato form input[type="email"],
+    .formulario-plato form input[type="password"],
+    .formulario-plato form textarea,
+    .formulario-plato form select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ddc8a9;
+        border-radius: 9px;
+        background: #fff;
+        color: #4a2c11;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+    }
+
+    .formulario-plato form textarea {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .formulario-plato form input:focus,
+    .formulario-plato form textarea:focus,
+    .formulario-plato form select:focus {
+        outline: none;
+        border-color: #f4b41a;
+        box-shadow: 0 0 0 3px rgba(244,180,26,.18);
+    }
+
+    .formulario-plato form input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #8b4513;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .formulario-plato .errorlist {
+        list-style: none;
+        padding: 10px;
+        margin: 6px 0;
+        background: #f8d7da;
+        color: #842029;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .formulario-plato .helptext {
+        display: block;
+        color: #8b7a69;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    /* Opciones del almuerzo */
+
+    .bloque-opciones {
+        margin-top: 25px;
+        padding: 22px;
+        background: #fff;
+        border: 1px solid #ead8bd;
+        border-radius: 12px;
+    }
+
+    .bloque-opciones h3 {
+        color: #3b1d0b;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .bloque-opciones h3 i {
+        color: #f4b41a;
+        margin-right: 7px;
+    }
+
+    .explicacion-opciones {
+        color: #8b4513;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .grupo-opciones {
+        margin-bottom: 22px;
+    }
+
+    .grupo-opciones h4 {
+        color: #5c2e0e;
+        margin-bottom: 12px;
+    }
+
+    .cuadricula-opciones {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .formulario-plato .cuadro-opcion {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    .cuadro-opcion input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+    }
+
+    .cuadro-opcion span {
+        display: block;
+        padding: 13px;
+        background: #fffaf3;
+        color: #5c2e0e;
+        border: 1px solid #ddc8a9;
+        border-radius: 9px;
+        font-size: 13px;
+        transition: .2s;
+    }
+
+    .cuadro-opcion span::before {
+        content: "□";
+        margin-right: 8px;
+        color: #8b4513;
+    }
+
+    .cuadro-opcion:hover span {
+        border-color: #f4b41a;
+        background: #fff7ea;
+    }
+
+    .cuadro-opcion input:checked + span {
+        background: #f8ebd3;
+        border-color: #8b4513;
+        font-weight: 700;
+    }
+
+    .cuadro-opcion input:checked + span::before {
+        content: "✓";
+    }
+
+    .cuadro-opcion input:focus-visible + span {
+        outline: 3px solid #f4b41a;
+        outline-offset: 2px;
+    }
+
+    .error-opciones {
+        color: #842029;
+        margin-top: 8px;
+        font-size: 13px;
+    }
+
+    /* Botones */
+
+    .botones-plato {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .boton-plato {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .boton-guardar-plato {
+        background: #3b1d0b;
+        color: white;
+        border: 1px solid #3b1d0b;
+    }
+
+    .boton-guardar-plato:hover {
+        background: #5c2e0e;
+        transform: translateY(-2px);
+    }
+
+    .boton-cancelar-plato {
+        background: white;
+        color: #5c2e0e;
+        border: 1px solid #5c2e0e;
+    }
+
+    .boton-cancelar-plato:hover {
+        background: #fdf5e6;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+        .form-plato-page {
+            width: 95%;
+            padding: 22px 15px;
+            margin: 20px auto;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5efe6;
-            color: #2e241c;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background: linear-gradient(135deg, #5c2e0e, #8b4513, #a0522d);
-            padding: 22px 40px;
-            border-bottom: 4px solid #d4a24c;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
-        }
-
-        .header-top {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: white;
-            padding: 6px;
-            object-fit: cover;
-            box-shadow: 0 0 0 4px #d4a24c;
-            flex-shrink: 0;
-        }
-
-        .marca h1 {
-            color: #fdf6ec;
-            font-size: clamp(22px, 3vw, 34px);
-            margin-bottom: 5px;
-        }
-
-        .lema {
-            color: #d4a24c;
-            font-style: italic;
-        }
-
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            max-width: 1200px;
-            margin: 20px auto 0;
-            padding-top: 18px;
-            border-top: 2px solid rgba(212, 162, 76, .5);
-        }
-
-        nav a {
-            color: #fdf6ec;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: rgba(0, 0, 0, .25);
-            border: 1px solid rgba(212, 162, 76, .5);
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: .3s;
-        }
-
-        nav a:hover {
-            background: #d4a24c;
-            color: #5c2e0e;
-            transform: translateY(-2px);
-        }
-
-        main {
-            flex: 1;
-            width: 90%;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 16px;
-            border-top: 5px solid #8b4513;
-            box-shadow: 0 8px 30px rgba(92, 46, 14, .15);
-        }
-
-        .titulo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .titulo h2 {
-            color: #5c2e0e;
-            font-size: clamp(26px, 4vw, 34px);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .titulo h2 i {
-            color: #d4a24c;
-        }
-
-        .titulo p {
-            color: #8b4513;
-            font-style: italic;
-        }
-
-        .formulario {
-            background: #fffaf3;
-            padding: 30px;
-            border-radius: 14px;
-            border: 1px solid #ead8bd;
-        }
-
-        .formulario p {
-            margin-bottom: 20px;
-        }
-
-        .formulario label {
-            display: block;
-            color: #5c2e0e;
-            font-weight: 700;
-            margin-bottom: 7px;
-        }
-
-        .formulario input[type="text"],
-        .formulario input[type="number"],
-        .formulario input[type="file"],
-        .formulario textarea,
-        .formulario select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #d8c3a5;
-            border-radius: 10px;
-            background: white;
-            color: #2e241c;
-            font-family: inherit;
-            font-size: 15px;
-        }
-
-        .formulario textarea {
-            min-height: 130px;
-            resize: vertical;
-        }
-
-        .formulario input:focus,
-        .formulario textarea:focus,
-        .formulario select:focus {
-            outline: none;
-            border-color: #d4a24c;
-            box-shadow: 0 0 0 3px rgba(212, 162, 76, .2);
-        }
-
-        .formulario input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #8b4513;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .errorlist {
-            list-style: none;
-            padding: 10px;
-            margin: 5px 0 10px;
-            background: #f8d7da;
-            color: #842029;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .helptext {
-            display: block;
-            color: #8b7a69;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .botones {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            border: none;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: .3s;
-        }
-
-        .btn-guardar {
-            background: linear-gradient(135deg, #8b4513, #5c2e0e);
-            color: white;
-        }
-
-        .btn-guardar:hover {
-            background: #d4a24c;
-            color: #5c2e0e;
-            transform: translateY(-2px);
-        }
-
-        .btn-cancelar {
-            background: #e8ddd0;
-            color: #5c2e0e;
-            border: 1px solid #d4c0a5;
-        }
-
-        .btn-cancelar:hover {
-            background: #d4a24c;
-            transform: translateY(-2px);
-        }
-
-        footer {
-            background: #2e241c;
-            color: #d4a24c;
-            text-align: center;
-            padding: 20px;
-            border-top: 4px solid #8b4513;
-        }
-
-        @media (max-width: 750px) {
-            header {
-                padding: 20px 15px;
-            }
-
-            .header-top {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .logo {
-                width: 110px;
-                height: 110px;
-            }
-
-            .marca h1 {
-                font-size: 24px;
-            }
-
-            main {
-                width: 95%;
-                padding: 25px 18px;
-                margin: 25px auto;
-            }
-
-            .formulario {
-                padding: 20px;
-            }
-
-            .botones {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-
-        /* NUEVOS ESTILOS DE PERSONALIZACION */
-
-        .bloque-opciones {
-            margin-top: 25px;
-            padding: 22px;
-            background: #fffaf3;
-            border: 1px solid #ead8bd;
-            border-radius: 12px;
-        }
-
-        .bloque-opciones h3 {
-            color: #5c2e0e;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .bloque-opciones .explicacion-opciones {
-            color: #8b4513;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        .grupo-opciones {
-            margin-bottom: 22px;
-        }
-
-        .grupo-opciones h4 {
-            color: #5c2e0e;
-            margin-bottom: 12px;
+        .formulario-plato {
+            padding: 18px;
         }
 
         .cuadricula-opciones {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
+            grid-template-columns: 1fr;
         }
 
-        .formulario .cuadro-opcion {
-            display: block;
-            position: relative;
-            cursor: pointer;
-            margin: 0;
-            font-weight: 400;
+        .botones-plato {
+            flex-direction: column;
         }
 
-        .formulario .cuadro-opcion input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            width: 1px;
-            height: 1px;
-            margin: 0;
+        .boton-plato {
+            width: 100%;
         }
+    }
+</style>
+{% endblock %}
 
-        .cuadro-opcion span {
-            display: block;
-            padding: 13px 14px;
-            background: white;
-            color: #5c2e0e;
-            border: 2px solid #d8c3a5;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: .2s;
-        }
+{% block contenido %}
 
-        .cuadro-opcion span::before {
-            content: "□";
-            margin-right: 8px;
-            color: #8b4513;
-        }
+<section class="contenedor-pagina form-plato-page">
 
-        .cuadro-opcion:hover span {
-            border-color: #d4a24c;
-            background: #fff7ea;
-        }
-
-        .cuadro-opcion input:checked + span {
-            background: #f8ebd3;
-            border-color: #8b4513;
-            font-weight: 700;
-        }
-
-        .cuadro-opcion input:checked + span::before {
-            content: "✓";
-        }
-
-        .cuadro-opcion input:focus-visible + span {
-            outline: 3px solid #d4a24c;
-            outline-offset: 2px;
-        }
-
-        .error-opciones {
-            color: #842029;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 550px) {
-            .cuadricula-opciones {
-                grid-template-columns: 1fr;
-            }
-
-            .bloque-opciones {
-                padding: 16px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-
-    <div class="header-top">
-
-        <img
-            src="{% static 'core/img/Logo.png' %}"
-            alt="Logo Las Ricuras de la Abuela Lola"
-            class="logo"
-        >
-
-        <div class="marca">
-            <h1>Las Ricuras de la Abuela Lola</h1>
-            <p class="lema">Donde cada plato sabe a hogar</p>
-        </div>
-
-    </div>
-
-    <nav>
-
-        <a href="{% url 'inicio' %}">
-            <i class="fa-solid fa-house"></i>
-            Inicio
-        </a>
-
-        <a href="{% url 'menu' %}">
-            <i class="fa-solid fa-book-open-reader"></i>
-            Menú
-        </a>
-
-        <a href="{% url 'Platos' %}">
-            <i class="fa-solid fa-plate-wheat"></i>
-            Platos
-        </a>
-
-        <a href="{% url 'login' %}">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            Iniciar sesión
-        </a>
-
-    </nav>
-
-</header>
-
-<main>
-
-    <div class="titulo">
+    <div class="form-plato-titulo">
 
         {% if plato %}
-
             <h2>
                 <i class="fa-solid fa-pen-to-square"></i>
                 Editar plato
             </h2>
 
-            <p>
-                Modifica la información de tu plato
-            </p>
-
+            <p>Modifica la información de tu plato</p>
         {% else %}
-
             <h2>
                 <i class="fa-solid fa-circle-plus"></i>
                 Agregar nuevo plato
             </h2>
 
-            <p>
-                Añade una nueva ricura al menú
-            </p>
-
+            <p>Añade una nueva ricura al menú</p>
         {% endif %}
+
+        <div class="linea-decorativa"></div>
 
     </div>
 
-    <div class="formulario">
+    <div class="formulario-plato">
 
         <form method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
 
             {{ form.as_p }}
-
-            <!-- OPCIONES DEL ALMUERZO -->
 
             {% if opciones_form %}
 
@@ -521,9 +343,7 @@
 
                             {{ opcion.tag }}
 
-                            <span>
-                                {{ opcion.choice_label }}
-                            </span>
+                            <span>{{ opcion.choice_label }}</span>
 
                         </label>
 
@@ -532,11 +352,7 @@
                     </div>
 
                     {% for error in campo.errors %}
-
-                    <p class="error-opciones">
-                        {{ error }}
-                    </p>
-
+                        <p class="error-opciones">{{ error }}</p>
                     {% endfor %}
 
                 </div>
@@ -547,9 +363,9 @@
 
             {% endif %}
 
-            <div class="botones">
+            <div class="botones-plato">
 
-                <button type="submit" class="btn btn-guardar">
+                <button type="submit" class="boton-plato boton-guardar-plato">
 
                     {% if plato %}
                         <i class="fa-solid fa-floppy-disk"></i>
@@ -561,9 +377,12 @@
 
                 </button>
 
-                <a href="{% url 'Platos' %}" class="btn btn-cancelar">
+                <a href="{% url 'Platos' %}"
+                   class="boton-plato boton-cancelar-plato">
+
                     <i class="fa-solid fa-arrow-left"></i>
                     Cancelar
+
                 </a>
 
             </div>
@@ -572,15 +391,11 @@
 
     </div>
 
-</main>
+</section>
 
-<footer>
-    <p>
-        &copy; 2026 Las Ricuras de la Abuela Lola —
-        Todos los derechos reservados
-    </p>
-</footer>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     // Mostrar las opciones al activar la personalización.
 
@@ -601,6 +416,4 @@
         actualizarOpciones();
     }
 </script>
-
-</body>
-</html>
+{% endblock %}
