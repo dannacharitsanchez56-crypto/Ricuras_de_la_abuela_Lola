@@ -1,10 +1,18 @@
-
 {% extends 'base.html' %}
+{% load l10n %}
+{% load currency_filters %}
+
 {% block titulo %}Resumen de ventas — Las Ricuras de la Abuela Lola{% endblock %}
+
 {% block extra_css %}
+
 <style>
     .ventas-contenedor {
         width: 100%;
+        max-width: 1100px;
+        margin: 35px auto;
+        padding: 0 20px;
+        box-sizing: border-box;
         color: #3b281d;
     }
 
@@ -15,7 +23,7 @@
     }
 
     .ventas-descripcion {
-        font-size: 16px;
+        font-size: 15px;
         line-height: 1.6;
         margin-bottom: 20px;
     }
@@ -23,61 +31,34 @@
     .ventas-linea {
         border: none;
         border-top: 2px solid #d4a24c;
-        margin: 18px 0 22px;
+        margin: 20px 0 25px;
     }
 
-    .filtro-ventas {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        gap: 15px;
+    .panel-filtros {
         background: #fdf6ec;
-        padding: 22px;
-        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid #ead5b9;
         border-left: 5px solid #d4a24c;
-        margin: 18px 0 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 3px 10px rgba(92, 46, 14, 0.06);
     }
 
-    .filtro-ventas .campo {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        flex: 1;
-        min-width: 175px;
-    }
-
-    .filtro-ventas label {
-        color: #8b4513;
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    .filtro-ventas input[type="date"] {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 11px 12px;
-        border: 1px solid #d4a24c;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 15px;
-        color: #2e241c;
-        background: #fff;
-    }
-
-    .filtro-ventas input[type="date"]:focus {
-        outline: 2px solid #d4a24c;
-        outline-offset: 2px;
+    .subtitulo-resultados {
+        color: #74390f;
+        font-size: 19px;
+        margin: 0 0 18px;
     }
 
     .botones-periodo {
         display: flex;
         flex-wrap: wrap;
         gap: 9px;
-        margin: 0 0 18px;
+        margin-bottom: 22px;
     }
 
     .boton-periodo {
-        padding: 9px 15px;
+        padding: 9px 16px;
         border: 1px solid #d4a24c;
         border-radius: 20px;
         background: #fffaf3;
@@ -91,37 +72,106 @@
 
     .boton-periodo:hover {
         background: #8b4513;
-        color: #fff;
+        color: white;
     }
 
-    .filtro-ventas .btn {
+    .filtro-ventas {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 15px;
         margin: 0;
-        cursor: pointer;
-        font-size: 15px;
-        font-family: inherit;
-        white-space: nowrap;
     }
+
+    .filtro-ventas .campo {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 175px;
+    }
+
+    .filtro-ventas label {
+        color: #8b4513;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .filtro-ventas input[type="date"] {
+        width: 100%;
+        height: 44px;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        border: 1px solid #d4a24c;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        color: #2e241c;
+        background: white;
+    }
+
+    .filtro-ventas input[type="date"]:focus {
+        outline: none;
+        border-color: #8b4513;
+    }
+
+    .acciones-filtro {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Botón consultar */
+
+    .boton-consultar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 22px;
+        border: none;
+        border-radius: 8px;
+        background: #8b4513;
+        color: white;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s;
+    }
+
+    .boton-consultar:hover {
+        background: #5c2e0e;
+    }
+
+    /* Botón ver todas */
 
     .boton-limpiar {
-        padding: 11px 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        height: 44px;
+        padding: 0 16px;
+        box-sizing: border-box;
         border: 1px solid #c9b29c;
-        border-radius: 25px;
-        background: #fff;
+        border-radius: 8px;
+        background: white;
         color: #74390f;
         font-family: inherit;
         font-size: 14px;
+        font-weight: 600;
         cursor: pointer;
+        white-space: nowrap;
     }
 
     .boton-limpiar:hover {
         background: #f3e5d4;
     }
 
-    .subtitulo-resultados {
-        color: #74390f;
-        font-size: 19px;
-        margin: 28px 0 15px;
-    }
+    /* Tarjetas del resumen */
 
     .tarjetas-resumen {
         display: grid;
@@ -129,9 +179,14 @@
         gap: 20px;
     }
 
-    
-.tarjeta {
-        background: #fff;
+    .ventas-contenedor .tarjeta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 170px;
+        box-sizing: border-box;
+        background: white;
         border: 1px solid #e1b36c;
         border-top: 5px solid #8b4513;
         border-radius: 12px;
@@ -141,7 +196,7 @@
         transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .tarjeta:hover {
+    .ventas-contenedor .tarjeta:hover {
         transform: translateY(-3px);
         box-shadow: 0 7px 18px rgba(92, 46, 14, 0.13);
     }
@@ -150,20 +205,20 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
-        margin-bottom: 10px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
         border-radius: 50%;
         background: #fdf0dc;
         color: #8b4513;
-        font-size: 20px;
+        font-size: 21px;
     }
 
     .tarjeta .etiqueta {
         color: #8b4513;
         font-weight: 700;
         font-size: 16px;
-        margin: 0 0 12px;
+        margin: 0 0 10px;
     }
 
     .tarjeta .valor {
@@ -174,7 +229,41 @@
         margin: 0;
     }
 
+    /* Botón descargar Excel */
+
+    .descargar-excel {
+        display: flex;
+        justify-content: center;
+        margin: 25px 0;
+    }
+
+    .boton-excel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        background: #287849;
+        color: white;
+        padding: 13px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+
+    .boton-excel:hover {
+        background: #1c5835;
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Mensaje de consulta */
+
     .mensaje-ventas {
+        display: flex;
+        align-items: center;
+        gap: 10px;
         margin-top: 22px;
         padding: 17px 20px;
         border-radius: 10px;
@@ -182,31 +271,44 @@
         border: 1px solid #ead5b9;
         color: #704522;
         line-height: 1.6;
+        font-size: 14px;
     }
 
     .mensaje-ventas i {
         color: #a45b25;
-        margin-right: 7px;
+    }
+
+    /* Adaptación para celulares */
+
+    @media (max-width: 768px) {
+
+        .ventas-contenedor {
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .acciones-filtro {
+            width: 100%;
+        }
+
+        .boton-consultar,
+        .boton-limpiar {
+            flex: 1;
+        }
+
+        .panel-filtros {
+            padding: 18px;
+        }
     }
 
     @media (max-width: 600px) {
+
         .ventas-contenedor h2 {
             font-size: 24px;
         }
 
-        .filtro-ventas {
-            padding: 17px;
-            gap: 12px;
-        }
-
         .filtro-ventas .campo {
             min-width: 100%;
-        }
-
-        .filtro-ventas .btn,
-        .boton-limpiar {
-            width: 100%;
-            justify-content: center;
         }
 
         .tarjetas-resumen {
@@ -214,12 +316,180 @@
             gap: 15px;
         }
 
-        .tarjeta {
+        .ventas-contenedor .tarjeta {
             padding: 20px 15px;
         }
+
+        .acciones-filtro {
+            flex-direction: column;
+        }
+
+        .boton-consultar,
+        .boton-limpiar {
+            width: 100%;
+            flex: none;
+        }
+
+        .boton-excel {
+            width: 100%;
+            box-sizing: border-box;
+        }
     }
+
+/* Historial de ventas */
+
+.historial-ventas {
+    margin-top: 35px;
+}
+
+.historial-ventas h3 {
+    color: #74390f;
+    font-size: 19px;
+    margin-bottom: 18px;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #ead5b9;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(92, 46, 14, 0.08);
+}
+
+.tabla-ventas {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.tabla-ventas thead {
+    background: #8b4513;
+    color: white;
+}
+
+.tabla-ventas th {
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.tabla-ventas td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ead5b9;
+    color: #3b281d;
+}
+
+.tabla-ventas tbody tr:nth-child(even) {
+    background: #fdf6ec;
+}
+
+.tabla-ventas tbody tr:hover {
+    background: #f5e6d3;
+}
+
+.tabla-ventas td form {
+    margin: 0;
+}
+
+/* Botón eliminar */
+
+.boton-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 14px;
+    background: #b83232;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.boton-eliminar:hover {
+    background: #8b2020;
+}
+
+.venta-protegida {
+    color: #92765e;
+    font-size: 13px;
+}
+
+.sin-ventas {
+    padding: 30px !important;
+    color: #92765e !important;
+}
+
+/* Acciones del historial de ventas */
+
+.acciones-historial {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.acciones-historial form {
+    margin: 0;
+}
+
+.boton-editar,
+.boton-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 9px 14px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.boton-editar {
+    background: #8b4513;
+    color: white;
+}
+
+.boton-editar:hover {
+    background: #5c2e0e;
+    color: white;
+    text-decoration: none;
+}
+
+.boton-eliminar {
+    background: #b83232;
+    color: white;
+}
+
+.boton-eliminar:hover {
+    background: #8b2020;
+}
+
+.tabla-ventas .total-venta {
+    font-weight: 700;
+    color: #74390f;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
 </style>
+
 {% endblock %}
+
 {% block contenido %}
 
 <div class="ventas-contenedor">
@@ -236,62 +506,90 @@
 
     <hr class="ventas-linea">
 
-    <h3 class="subtitulo-resultados">
-        <i class="fa-regular fa-calendar"></i>
-        ¿Qué período deseas consultar?
-    </h3>
+    <!-- Panel de filtros -->
 
-    <div class="botones-periodo">
-        <button type="button" class="boton-periodo"
-                data-periodo="hoy">
-            Hoy
-        </button>
+    <div class="panel-filtros">
 
-        <button type="button" class="boton-periodo"
-                data-periodo="semana">
-            Esta semana
-        </button>
+        <h3 class="subtitulo-resultados">
+            <i class="fa-regular fa-calendar"></i>
+            ¿Qué período deseas consultar?
+        </h3>
 
-        <button type="button" class="boton-periodo"
-                data-periodo="mes">
-            Este mes
-        </button>
+        <div class="botones-periodo">
+
+            <button type="button"
+                    class="boton-periodo"
+                    data-periodo="hoy">
+                Hoy
+            </button>
+
+            <button type="button"
+                    class="boton-periodo"
+                    data-periodo="semana">
+                Esta semana
+            </button>
+
+            <button type="button"
+                    class="boton-periodo"
+                    data-periodo="mes">
+                Este mes
+            </button>
+
+        </div>
+
+        <form method="get"
+              class="filtro-ventas"
+              id="formulario-ventas">
+
+            <div class="campo">
+
+                <label for="fecha_inicio">Desde</label>
+
+                <input
+                    type="date"
+                    id="fecha_inicio"
+                    name="fecha_inicio"
+                    value="{{ fecha_inicio|default:'' }}"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="fecha_fin">Hasta</label>
+
+                <input
+                    type="date"
+                    id="fecha_fin"
+                    name="fecha_fin"
+                    value="{{ fecha_fin|default:'' }}"
+                >
+
+            </div>
+
+            <div class="acciones-filtro">
+
+                <button type="submit" class="boton-consultar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Consultar
+                </button>
+
+                <button type="button"
+                        class="boton-limpiar"
+                        id="limpiar-filtros">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Ver todas
+
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
 
-    <form method="get" class="filtro-ventas" id="formulario-ventas">
-
-        <div class="campo">
-            <label for="fecha_inicio">Desde</label>
-            <input
-                type="date"
-                id="fecha_inicio"
-                name="fecha_inicio"
-                value="{{ fecha_inicio|default:'' }}"
-            >
-        </div>
-
-        <div class="campo">
-            <label for="fecha_fin">Hasta</label>
-            <input
-                type="date"
-                id="fecha_fin"
-                name="fecha_fin"
-                value="{{ fecha_fin|default:'' }}"
-            >
-        </div>
-
-        <button type="submit" class="btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            Consultar
-        </button>
-
-        <button type="button" class="boton-limpiar"
-                id="limpiar-filtros">
-            <i class="fa-solid fa-rotate-left"></i>
-            Ver todas
-        </button>
-
-    </form>
+    <!-- Resultados -->
 
     <h3 class="subtitulo-resultados">
         <i class="fa-solid fa-chart-pie"></i>
@@ -300,117 +598,348 @@
 
     <div class="tarjetas-resumen">
 
+        <!-- Total vendido -->
+
         <div class="tarjeta">
+
             <div class="icono-tarjeta">
                 <i class="fa-solid fa-sack-dollar"></i>
             </div>
 
             <p class="etiqueta">Total vendido</p>
 
-            <p class="valor" id="total-vendido"
-                data-total="{{ total_vendido|default:0 }}">
-                 ${{ total_vendido|default:0 }}
-</p>
+            <p class="valor"
+               id="total-vendido"
+               data-total="{{ total_vendido|default:0|unlocalize }}">
+
+                ${{ total_vendido|default:0 }}
+
+            </p>
+
         </div>
 
-    <div class="descargar-excel">
-    <a href="{% url 'exportar_ventas_excel' %}?fecha_inicio={{ fecha_inicio|urlencode }}&amp;fecha_fin={{ fecha_fin|urlencode }}"
-       class="btn">
-        <i class="fa-solid fa-file-excel"></i>
-        Descargar ventas en Excel
-    </a>
-        </div>
+        <!-- Cantidad de ventas -->
 
         <div class="tarjeta">
+
             <div class="icono-tarjeta">
                 <i class="fa-solid fa-receipt"></i>
             </div>
 
             <p class="etiqueta">Cantidad de ventas</p>
 
-            <p class="valor">{{ cantidad_ventas|default:0 }}</p>
+            <p class="valor">
+                {{ cantidad_ventas|default:0 }}
+            </p>
+
         </div>
+
+        <!-- Cantidad de platos vendidos -->
+
+        {% if platos_vendidos != None %}
+
+        <div class="tarjeta">
+
+            <div class="icono-tarjeta">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+
+            <p class="etiqueta">Platos vendidos</p>
+
+            <p class="valor">
+                {{ platos_vendidos|default:0 }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <!-- Ventas realizadas por la web -->
+
+        {% if ventas_web != None %}
+
+        <div class="tarjeta">
+
+            <div class="icono-tarjeta">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+
+            <p class="etiqueta">Ventas por la web</p>
+
+            <p class="valor">
+                {{ ventas_web|default:0 }}
+            </p>
+
+        </div>
+
+        {% endif %}
 
     </div>
 
-    {% if cantidad_ventas %}
-        <div class="mensaje-ventas">
-            <i class="fa-solid fa-circle-check"></i>
-            Consulta realizada. Aquí puedes revisar el resumen
-            de las ventas correspondientes al período seleccionado.
+    <!-- Descargar ventas en Excel -->
+
+    <div class="descargar-excel">
+
+        <a href="{% url 'exportar_ventas_excel' %}?fecha_inicio={{ fecha_inicio|urlencode }}&amp;fecha_fin={{ fecha_fin|urlencode }}"
+           class="boton-excel">
+
+            <i class="fa-solid fa-file-excel"></i>
+            Descargar ventas en Excel
+
+        </a>
+
+    </div>
+
+    <!-- Historial de ventas -->
+
+<div class="historial-ventas">
+
+    <h3>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Historial de ventas
+    </h3>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-ventas">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Platos vendidos</th>
+                    <th>Origen</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for venta in ventas %}
+
+                <tr>
+
+                    <td>#{{ venta.id }}</td>
+
+                    <td>
+                        {{ venta.fecha|date:"d/m/Y H:i" }}
+                    </td>
+
+                    <td>
+                        {{ venta.cantidad|default_if_none:"Sin registro" }}
+                    </td>
+
+                    <td>
+                        {{ venta.get_origen_display }}
+                    </td>
+
+                    <td class="total-venta">
+                        ${{ venta.total|cop }}
+                    </td>
+
+                    <td>
+
+    {% if venta.origen == 'manual' %}
+
+        <div class="acciones-historial">
+
+            <!-- Botón editar -->
+
+            <a href="{% url 'editar_venta' venta.id %}"
+               class="boton-editar">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+                Editar
+
+            </a>
+
+            <!-- Botón eliminar -->
+
+            <form method="post"
+                  action="{% url 'eliminar_venta' venta.id %}"
+                  onsubmit="return confirm('¿Estás seguro de eliminar esta venta?');">
+
+                {% csrf_token %}
+
+                <button type="submit"
+                        class="boton-eliminar">
+
+                    <i class="fa-solid fa-trash"></i>
+                    Eliminar
+
+                </button>
+
+            </form>
+
         </div>
+
     {% else %}
+
+        <span class="venta-protegida">
+            Pedido web
+        </span>
+
+    {% endif %}
+
+</td>
+
+                   
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="sin-ventas">
+                        No hay ventas registradas.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+    <!-- Mensajes de consulta -->
+
+    {% if cantidad_ventas %}
+
         <div class="mensaje-ventas">
-            <i class="fa-solid fa-circle-info"></i>
-            No hay ventas registradas para el período seleccionado.
-            Prueba con otras fechas o selecciona «Ver todas».
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <span>
+                Consulta realizada. Aquí puedes revisar el resumen
+                de las ventas correspondientes al período seleccionado.
+            </span>
+
         </div>
+
+    {% else %}
+
+        <div class="mensaje-ventas">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <span>
+                No hay ventas registradas para el período seleccionado.
+                Prueba con otras fechas o selecciona «Ver todas».
+            </span>
+
+        </div>
+
     {% endif %}
 
 </div>
 
 <script>
-   
+
 document.addEventListener('DOMContentLoaded', function () {
+
     const formulario = document.getElementById('formulario-ventas');
     const fechaInicio = document.getElementById('fecha_inicio');
     const fechaFin = document.getElementById('fecha_fin');
     const botonLimpiar = document.getElementById('limpiar-filtros');
-
-
     const totalVendido = document.getElementById('total-vendido');
 
+    // Formato de pesos colombianos
+
     if (totalVendido) {
+
         const monto = Number(totalVendido.dataset.total);
 
-        totalVendido.textContent = '$' + monto.toLocaleString('es-CO', {
-            maximumFractionDigits: 0
-        });
+        if (Number.isFinite(monto)) {
+
+            totalVendido.textContent = '$' + monto.toLocaleString('es-CO', {
+                maximumFractionDigits: 0
+            });
+
+        }
+
     }
 
+    // Formato de fechas
+
     function formatoFecha(fecha) {
+
         const anio = fecha.getFullYear();
         const mes = String(fecha.getMonth() + 1).padStart(2, '0');
         const dia = String(fecha.getDate()).padStart(2, '0');
 
         return `${anio}-${mes}-${dia}`;
+
     }
 
+    // Validación de fechas
+
+    function actualizarLimites() {
+
+        fechaFin.min = fechaInicio.value || '';
+        fechaInicio.max = fechaFin.value || '';
+
+    }
+
+    actualizarLimites();
+
+    // Botones Hoy, Esta semana y Este mes
+
     document.querySelectorAll('[data-periodo]').forEach(function (boton) {
+
         boton.addEventListener('click', function () {
+
             const hoy = new Date();
             const inicio = new Date(hoy);
 
             if (boton.dataset.periodo === 'semana') {
+
                 const diaSemana = (hoy.getDay() + 6) % 7;
                 inicio.setDate(hoy.getDate() - diaSemana);
+
             }
 
             if (boton.dataset.periodo === 'mes') {
+
                 inicio.setDate(1);
+
             }
 
             fechaInicio.value = formatoFecha(inicio);
             fechaFin.value = formatoFecha(hoy);
 
+            actualizarLimites();
+
             formulario.requestSubmit();
+
         });
+
     });
+
+    // Mostrar todas las ventas
 
     botonLimpiar.addEventListener('click', function () {
+
         fechaInicio.value = '';
         fechaFin.value = '';
+
+        actualizarLimites();
+
         formulario.requestSubmit();
+
     });
 
-    fechaInicio.addEventListener('change', function () {
-        fechaFin.min = fechaInicio.value || '';
-    });
+    fechaInicio.addEventListener('change', actualizarLimites);
 
-    fechaFin.addEventListener('change', function () {
-        fechaInicio.max = fechaFin.value || '';
-    });
+    fechaFin.addEventListener('change', actualizarLimites);
+
 });
 
 </script>
+
 {% endblock %}

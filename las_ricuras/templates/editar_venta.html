@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% load l10n %}
+{% load currency_filters %}
+
+{% block titulo %}Editar venta — Las Ricuras de la Abuela Lola{% endblock %}
+{% block extra_css %}
+
+<style>
+    .editar-contenedor {
+        width: 100%;
+        max-width: 850px;
+        margin: 35px auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+        color: #3b281d;
+    }
+
+    .editar-contenedor h2 {
+        color: #74390f;
+        font-size: 29px;
+        margin-bottom: 12px;
+    }
+
+    .editar-descripcion {
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .editar-linea {
+        border: none;
+        border-top: 2px solid #d4a24c;
+        margin: 20px 0 25px;
+    }
+
+    .formulario-editar {
+        background: #fffdf9;
+        padding: 28px;
+        border: 1px solid #ead5b9;
+        border-left: 5px solid #d4a24c;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(92, 46, 14, 0.08);
+    }
+
+    .informacion-venta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        background: #fdf6ec;
+        padding: 15px;
+        border: 1px solid #ead5b9;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        color: #74390f;
+        font-size: 14px;
+    }
+
+    .formulario-editar h3 {
+        color: #74390f;
+        font-size: 19px;
+        margin: 0 0 22px;
+    }
+
+    .campos-editar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .campo-editar {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .campo-editar label {
+        color: #8b4513;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .campo-editar input {
+        width: 100%;
+        height: 48px;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border: 1px solid #d4a24c;
+        border-radius: 8px;
+        background: white;
+        color: #3b281d;
+        font-family: inherit;
+        font-size: 16px;
+    }
+
+    .campo-editar input:focus {
+        outline: none;
+        border-color: #8b4513;
+        box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.08);
+    }
+
+    .ayuda-editar {
+        font-size: 12px;
+        color: #92765e;
+        line-height: 1.5;
+    }
+
+    .acciones-editar {
+        display: flex;
+        gap: 15px;
+        padding-top: 22px;
+        border-top: 1px solid #ead5b9;
+    }
+
+    .boton-guardar,
+    .boton-cancelar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        gap: 8px;
+        padding: 13px 20px;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .boton-guardar {
+        background: #8b4513;
+        border: 1px solid #8b4513;
+        color: white;
+    }
+
+    .boton-guardar:hover {
+        background: #5c2e0e;
+        border-color: #5c2e0e;
+    }
+
+    .boton-cancelar {
+        background: white;
+        border: 1px solid #d4a24c;
+        color: #74390f;
+    }
+
+    .boton-cancelar:hover {
+        background: #f3e5d4;
+        color: #74390f;
+        text-decoration: none;
+    }
+
+    .nota-editar {
+        margin-top: 25px;
+        padding: 17px 20px;
+        background: #fdf6ec;
+        border: 1px solid #ead5b9;
+        border-radius: 10px;
+        color: #704522;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .nota-editar i {
+        color: #a45b25;
+        margin-right: 7px;
+    }
+
+    @media (max-width: 600px) {
+
+        .editar-contenedor {
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .editar-contenedor h2 {
+            font-size: 24px;
+        }
+
+        .formulario-editar {
+            padding: 20px;
+        }
+
+        .campos-editar {
+            grid-template-columns: 1fr;
+        }
+
+        .acciones-editar {
+            flex-direction: column;
+        }
+
+        .boton-guardar,
+        .boton-cancelar {
+            width: 100%;
+        }
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block contenido %}
+
+<div class="editar-contenedor">
+
+    <h2>
+        <i class="fa-solid fa-pen-to-square"></i>
+        Editar venta
+    </h2>
+
+    <p class="editar-descripcion">
+        Modifica la cantidad de platos vendidos o el monto
+        de una venta registrada anteriormente.
+    </p>
+
+    <hr class="editar-linea">
+
+    <form method="post" class="formulario-editar">
+
+        {% csrf_token %}
+
+        <!-- Información de la venta -->
+
+        <div class="informacion-venta">
+
+            <span>
+                <i class="fa-solid fa-receipt"></i>
+                Venta #{{ venta.id }}
+            </span>
+
+            <span>
+                <i class="fa-regular fa-calendar"></i>
+                {{ venta.fecha|date:"d/m/Y H:i" }}
+            </span>
+
+        </div>
+
+        <h3>
+            <i class="fa-solid fa-clipboard-list"></i>
+            Información de la venta
+        </h3>
+
+        <div class="campos-editar">
+
+            <!-- Cantidad de platos -->
+
+            <div class="campo-editar">
+
+                <label for="cantidad">
+                    <i class="fa-solid fa-utensils"></i>
+                    Cantidad de platos vendidos
+                </label>
+
+                <input
+                    type="number"
+                    name="cantidad"
+                    id="cantidad"
+                    min="1"
+                    step="1"
+                    value="{{ venta.cantidad|default_if_none:''|unlocalize }}"
+                    required
+                >
+
+                <span class="ayuda-editar">
+                    Modifica la cantidad total de platos.
+                </span>
+
+            </div>
+
+            <!-- Monto total -->
+
+            <div class="campo-editar">
+
+                <label for="monto">
+                    <i class="fa-solid fa-money-bill"></i>
+                    Monto total (COP)
+                </label>
+
+                <input
+                    type="number"
+                    name="monto"
+                    id="monto"
+                    min="0.01"
+                    step="0.01"
+                    value="{{ venta.total|unlocalize }}"
+                    required
+                >
+
+                <span class="ayuda-editar">
+                    Ingresa el valor correcto de la venta.
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- Botones -->
+
+        <div class="acciones-editar">
+
+            <button type="submit" class="boton-guardar">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+                Guardar cambios
+
+            </button>
+
+            <a href="{% url 'resumen_ventas' %}"
+               class="boton-cancelar">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Cancelar
+
+            </a>
+
+        </div>
+
+    </form>
+
+    <div class="nota-editar">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        Al guardar los cambios, el monto total y la cantidad
+        de platos vendidos se actualizarán automáticamente
+        en el resumen de ventas y en los próximos reportes de Excel.
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -92,6 +92,18 @@ class RegistroVenta(models.Model):
         max_digits=12,
         decimal_places=2
     )
+    cantidad = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+    )
+    origen = models.CharField(
+        max_length=20,
+        choices=[
+            ('manual', 'Manual'),
+            ('web', 'Pedido Web'),
+        ],
+        default='manual'
+    )
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -162,6 +174,7 @@ class PedidoConEleccion(models.Model):
         ('pendiente', 'Pendiente'),
         ('confirmado', 'Confirmado'),
         ('cancelado', 'Cancelado'),
+        ('pagado', 'Pagado')
     ]
 
     usuario = models.ForeignKey(
@@ -196,5 +209,7 @@ class PedidoConEleccion(models.Model):
 
     fecha = models.DateTimeField(auto_now_add=True)
 
+    venta_registrada = models.BooleanField(default=False)
+   
     def __str__(self):
         return f'Pedido #{self.pk} - {self.nombre_plato}'

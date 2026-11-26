@@ -24,6 +24,9 @@ from .models import OpcionesAlmuerzo, PedidoConEleccion
 from .personalizacion_forms import (OpcionesAlmuerzoForm,ElegirAlmuerzoForm)
 from django.http import Http404
 from urllib.parse import quote
+from django.db import transaction
+from django.db.models import Sum, Count, Q
+from decimal import Decimal, InvalidOperation
 
 
 def portada(request):
@@ -315,7 +318,8 @@ def registro(request):
 
 @staff_member_required
 def resumen_ventas(request):
-    ventas = RegistroVenta.objects.all()
+
+    ventas = RegistroVenta.objects.all().order_by('-fecha')
 
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
@@ -329,11 +333,16 @@ def resumen_ventas(request):
     resumen = ventas.aggregate(
         total_vendido=Sum('total'),
         cantidad_ventas=Count('id'),
+        platos_vendidos=Sum('cantidad'),
+        ventas_web=Count('id', filter=Q(origen='web'))
     )
 
     contexto = {
+        'ventas': ventas,
         'total_vendido': resumen['total_vendido'] or 0,
         'cantidad_ventas': resumen['cantidad_ventas'],
+        'platos_vendidos': resumen['platos_vendidos'] or 0,
+        'ventas_web': resumen['ventas_web'],
         'fecha_inicio': fecha_inicio or '',
         'fecha_fin': fecha_fin or '',
     }
@@ -344,33 +353,64 @@ def resumen_ventas(request):
 @staff_member_required
 def registrar_venta(request):
     if request.method == 'POST':
-        monto = request.POST.get('monto', '').strip()
 
         try:
-            monto = Decimal(monto)
+            monto = Decimal(request.POST.get('monto', ''))
+            cantidad = int(request.POST.get('cantidad', ''))
 
-            if monto <= 0:
-                messages.error(request, 'Ingresa un monto mayor que cero.')
+            if not monto.is_finite() or monto <= 0 or cantidad <= 0:
+                messages.error(
+                    request,
+                    'Ingresa valores mayores que cero.'
+                )
                 return redirect('registrar_venta')
 
-            RegistroVenta.objects.create(total=monto)
+            venta = RegistroVenta.objects.create(
+                total=monto,
+                cantidad=cantidad,
+                origen='manual'
+            )
 
-            messages.success(request, 'Venta registrada correctamente.')
+            if request.POST.get('descargar_excel') == 'on':
+                return _crear_excel_ventas(
+                    RegistroVenta.objects.filter(pk=venta.pk),
+                    f'venta_{venta.pk}.xlsx'
+                )
+
+            messages.success(
+                request,
+                f'Venta registrada: {cantidad} platos vendidos.'
+            )
+
             return redirect('resumen_ventas')
 
         except (InvalidOperation, ValueError):
-            messages.error(request, 'Ingresa un monto válido.')
+            messages.error(request, 'Ingresa valores válidos.')
             return redirect('registrar_venta')
 
     return render(request, 'registrar_venta.html')
+
 
 def _crear_excel_ventas(ventas, nombre_archivo):
     wb = Workbook()
     ws = wb.active
     ws.title = "Ventas"
 
-    encabezados = ["ID", "Fecha", "Hora", "Total (COP)"]
-    ws.append(encabezados)
+    encabezados = [
+        "ID", 
+        "Fecha", 
+        "Hora", 
+        "Cantidad de platos",
+        "Origen",
+        "Total (COP)"]
+    ws.append([
+        venta.id,
+        fecha.strftime("%d/%m/%Y"),
+        fecha.strftime("%H:%M"),
+        venta.cantidad,
+        venta.get_origen_display(),
+        float(venta.total)
+    ])
 
     for celda in ws[1]:
         celda.font = Font(
@@ -393,16 +433,20 @@ def _crear_excel_ventas(ventas, nombre_archivo):
             venta.id,
             fecha.strftime("%d/%m/%Y"),
             fecha.strftime("%H:%M"),
+            venta.cantidad,
+            venta.get_origen_display(),
             float(venta.total)
         ])
 
     for fila in ws.iter_rows(min_row=2):
-        fila[3].number_format = '"$"#,##0.00'
+        fila[5].number_format = '"$"#,##0.00'
 
     ws.column_dimensions["A"].width = 12
     ws.column_dimensions["B"].width = 20
     ws.column_dimensions["C"].width = 15
-    ws.column_dimensions["D"].width = 22
+    ws.column_dimensions["D"].width = 25
+    ws.column_dimensions["E"].width = 20
+    ws.column_dimensions["F"].width = 22
 
     archivo = BytesIO()
     wb.save(archivo)
@@ -609,25 +653,138 @@ def pedidos_recibidos(request):
         }
     )
 
-
 @staff_member_required(login_url='login')
 @require_POST
+@transaction.atomic
 def cambiar_estado_pedido(request, id):
+
     pedido = get_object_or_404(PedidoConEleccion, id=id)
+
     nuevo_estado = request.POST.get('estado', '')
+
     estados_validos = [
         valor for valor, nombre in PedidoConEleccion.ESTADOS
     ]
 
     if nuevo_estado not in estados_validos:
-        messages.error(request, 'El estado seleccionado no es válido.')
+        messages.error(request, 'El estado no es válido.')
         return redirect('pedidos_recibidos')
 
     pedido.estado = nuevo_estado
     pedido.save(update_fields=['estado'])
 
+    if nuevo_estado == 'pagado':
+
+        actualizado = PedidoConEleccion.objects.filter(
+            pk=pedido.pk,
+            venta_registrada=False
+        ).update(venta_registrada=True)
+
+        if actualizado:
+            RegistroVenta.objects.create(
+                total=pedido.precio,
+                cantidad=1,
+                origen='web'
+            )
+
+            messages.success(
+                request,
+                'Almuerzo registrado automáticamente en ventas.'
+            )
+
     messages.success(
         request,
-        f'Pedido #{pedido.id} actualizado a {pedido.get_estado_display()}.'
+        f'Pedido #{pedido.id} actualizado correctamente.'
     )
+
     return redirect('pedidos_recibidos')
+
+@staff_member_required
+@require_POST
+def eliminar_venta(request, venta_id):
+
+    venta = get_object_or_404(
+        RegistroVenta,
+        id=venta_id
+    )
+
+    if venta.origen == 'web':
+        messages.error(
+            request,
+            'Las ventas web deben gestionarse desde los pedidos.'
+        )
+        return redirect('resumen_ventas')
+
+    venta.delete()
+
+    messages.success(
+        request,
+        'Venta eliminada correctamente.'
+    )
+
+    return redirect('resumen_ventas')
+
+@staff_member_required
+def editar_venta(request, venta_id):
+
+    venta = get_object_or_404(
+        RegistroVenta,
+        id=venta_id
+    )
+
+    if venta.origen != 'manual':
+        messages.error(
+            request,
+            'No puedes editar directamente una venta web.'
+        )
+        return redirect('resumen_ventas')
+
+    if request.method == 'POST':
+
+        try:
+            cantidad = int(request.POST.get('cantidad', ''))
+            monto = Decimal(request.POST.get('monto', ''))
+
+            if (
+                cantidad <= 0
+                or not monto.is_finite()
+                or monto <= 0
+            ):
+
+                messages.error(
+                    request,
+                    'Ingresa valores mayores que cero.'
+                )
+
+                return redirect('editar_venta', venta_id=venta.id)
+
+            venta.cantidad = cantidad
+            venta.total = monto
+
+            venta.full_clean()
+
+            venta.save(update_fields=['cantidad', 'total'])
+
+            messages.success(
+                request,
+                'Venta actualizada correctamente.'
+            )
+
+            return redirect('resumen_ventas')
+
+        except (InvalidOperation, ValueError, ValidationError):
+
+            messages.error(
+                request,
+                'Ingresa una cantidad y un monto válidos.'
+            )
+
+            return redirect('editar_venta', venta_id=venta.id)
+
+    return render(
+        request,
+        'editar_venta.html',
+        {
+            'venta': venta
+        }
+    )

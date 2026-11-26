@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load currency_filters %}
 {% load static %}
@@ -7,7 +6,22 @@
 
 {% block extra_css %}
 <style>
-    /* --- CABECERA DEL MENÚ --- */
+    /* Contenedor principal */
+
+    .menu-contenedor {
+        max-width: 1200px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 30px auto;
+        padding: 0 20px 35px;
+    }
+
+    .menu-contenedor [hidden] {
+        display: none !important;
+    }
+
+    /* Cabecera del menú */
+
     .titulo-menu {
         text-align: center;
         margin-bottom: 30px;
@@ -42,13 +56,14 @@
         border-radius: 3px;
     }
 
-    /* --- FILTROS (BOTONES) --- */
+    /* Filtros de categorías */
+
     .filtros-categoria {
         display: flex;
         justify-content: center;
         gap: 12px;
         flex-wrap: wrap;
-        margin-bottom: 40px;
+        margin-bottom: 24px;
     }
 
     .filtros-categoria .btn {
@@ -72,16 +87,36 @@
         transform: translateY(-2px);
     }
 
-    /* --- CUADRÍCULA DE PLATOS (GRID) --- */
-    .platos-grid {
-        display: grid;
-        /* Crea columnas automáticas: mínimo 300px, máximo lo que quepa */
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 30px;
-        padding-bottom: 40px;
+    /* Contador de resultados */
+
+    .menu-resultados {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 0;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #e8d5b5;
+        color: var(--cafe-medio);
+        font-size: 0.9rem;
     }
 
-    /* --- TARJETA DEL PLATO --- */
+    .menu-resultados strong {
+        color: var(--cafe-oscuro);
+    }
+
+    /* Cuadrícula de platos */
+
+    .platos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        padding-bottom: 0;
+    }
+
+    /* Tarjeta de cada plato */
+
     .plato-card {
         background: var(--blanco);
         border-radius: 15px;
@@ -104,6 +139,7 @@
     }
 
     /* Imagen del plato */
+
     .imagen-plato {
         position: relative;
         width: 100%;
@@ -137,10 +173,11 @@
         font-weight: 700;
         text-transform: uppercase;
         border-radius: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     /* Información del plato */
+
     .plato-info {
         padding: 20px;
         display: flex;
@@ -152,6 +189,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        flex-wrap: wrap;
         margin-bottom: 10px;
         gap: 10px;
     }
@@ -189,26 +227,28 @@
         color: #666;
         font-size: 0.9rem;
         margin-bottom: 20px;
-        /* TRUCO: Cortar el texto a 3 líneas para que todas las tarjetas midan igual */
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        flex: 1; /* Empuja los botones hacia abajo */
+        flex: 1;
     }
 
-    /* Footer de la tarjeta (Botones) */
+    /* Parte inferior de la tarjeta */
+
     .plato-footer-lista {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: auto; /* Asegura que los botones queden al fondo */
+        flex-wrap: wrap;
+        margin-top: auto;
         padding-top: 15px;
         border-top: 1px dashed #e8d5b5;
         gap: 10px;
     }
 
-    .disponible, .no-disponible {
+    .disponible,
+    .no-disponible {
         font-size: 0.75rem;
         font-weight: 700;
         padding: 4px 10px;
@@ -229,15 +269,18 @@
         background: #fee2e2;
     }
 
+    /* Botones de cada plato */
+
     .acciones-plato {
         display: flex;
         gap: 8px;
         flex: 1;
         justify-content: flex-end;
+        flex-wrap: wrap;
     }
 
     .acciones-plato .btn {
-        padding: 8px 16px;
+        padding: 8px 12px;
         font-size: 0.85rem;
         margin: 0;
         border-radius: 10px;
@@ -247,7 +290,6 @@
         font-weight: 600;
     }
 
-    /* Botones específicos */
     .btn-ver {
         background: transparent;
         border: 1.5px solid var(--cafe-medio);
@@ -270,14 +312,15 @@
         transform: translateY(-2px);
     }
 
-    /* Estado vacío */
+    /* Mensaje cuando no hay platos */
+
     .sin-platos {
         text-align: center;
         padding: 50px 20px;
         background: var(--blanco);
         border: 1px dashed var(--dorado);
         border-radius: 15px;
-        grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+        grid-column: 1 / -1;
     }
 
     .icono-vacio {
@@ -286,10 +329,97 @@
         margin-bottom: 15px;
     }
 
-    /* --- RESPONSIVO CELULAR --- */
-    @media (max-width: 768px) {
+    /* Paginación */
+
+    .paginacion-menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 30px 0 0;
+        padding: 20px 0 0;
+        border-top: 1px solid #e8d5b5;
+    }
+
+    .numeros-pagina {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .boton-pagina {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-width: 42px;
+        min-height: 42px;
+        box-sizing: border-box;
+        padding: 9px 13px;
+        border: 1px solid #e8d5b5;
+        border-radius: 9px;
+        background: var(--blanco);
+        color: var(--cafe-oscuro);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .boton-pagina:hover:not(:disabled),
+    .boton-pagina[aria-current="page"] {
+        background: var(--cafe-oscuro);
+        border-color: var(--cafe-oscuro);
+        color: white;
+    }
+
+    .boton-pagina:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    .boton-pagina:focus-visible {
+        outline: 2px solid var(--dorado);
+        outline-offset: 3px;
+    }
+
+    /* Adaptación para tablets */
+
+    @media (max-width: 1000px) {
+
         .platos-grid {
-            grid-template-columns: 1fr; /* Una columna en celular */
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+    }
+
+    /* Adaptación para celulares */
+
+    @media (max-width: 650px) {
+
+        .menu-contenedor {
+            margin: 20px auto;
+            padding: 0 12px 25px;
+        }
+
+        .titulo-menu h2 {
+            font-size: clamp(2.2rem, 9vw, 3rem);
+            gap: 8px;
+        }
+
+        .filtros-categoria {
+            gap: 8px;
+        }
+
+        .filtros-categoria .btn {
+            padding: 9px 14px;
+        }
+
+        .platos-grid {
+            grid-template-columns: 1fr;
         }
 
         .imagen-plato {
@@ -309,269 +439,605 @@
             flex: 1;
             justify-content: center;
         }
+
     }
+
 </style>
 {% endblock %}
 
 
 {% block contenido %}
 
-<section class="titulo-menu">
-    <h2>
-        <i class="fa-solid fa-utensils"></i> Nuestro Menú
-    </h2>
+<div class="menu-contenedor">
 
-    <div class="linea"></div>
+    <!-- Cabecera del menú -->
 
-    <p>
-        Descubre los sabores tradicionales de nuestra cocina,
-        preparados con cariño y ese toque especial de la Abuela Lola.
-    </p>
-</section>
+    <section class="titulo-menu">
 
+        <h2>
+            <i class="fa-solid fa-utensils"></i>
+            Nuestro Menú
+        </h2>
 
-<!-- FILTROS DE CATEGORÍAS -->
+        <div class="linea"></div>
 
-<div class="filtros-categoria">
+        <p>
+            Descubre los sabores tradicionales de nuestra cocina,
+            preparados con cariño y ese toque especial de la Abuela Lola.
+        </p>
 
-    <button class="btn activo"
-            onclick="filtrarPlatos('todos', this)">
-        Todos
-    </button>
-
-    <button class="btn"
-            onclick="filtrarPlatos('plato_fuerte', this)">
-        Platos Fuertes
-    </button>
-
-    <button class="btn"
-            onclick="filtrarPlatos('entrada', this)">
-        Entradas
-    </button>
-
-    <button class="btn"
-            onclick="filtrarPlatos('bebida', this)">
-        Bebidas
-    </button>
-
-    <button class="btn"
-            onclick="filtrarPlatos('postre', this)">
-        Postres
-    </button>
-
-</div>
+    </section>
 
 
-<!-- LISTADO DE PLATOS -->
+    <!-- Filtros de categorías -->
 
-{% if platos %}
+    <div class="filtros-categoria">
 
-    <div class="platos-grid">
+        <button type="button"
+                class="btn activo"
+                aria-pressed="true"
+                onclick="filtrarPlatos('todos', this)">
+            Todos
+        </button>
 
-        {% for plato in platos %}
+        <button type="button"
+                class="btn"
+                aria-pressed="false"
+                onclick="filtrarPlatos('plato_fuerte', this)">
+            Platos Fuertes
+        </button>
 
-            <!-- TARJETA VERTICAL -->
+        <button type="button"
+                class="btn"
+                aria-pressed="false"
+                onclick="filtrarPlatos('entrada', this)">
+            Entradas
+        </button>
 
-            <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}"
-                     data-categoria="{{ plato.categoria }}">
+        <button type="button"
+                class="btn"
+                aria-pressed="false"
+                onclick="filtrarPlatos('bebida', this)">
+            Bebidas
+        </button>
 
-                <!-- IMAGEN -->
+        <button type="button"
+                class="btn"
+                aria-pressed="false"
+                onclick="filtrarPlatos('postre', this)">
+            Postres
+        </button>
 
-                <div class="imagen-plato">
-
-                    {% if plato.imagen %}
-
-                        <img src="{{ plato.imagen.url }}"
-                             alt="{{ plato.nombre }}"
-                             loading="lazy">
-
-                    {% else %}
-
-                        <i class="fa-solid fa-utensils"
-                           style="font-size: 40px; color: #d4a24c;"></i>
-
-                    {% endif %}
-
-                    {% if not plato.disponible %}
-                        <div class="etiqueta-agotado">Agotado</div>
-                    {% endif %}
-
-                </div>
+    </div>
 
 
-                <!-- INFORMACIÓN DEL PLATO -->
+    <!-- Listado de platos -->
 
-                <div class="plato-info">
+    {% if platos %}
 
-                    <div>
+        <!-- Contador de resultados -->
 
-                        <span class="categoria-tag">
-                            {{ plato.get_categoria_display }}
-                        </span>
+        <div class="menu-resultados"
+             id="menu-resultados"
+             hidden>
 
-                        <div class="plato-header-lista">
+            <strong id="cantidad-resultados" role="status"></strong>
 
-                            <h3>{{ plato.nombre }}</h3>
+            <span id="pagina-resultados"></span>
 
-                            <span class="precio">
-                                ${{ plato.precio|cop }}
-                            </span>
+        </div>
 
-                        </div>
+
+        <div class="platos-grid" id="platos-grid">
+
+            {% for plato in platos %}
+
+                <!-- Tarjeta del plato -->
+
+                <article class="plato-card {% if not plato.disponible %}no-disponible-card{% endif %}"
+                         data-categoria="{{ plato.categoria }}">
+
+                    <!-- Imagen -->
+
+                    <div class="imagen-plato">
+
+                        {% if plato.imagen %}
+
+                            <img src="{{ plato.imagen.url }}"
+                                 alt="{{ plato.nombre }}"
+                                 loading="lazy">
+
+                        {% else %}
+
+                            <i class="fa-solid fa-utensils"
+                               style="font-size: 40px; color: #d4a24c;">
+                            </i>
+
+                        {% endif %}
+
+                        {% if not plato.disponible %}
+
+                            <div class="etiqueta-agotado">
+                                Agotado
+                            </div>
+
+                        {% endif %}
 
                     </div>
 
 
-                    <!-- DESCRIPCIÓN -->
+                    <!-- Información del plato -->
 
-                    <p class="descripcion">
-                        {{ plato.descripcion|default:"Delicioso plato preparado con el sabor tradicional de nuestra casa." }}
-                    </p>
+                    <div class="plato-info">
 
+                        <div>
 
-                    <!-- ESTADO Y BOTONES -->
-
-                    <div class="plato-footer-lista">
-
-                        {% if plato.disponible %}
-
-                            <span class="disponible">
-                                <i class="fa-solid fa-circle-check"></i>
-                                Disponible
+                            <span class="categoria-tag">
+                                {{ plato.get_categoria_display }}
                             </span>
 
-                        {% else %}
+                            <div class="plato-header-lista">
 
-                            <span class="no-disponible">
-                                <i class="fa-solid fa-circle-xmark"></i>
-                                Agotado
-                            </span>
+                                <h3>{{ plato.nombre }}</h3>
 
-                        {% endif %}
+                                <span class="precio">
+                                    ${{ plato.precio|cop }}
+                                </span>
+
+                            </div>
+
+                        </div>
 
 
-                        <div class="acciones-plato">
+                        <!-- Descripción -->
+
+                        <p class="descripcion">
+                            {{ plato.descripcion|default:"Delicioso plato preparado con el sabor tradicional de nuestra casa." }}
+                        </p>
+
+
+                        <!-- Disponibilidad y botones -->
+
+                        <div class="plato-footer-lista">
 
                             {% if plato.disponible %}
 
-                                <!-- BOTÓN VER -->
+                                <span class="disponible">
 
-                                <a href="{% url 'plato_detalle' plato.id %}"
-                                   class="btn btn-ver">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    Disponible
 
-                                    <i class="fa-solid fa-eye"></i>
-                                    Ver
-
-                                </a>
-
-
-                                <!-- ALMUERZO PERSONALIZABLE -->
-
-                                {% if plato.personalizable %}
-
-                                    <a href="{% url 'personalizar_almuerzo' plato.id %}"
-                                       class="btn btn-pedir">
-
-                                        <i class="fa-solid fa-sliders"></i>
-                                        Personalizar
-
-                                    </a>
-
-                                {% else %}
-
-                                    <!-- PLATOS FIJOS POR WHATSAPP -->
-
-                                    <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre|urlencode }}%20a%20domicilio"
-                                       target="_blank"
-                                       rel="noopener noreferrer"
-                                       class="btn btn-pedir">
-
-                                        <i class="fa-brands fa-whatsapp"></i>
-                                        Pedir
-
-                                    </a>
-
-                                {% endif %}
+                                </span>
 
                             {% else %}
 
-                                <span class="btn"
-                                      style="opacity: 0.5; cursor: not-allowed; width: 100%; justify-content: center; background: #eee; color: #999 !important; border-color: #ddd;">
+                                <span class="no-disponible">
 
-                                    No disponible
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    Agotado
 
                                 </span>
 
                             {% endif %}
 
+
+                            <div class="acciones-plato">
+
+                                {% if plato.disponible %}
+
+                                    <!-- Botón ver -->
+
+                                    <a href="{% url 'plato_detalle' plato.id %}"
+                                       class="btn btn-ver">
+
+                                        <i class="fa-solid fa-eye"></i>
+                                        Ver
+
+                                    </a>
+
+
+                                    <!-- Almuerzo personalizable -->
+
+                                    {% if plato.personalizable %}
+
+                                        <a href="{% url 'personalizar_almuerzo' plato.id %}"
+                                           class="btn btn-pedir">
+
+                                            <i class="fa-solid fa-sliders"></i>
+                                            Personalizar
+
+                                        </a>
+
+                                    {% else %}
+
+                                        <!-- Pedir platos normales por WhatsApp -->
+
+                                        <a href="https://wa.me/573118299494?text=Hola,%20quiero%20pedir%20{{ plato.nombre|urlencode }}%20a%20domicilio"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="btn btn-pedir">
+
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                            Pedir
+
+                                        </a>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <span class="btn"
+                                          style="opacity: 0.5;
+                                                 cursor: not-allowed;
+                                                 width: 100%;
+                                                 justify-content: center;
+                                                 background: #eee;
+                                                 color: #999 !important;
+                                                 border-color: #ddd;">
+
+                                        No disponible
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
                         </div>
 
                     </div>
 
+                </article>
+
+            {% endfor %}
+
+
+            <!-- Mensaje cuando una categoría está vacía -->
+
+            <div class="sin-platos"
+                 id="sin-resultados"
+                 hidden>
+
+                <div class="icono-vacio">
+
+                    <i class="fa-solid fa-utensils"></i>
+
                 </div>
 
-            </article>
+                <h3>No hay platos en esta categoría</h3>
 
-        {% endfor %}
+                <p>
+                    Selecciona otra categoría para ver más platos.
+                </p>
 
-    </div>
+            </div>
 
-{% else %}
-
-    <div class="sin-platos">
-
-        <div class="icono-vacio">
-            <i class="fa-solid fa-utensils"></i>
         </div>
 
-        <h3>No hay platos disponibles</h3>
 
-        <p>
-            En este momento no hay platos registrados en el menú.
-        </p>
+        <!-- Paginación del menú -->
 
-    </div>
+        <nav class="paginacion-menu"
+             id="paginacion-menu"
+             aria-label="Páginas del menú"
+             hidden>
 
-{% endif %}
+            <button type="button"
+                    class="boton-pagina"
+                    id="pagina-anterior">
+
+                <i class="fa-solid fa-chevron-left"
+                   aria-hidden="true"></i>
+
+                Anterior
+
+            </button>
+
+
+            <!-- Números generados por JavaScript -->
+
+            <div class="numeros-pagina"
+                 id="numeros-pagina">
+            </div>
+
+
+            <button type="button"
+                    class="boton-pagina"
+                    id="pagina-siguiente">
+
+                Siguiente
+
+                <i class="fa-solid fa-chevron-right"
+                   aria-hidden="true"></i>
+
+            </button>
+
+        </nav>
+
+
+    {% else %}
+
+        <div class="sin-platos">
+
+            <div class="icono-vacio">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+
+            <h3>No hay platos disponibles</h3>
+
+            <p>
+                En este momento no hay platos registrados en el menú.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
 
 {% endblock %}
 
 
 {% block extra_js %}
+
 <script>
 
-function filtrarPlatos(categoria, boton) {
+    
 
-    // 1. Cambiar el estado visual de los botones
+    const platosPorPagina = 6;
 
-    document.querySelectorAll('.filtros-categoria .btn').forEach(btn => {
-        btn.classList.remove('activo');
-    });
-
-    boton.classList.add('activo');
+    let paginaActual = 1;
+    let categoriaActual = 'todos';
 
 
-    // 2. Filtrar las tarjetas
+    // Obtener los platos de la categoría seleccionada
 
-    const platos = document.querySelectorAll('.plato-card');
+    function obtenerPlatosFiltrados() {
 
-    platos.forEach(plato => {
+        const platos = Array.from(
+            document.querySelectorAll('.menu-contenedor .plato-card')
+        );
 
-        const catPlato = plato.getAttribute('data-categoria');
+        return platos.filter(plato =>
 
-        if (categoria === 'todos' || catPlato === categoria) {
+            categoriaActual === 'todos' ||
+            plato.dataset.categoria === categoriaActual
 
-            plato.style.display = 'flex';
+        );
 
-        } else {
+    }
 
-            plato.style.display = 'none';
+
+    // Mostrar los platos de la página actual
+
+    function mostrarPagina() {
+
+        const resumen = document.getElementById('menu-resultados');
+
+        if (!resumen) return;
+
+        const platos = document.querySelectorAll(
+            '.menu-contenedor .plato-card'
+        );
+
+        const filtrados = obtenerPlatosFiltrados();
+
+        const total = filtrados.length;
+
+        const totalPaginas = Math.max(
+            1,
+            Math.ceil(total / platosPorPagina)
+        );
+
+        paginaActual = Math.max(
+            1,
+            Math.min(paginaActual, totalPaginas)
+        );
+
+        const inicio = (paginaActual - 1) * platosPorPagina;
+
+        const fin = Math.min(
+            inicio + platosPorPagina,
+            total
+        );
+
+
+        // Ocultar todos los platos
+
+        platos.forEach(plato => {
+
+            plato.hidden = true;
+
+        });
+
+
+        // Mostrar únicamente los platos de la página actual
+
+        filtrados.slice(inicio, fin).forEach(plato => {
+
+            plato.hidden = false;
+
+        });
+
+
+        // Actualizar contador de resultados
+
+        resumen.hidden = false;
+
+        document.getElementById('cantidad-resultados').textContent = total
+
+            ? `Mostrando ${inicio + 1}–${fin} de ${total} platos`
+
+            : '0 platos encontrados';
+
+
+        document.getElementById('pagina-resultados').textContent = total
+
+            ? `Página ${paginaActual} de ${totalPaginas}`
+
+            : '';
+
+
+        // Mostrar mensaje si no hay platos en la categoría
+
+        document.getElementById('sin-resultados').hidden = total !== 0;
+
+
+        // Actualizar botones de paginación
+
+        const paginacion = document.getElementById('paginacion-menu');
+
+        const numeros = document.getElementById('numeros-pagina');
+
+        paginacion.hidden = totalPaginas <= 1;
+
+        numeros.replaceChildren();
+
+
+        document.getElementById('pagina-anterior').disabled =
+            paginaActual === 1;
+
+        document.getElementById('pagina-siguiente').disabled =
+            paginaActual === totalPaginas;
+
+
+        if (totalPaginas <= 1) return;
+
+
+        // Crear los números de página
+
+        for (let pagina = 1; pagina <= totalPaginas; pagina++) {
+
+            const boton = document.createElement('button');
+
+            boton.type = 'button';
+
+            boton.className = 'boton-pagina';
+
+            boton.textContent = pagina;
+
+            boton.setAttribute(
+                'aria-label',
+                `Página ${pagina}`
+            );
+
+
+            // Resaltar la página actual
+
+            if (pagina === paginaActual) {
+
+                boton.setAttribute('aria-current', 'page');
+
+            }
+
+
+            boton.addEventListener('click', () => {
+
+                cambiarPagina(pagina);
+
+            });
+
+
+            numeros.appendChild(boton);
 
         }
 
-    });
+    }
 
-}
+
+    // Cambiar de página
+
+    function cambiarPagina(pagina) {
+
+        paginaActual = pagina;
+
+        mostrarPagina();
+
+
+        // Subir suavemente al inicio del listado
+
+        document.getElementById('menu-resultados').scrollIntoView({
+
+            behavior: 'smooth',
+
+            block: 'start'
+
+        });
+
+    }
+
+
+    // Filtrar platos por categoría
+
+    function filtrarPlatos(categoria, boton) {
+
+        document.querySelectorAll('.filtros-categoria .btn').forEach(btn => {
+
+            btn.classList.remove('activo');
+
+            btn.setAttribute('aria-pressed', 'false');
+
+        });
+
+
+        boton.classList.add('activo');
+
+        boton.setAttribute('aria-pressed', 'true');
+
+
+        categoriaActual = categoria;
+
+        paginaActual = 1;
+
+
+        mostrarPagina();
+
+    }
+
+
+    // Iniciar la paginación
+
+    function iniciarMenu() {
+
+        const anterior = document.getElementById('pagina-anterior');
+
+        const siguiente = document.getElementById('pagina-siguiente');
+
+
+        if (!anterior || !siguiente) return;
+
+
+        anterior.addEventListener('click', () => {
+
+            cambiarPagina(paginaActual - 1);
+
+        });
+
+
+        siguiente.addEventListener('click', () => {
+
+            cambiarPagina(paginaActual + 1);
+
+        });
+
+
+        mostrarPagina();
+
+    }
+
+
+    // Ejecutar cuando la página esté cargada
+
+    if (document.readyState === 'loading') {
+
+        document.addEventListener('DOMContentLoaded', iniciarMenu);
+
+    } else {
+
+        iniciarMenu();
+
+    }
 
 </script>
+
 {% endblock %}
