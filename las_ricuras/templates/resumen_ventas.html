@@ -18,8 +18,8 @@
 
     .ventas-contenedor h2 {
         color: #74390f;
-        font-size: 29px;
-        margin-bottom: 12px;
+        font-size: 28px;
+        margin-bottom: 10px;
     }
 
     .ventas-descripcion {
@@ -173,10 +173,17 @@
 
     /* Tarjetas del resumen */
 
+    .encabezado-resultados .subtitulo-resultados {
+        margin: 0;
+    }
+
+
+    /* Tarjetas de resumen */
     .tarjetas-resumen {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 20px;
+        gap: 22px;
+        width: 100%;
     }
 
     .ventas-contenedor .tarjeta {
@@ -190,8 +197,14 @@
         border: 1px solid #e1b36c;
         border-top: 5px solid #8b4513;
         border-radius: 12px;
-        padding: 24px 20px;
+        padding: 25px 20px;
+        min-height: 150px;
+        box-sizing: border-box;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         box-shadow: 0 4px 14px rgba(92, 46, 14, 0.09);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -202,7 +215,7 @@
     }
 
     .tarjeta .icono-tarjeta {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
         width: 48px;
@@ -223,7 +236,7 @@
 
     .tarjeta .valor {
         color: #5c2e0e;
-        font-size: 32px;
+        font-size: 30px;
         font-weight: 700;
         overflow-wrap: anywhere;
         margin: 0;
@@ -265,7 +278,7 @@
         align-items: center;
         gap: 10px;
         margin-top: 22px;
-        padding: 17px 20px;
+        padding: 16px 20px;
         border-radius: 10px;
         background: #fdf6ec;
         border: 1px solid #ead5b9;
@@ -301,6 +314,18 @@
         }
     }
 
+    /* Pantallas medianas */
+    @media (max-width: 900px) {
+        .filtro-ventas {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .filtro-ventas button {
+            width: 100%;
+        }
+    }
+
+    /* Celulares */
     @media (max-width: 600px) {
 
         .ventas-contenedor h2 {
@@ -591,10 +616,15 @@
 
     <!-- Resultados -->
 
-    <h3 class="subtitulo-resultados">
-        <i class="fa-solid fa-chart-pie"></i>
-        Resultados de la consulta
-    </h3>
+    <div class="encabezado-resultados">
+
+        <h3 class="subtitulo-resultados">
+            <i class="fa-solid fa-chart-pie"></i>
+            Resultados de la consulta
+        </h3>
+
+
+    </div>
 
     <div class="tarjetas-resumen">
 
@@ -859,7 +889,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             totalVendido.textContent = '$' + monto.toLocaleString('es-CO', {
                 maximumFractionDigits: 0
-            });
+            }) + ' COP';
 
         }
 
